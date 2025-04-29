@@ -110,4 +110,29 @@ augroup highlight_yank
 	autocmd TextYankPost * silent! lua vim.highlight.on_yank()
 augroup END
 
+let mapleader = " "
+
+" Leader + s를 눌렀을 때 'true'와 'false'를 토글
+nnoremap <Leader>s :call ToggleTrueFalse()<CR>
+
+function! ToggleTrueFalse()
+    " 현재 커서 위치에서 'true' 또는 'false'를 찾고 바꿉니다.
+    let line = getline('.')
+    let col = col('.') - 1
+    let word = matchstr(line, '\%'.col.'c\w*')
+
+    if word == "true"
+        " 'true'를 'false'로 바꿉니다.
+        execute 'normal! ciwfalse'
+    elseif word == "false"
+        " 'false'를 'true'로 바꿉니다.
+        execute 'normal! ciwtrue'
+    endif
+endfunction
+
+" Leader + h를 눌렀을 때 ^로 이동
+nnoremap <Leader>h ^
+" Leader + l을 눌렀을 때 $로 이동
+nnoremap <Leader>l $
+
 colorscheme jellybeans
