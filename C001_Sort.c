@@ -53,7 +53,7 @@ void InputRand(int* cnt, int** arr)
 
         for (int j = 0; j < i; ++j)
         {
-            if ((*arr)[j] == temp)
+            if (*(*arr+j) == temp)
             {
                 isDuplicate = 1;
                 break;
@@ -62,7 +62,7 @@ void InputRand(int* cnt, int** arr)
 
         if (!isDuplicate)
         {
-            (*arr)[i] = temp;
+            *(*arr+i) = temp;
             ++i;
         }
     }
