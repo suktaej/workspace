@@ -27,8 +27,6 @@ int main(void)
 
 void InputRand(int* cnt, int** arr)
 {
-    int temp;
-
     srand(time(NULL));
 
     printf("Input Random Number:");
@@ -36,23 +34,36 @@ void InputRand(int* cnt, int** arr)
 
     if (*cnt <= 0)
         *cnt = 1;
+    else if (*cnt > MAX_SIZE)
+        *cnt = MAX_SIZE;
 
     *arr = (int*)malloc(*cnt * sizeof(int));
     
-    for (int i = 0; i < *cnt; ++i)
+    if (*arr == NULL)
     {
-        temp = (rand() % MAX_SIZE);
-        *((*arr) + i) = temp;
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+
+    int i = 0;
+    while (i < *cnt)
+    {
+        int temp = rand() % MAX_SIZE;
+        int isDuplicate = 0;
 
         for (int j = 0; j < i; ++j)
         {
-            if (*((*arr) + j) == temp)
+            if ((*arr)[j] == temp)
             {
-                --i;
-                printf("%d is duplicate\n",temp);
+                isDuplicate = 1;
                 break;
             }
         }
-        printf("%d\n", *((*arr) + i));
+
+        if (!isDuplicate)
+        {
+            (*arr)[i] = temp;
+            ++i;
+        }
     }
 }
