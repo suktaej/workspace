@@ -3,6 +3,7 @@
 #include <time.h>
 
 #define MAX_SIZE 100
+int swap_count = 0;
 
 enum ESortType
 {
@@ -20,6 +21,7 @@ enum ESortType
 void InputRand(int*, int**);
 void Selector(const int* const cnt, int *const arr);
 void Swap(int *,int *);
+void PrintArray(const int *const cnt, const int *const arr);
 
 void SelectionSort(const int* const cnt, int *const arr);
 
@@ -31,16 +33,16 @@ int main(void)
     int cnt = 0;
 
     InputRand(&cnt, &arr);
-    Selector(&cnt, arr);
 
-    for (int i = 0;i < cnt;++i)
-    {
-        if (i % 5 == 0)
-            printf("\n");
-        printf("%d\t", *(arr + i));
-    }
+    clock_t start = clock();
+    Selector(&cnt, arr);
+    clock_t end = clock();
 
     free(arr);
+
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("Execution time: %.6f seconds\n", time_spent);
+    printf("Total swaps: %d\n", swap_count);
 
     return 0;
 }
@@ -84,6 +86,8 @@ void InputRand(int* cnt, int** arr)
             ++i;
         }
     }
+    
+    PrintArray(cnt, *arr);
 }
 
 void Selector(const int* const cnt, int *const arr)
@@ -95,6 +99,7 @@ void Selector(const int* const cnt, int *const arr)
 
     for (int i = 0; i < End; ++i)
         printf("%d. %s\n", i, SortTypeNames[i]);
+    printf("> ");
 
     scanf("%d", &inp);
 
@@ -121,9 +126,7 @@ void Selector(const int* const cnt, int *const arr)
         break;
     }
 
-    for(int i = 0; i< *cnt ;++i)
-        printf("%d ",arr[i]);
-    printf("\n");
+    PrintArray(cnt, arr);
 }
 
 void Swap(int *a,int *b)
@@ -131,6 +134,14 @@ void Swap(int *a,int *b)
     int temp = *a;
     *a = *b;
     *b = temp;
+    swap_count++;
+}
+
+void PrintArray(const int *const cnt, const int *const arr)
+{
+    for (int i = 0;i < *cnt;++i)
+        printf("%d ", *(arr + i));
+    printf("\n");
 }
 
 void SelectionSort(const int* const cnt, int *const arr)
