@@ -4,18 +4,38 @@
 
 #define MAX_SIZE 100
 
+enum ESortType
+{
+    Selection,
+    Insertion,
+    Bubble,
+    Quick,
+    Merge,
+    Heap,
+    Counting,
+    Radix,
+    End
+};
+
 void InputRand(int*, int**);
+void Selector(const int* const cnt, int *const arr);
+void Swap(int *,int *);
+
+void SelectionSort(const int* const cnt, int *const arr);
 
 int main(void)
 {
+    srand(time(NULL));
+
     int* arr = NULL;
     int cnt = 0;
 
     InputRand(&cnt, &arr);
-    
+    Selector(&cnt, arr);
+
     for (int i = 0;i < cnt;++i)
     {
-        if (i%5==0)
+        if (i % 5 == 0)
             printf("\n");
         printf("%d\t", *(arr + i));
     }
@@ -27,8 +47,6 @@ int main(void)
 
 void InputRand(int* cnt, int** arr)
 {
-    srand(time(NULL));
-
     printf("Input Random Number:");
     scanf("%d", cnt);
 
@@ -38,7 +56,7 @@ void InputRand(int* cnt, int** arr)
         *cnt = MAX_SIZE;
 
     *arr = (int*)malloc(*cnt * sizeof(int));
-    
+
     if (*arr == NULL)
     {
         printf("Memory allocation failed.\n");
@@ -53,7 +71,7 @@ void InputRand(int* cnt, int** arr)
 
         for (int j = 0; j < i; ++j)
         {
-            if (*(*arr+j) == temp)
+            if (*(*arr + j) == temp)
             {
                 isDuplicate = 1;
                 break;
@@ -62,8 +80,71 @@ void InputRand(int* cnt, int** arr)
 
         if (!isDuplicate)
         {
-            *(*arr+i) = temp;
+            *(*arr + i) = temp;
             ++i;
         }
+    }
+}
+
+void Selector(const int* const cnt, int *const arr)
+{
+    const char *SortTypeNames[] = {"Selection", "Insertion", "Bubble", "Quick", "Merge", "Heap", "Counting", "Radix"};
+    int inp = 0;
+
+    printf("Select Sort Alg\n");
+
+    for (int i = 0; i < End; ++i)
+        printf("%d. %s\n", i, SortTypeNames[i]);
+
+    scanf("%d", &inp);
+
+    switch (inp)
+    {
+    case Selection:
+        SelectionSort(cnt, arr);
+        break;
+    case Insertion:
+        break;
+    case Bubble:
+        break;
+    case Quick:
+        break;
+    case Merge:
+        break;
+    case Heap:
+        break;
+    case Counting:
+        break;
+    case Radix:
+        break;
+    default:
+        break;
+    }
+
+    for(int i = 0; i< *cnt ;++i)
+        printf("%d ",arr[i]);
+    printf("\n");
+}
+
+void Swap(int *a,int *b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void SelectionSort(const int* const cnt, int *const arr)
+{
+    for (int i = 0;i < *cnt- 1;++i)
+    {
+        int minIdx = i;
+        for (int j = i+1;j < *cnt;++j)
+        {
+            if(*(arr+j) < *(arr+minIdx))
+            minIdx = j;
+        }
+
+        if(minIdx!=i)
+        Swap(arr+i,arr+minIdx);
     }
 }
