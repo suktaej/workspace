@@ -1,29 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include "C001_Sort.h"
 
-#define MAX_SIZE 100
 int swap_count = 0;
-
-enum ESortType
-{
-    Selection,
-    Insertion,
-    Bubble,
-    Quick,
-    Merge,
-    Heap,
-    Counting,
-    Radix,
-    End
-};
-
-void InputRand(int*, int**);
-void Selector(const int* const cnt, int *const arr);
-void Swap(int *,int *);
-void PrintArray(const int *const cnt, const int *const arr);
-
-void SelectionSort(const int* const cnt, int *const arr);
 
 int main(void)
 {
@@ -69,18 +46,18 @@ void InputRand(int* cnt, int** arr)
     while (i < *cnt)
     {
         int temp = rand() % MAX_SIZE;
-        int isDuplicate = 0;
+        bool bIsDuplicate = false;
 
         for (int j = 0; j < i; ++j)
         {
             if (*(*arr + j) == temp)
             {
-                isDuplicate = 1;
+                bIsDuplicate = true;
                 break;
             }
         }
 
-        if (!isDuplicate)
+        if (!bIsDuplicate)
         {
             *(*arr + i) = temp;
             ++i;
@@ -156,6 +133,6 @@ void SelectionSort(const int* const cnt, int *const arr)
         }
 
         if(minIdx!=i)
-        Swap(arr+i,arr+minIdx);
+          Swap(arr + i, arr + minIdx);
     }
 }
