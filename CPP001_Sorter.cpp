@@ -19,6 +19,7 @@ void Sorter::InputRand() {
   else if (cnt > MAX_SIZE)
     cnt = MAX_SIZE;
 
+  // pointer arr
   // 기존 메모리 해제
   delete[] arr;
   // 포인터 초기화
@@ -27,6 +28,10 @@ void Sorter::InputRand() {
   try {
     // 메모리 할당 시도
     arr = new int[cnt];
+    // vector 초기화
+    vec.clear();
+    // 선행적 메모리 초기화
+    vec.resize(cnt);
   } catch (const std::bad_alloc &e) {
     std::cerr << "Memory alloc failed" << e.what() << std::endl;
     exit(1);
@@ -48,8 +53,15 @@ void Sorter::Shuffle() {
 
   std::shuffle(pool.begin(), pool.end(), g);
 
-  for (int i = 0; i < cnt; ++i)
+  for (int i = 0; i < cnt; ++i) {
     arr[i] = pool[i];
+    // push_back은 현재 끝에 새로운 요소를 추가
+    // 이 경우 용량을 확인하고 새 메모리 블록을 재할당
+    // 이후 복사, 이동, 해제를 진행
+    // 위에서 크기를 확정했으므로(resize) 대입이 메모리 절감
+    // vec.push_back(pool[i]);
+    vec[i] = pool[i];
+  }
 
   PrintArray();
 }
@@ -57,7 +69,10 @@ void Sorter::Shuffle() {
 void Sorter::PrintArray() {
   for (int i = 0; i < cnt; ++i)
     std::cout << *(arr + i) << " ";
+  std::cout << std::endl;
 
+  for(const int &val : vec)
+    std::cout<<val<<" ";
   std::cout << std::endl;
 }
 
@@ -73,12 +88,12 @@ void Sorter::Selector() {
   std::cout << "> ";
 
   int inp;
-  std::cin>>inp;
+  std::cin >> inp;
 
-  if(inp >= 0 && inp < static_cast<int>(ESortType::End))
+  if (inp >= 0 && inp < static_cast<int>(ESortType::End))
     tp = static_cast<ESortType>(inp);
   else
-   tp = ESortType::Selection;
+    tp = ESortType::Selection;
 
   switch (tp) {
   case ESortType::Selection:
@@ -105,18 +120,46 @@ void Sorter::Selector() {
   PrintArray();
 }
 
-void Sorter::SelectionSort() 
-{
-    for(int i =0; i<cnt-1;++i)
-    {
-        int minIdx = i;
-        for(int j = i+1;j<cnt;++j)
-        {
-            if(arr[j] < arr[minIdx])
-              minIdx = j;
-        }
-
-        if(minIdx!=i)
-        std::swap(arr[i],arr[minIdx]);
+void Sorter::SelectionSort() {
+  // pointer array
+  for (int i = 0; i < cnt - 1; ++i) {
+    int minIdx = i;
+    for (int j = i + 1; j < cnt; ++j) {
+      if (arr[j] < arr[minIdx])
+        minIdx = j;
     }
+
+    if (minIdx != i)
+      std::swap(arr[i], arr[minIdx]);
+  }
+
+  // vector
+  if (vec.empty() || vec.size() < 2)
+    return;
+
+  for (vec_it it_i = vec.begin(); it_i != vec.end()-1; ++it_i) {
+    vec_it minIt = it_i;
+    for (vec_it it_j = it_i + 1; it_j != vec.end(); ++it_j) {
+      if (*it_j < *minIt)
+        minIt = it_j;
+    }
+
+    if (minIt != it_i)
+      std::swap(*it_i, *minIt);
+  }
+
+  /*
+  for(size_t i = 0; i<vec.size()-1;++i)
+  {
+      size_t minIdx = i;
+      for(size_t j = i+1; j<vec.size();++j)
+      {
+          if(vec[j]<vec[minIdx])
+          minIdx = j;
+      }
+
+      if (minIdx != i)
+          std::swap(vec[i], vec[minIdx]);
+  }
+  */
 }
