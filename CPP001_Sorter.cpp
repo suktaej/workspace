@@ -100,6 +100,7 @@ void Sorter::Selector() {
     SelectionSort();
     break;
   case ESortType::Insertion:
+    InsertionSort();
     break;
   case ESortType::Bubble:
     break;
@@ -121,6 +122,7 @@ void Sorter::Selector() {
 }
 
 void Sorter::SelectionSort() {
+  /*
   // pointer array
   for (int i = 0; i < cnt - 1; ++i) {
     int minIdx = i;
@@ -132,7 +134,8 @@ void Sorter::SelectionSort() {
     if (minIdx != i)
       std::swap(arr[i], arr[minIdx]);
   }
-
+  */
+  
   // vector
   if (vec.empty() || vec.size() < 2)
     return;
@@ -147,19 +150,23 @@ void Sorter::SelectionSort() {
     if (minIt != it_i)
       std::swap(*it_i, *minIt);
   }
+}
 
-  /*
-  for(size_t i = 0; i<vec.size()-1;++i)
+void Sorter::InsertionSort()
+{
+  if(vec.empty() || vec.size()<2)
+    return;
+
+  for(vec_it it_i = vec.begin()+1;it_i!=vec.end();++it_i)
   {
-      size_t minIdx = i;
-      for(size_t j = i+1; j<vec.size();++j)
-      {
-          if(vec[j]<vec[minIdx])
-          minIdx = j;
-      }
+      int key = *it_i;
+      vec_it it_j = it_i;
 
-      if (minIdx != i)
-          std::swap(vec[i], vec[minIdx]);
+      while(it_j!=vec.begin() && *(it_j-1)>key)
+      {
+        *it_j = *(it_j - 1);
+        --it_j;
+      }
+      *it_j = key;
   }
-  */
 }

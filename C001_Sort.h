@@ -29,7 +29,7 @@ void Swap(int *a, int *b);
 void PrintArray(const int *const cnt, const int *const arr);
 
 void SelectionSort(const int* const cnt, int *const arr);
-// void InsertionSort(const int* const cnt, int *const arr); 
-// void BubbleSort(const int* const cnt, int *const arr);
+void InsertionSort(const int* const cnt, int *const arr); 
+void BubbleSort(const int* const cnt, int *const arr);
 
 #endif // SORT_ALGORITHMS_H

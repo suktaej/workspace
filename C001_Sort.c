@@ -86,8 +86,10 @@ void Selector(const int* const cnt, int *const arr)
         SelectionSort(cnt, arr);
         break;
     case Insertion:
+        InsertionSort(cnt, arr);
         break;
     case Bubble:
+        BubbleSort(cnt ,arr);
         break;
     case Quick:
         break;
@@ -123,10 +125,10 @@ void PrintArray(const int *const cnt, const int *const arr)
 
 void SelectionSort(const int* const cnt, int *const arr)
 {
-    for (int i = 0;i < *cnt- 1;++i)
+    for (int i = 0;i < *cnt - 1;++i)
     {
         int minIdx = i;
-        for (int j = i+1;j < *cnt;++j)
+        for (int j = i + 1;j < *cnt;++j)
         {
             if(*(arr+j) < *(arr+minIdx))
             minIdx = j;
@@ -135,4 +137,26 @@ void SelectionSort(const int* const cnt, int *const arr)
         if(minIdx!=i)
           Swap(arr + i, arr + minIdx);
     }
+}
+
+void InsertionSort(const int* const cnt, int *const arr)
+{
+    for(int i=1;i<*cnt;++i) // 정렬되지 않은 부분의 첫 번째 요소부터 시작
+                            // i=0은 정렬부로 간주
+    {
+        int key = *(arr+i);     // 삽입 요소
+        int j = i-1;        // 정렬부의 마지막 요소부터 역순탐색
+
+        while(j>=0 && *(arr+j) > key)
+        {
+            *(arr+j+1) = *(arr+j);    // 한 칸 뒤로 이동
+            --j;          // 다음요소 확인
+        }
+        *(arr+j+1) = key;         // 정렬 된 위치에 키값 삽입
+    }
+}
+
+void BubbleSort(const int* const cnt, int *const arr)
+{
+
 }

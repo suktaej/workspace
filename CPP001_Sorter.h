@@ -6,6 +6,7 @@
 #include <vector>
 
 static constexpr int MAX_SIZE = 100;
+
 using vec_it = std::vector<int>::iterator;
 
 enum class ESortType {
@@ -73,4 +74,5 @@ public:
   void Shuffle();
 
   void SelectionSort();
+  void InsertionSort();
 };
