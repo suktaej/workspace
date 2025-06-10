@@ -71,8 +71,8 @@ void Sorter::PrintArray() {
     std::cout << *(arr + i) << " ";
   std::cout << std::endl;
 
-  for(const int &val : vec)
-    std::cout<<val<<" ";
+  for (const int &val : vec)
+    std::cout << val << " ";
   std::cout << std::endl;
 }
 
@@ -103,6 +103,7 @@ void Sorter::Selector() {
     InsertionSort();
     break;
   case ESortType::Bubble:
+    BubbleSort();
     break;
   case ESortType::Quick:
     break;
@@ -135,12 +136,12 @@ void Sorter::SelectionSort() {
       std::swap(arr[i], arr[minIdx]);
   }
   */
-  
+
   // vector
   if (vec.empty() || vec.size() < 2)
     return;
 
-  for (vec_it it_i = vec.begin(); it_i != vec.end()-1; ++it_i) {
+  for (vec_it it_i = vec.begin(); it_i != vec.end() - 1; ++it_i) {
     vec_it minIt = it_i;
     for (vec_it it_j = it_i + 1; it_j != vec.end(); ++it_j) {
       if (*it_j < *minIt)
@@ -152,21 +153,38 @@ void Sorter::SelectionSort() {
   }
 }
 
-void Sorter::InsertionSort()
-{
-  if(vec.empty() || vec.size()<2)
+void Sorter::InsertionSort() {
+  if (vec.empty() || vec.size() < 2)
     return;
 
-  for(vec_it it_i = vec.begin()+1;it_i!=vec.end();++it_i)
-  {
-      int key = *it_i;
-      vec_it it_j = it_i;
+  for (vec_it it_i = vec.begin() + 1; it_i != vec.end(); ++it_i) {
+    int key = *it_i;
+    vec_it it_j = it_i;
 
-      while(it_j!=vec.begin() && *(it_j-1)>key)
-      {
-        *it_j = *(it_j - 1);
-        --it_j;
+    while (it_j != vec.begin() && *(it_j - 1) > key) {
+      *it_j = *(it_j - 1);
+      --it_j;
+    }
+    *it_j = key;
+  }
+}
+
+void Sorter::BubbleSort() {
+  if (vec.empty() || vec.size() < 2)
+    return;
+
+  for (vec_it it_i = vec.begin(); it_i != vec.end() - 1; ++it_i) {
+    bool swapFlag = false;
+    // it_i - vec.begin() : 두 개의 Iterator사이의 거리(정수값)
+    for (vec_it it_j = vec.begin();
+         it_j != vec.end() - 1 - (it_i - vec.begin()); ++it_j) {
+      if (*it_j > *(it_j + 1)) {
+        std::swap(*it_j, *(it_j + 1));
+        swapFlag = true;
       }
-      *it_j = key;
+
+      if (!swapFlag)
+        break;
+    }
   }
 }

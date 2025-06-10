@@ -1,8 +1,8 @@
+#include <algorithm>
 #include <array>
 #include <cstdlib>
-#include <random>
-#include <algorithm>
 #include <iostream>
+#include <random>
 #include <vector>
 
 static constexpr int MAX_SIZE = 100;
@@ -75,4 +75,5 @@ public:
 
   void SelectionSort();
   void InsertionSort();
+  void BubbleSort();
 };
