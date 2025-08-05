@@ -6,6 +6,7 @@
 #include <vector>
 
 static constexpr int MAX_SIZE = 100;
+//constexpr의 경우 static으로 지정하더라도 cpp에서 정의할 필요 없음
 
 using vec_it = std::vector<int>::iterator;
 

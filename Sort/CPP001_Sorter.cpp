@@ -56,14 +56,12 @@ void Sorter::Shuffle() {
   for (int i = 0; i < cnt; ++i) {
     arr[i] = pool[i];
     // push_back은 현재 끝에 새로운 요소를 추가
-    // 이 경우 용량을 확인하고 새 메모리 블록을 재할당
+    // 이 경우 용량을 확인하고 부족할 경우 새 메모리 블록을 재할당
     // 이후 복사, 이동, 해제를 진행
     // 위에서 크기를 확정했으므로(resize) 대입이 메모리 절감
     // vec.push_back(pool[i]);
     vec[i] = pool[i];
   }
-
-  PrintArray();
 }
 
 void Sorter::PrintArray() {
@@ -95,6 +93,7 @@ void Sorter::Selector() {
   else
     tp = ESortType::Selection;
 
+  PrintArray();
   switch (tp) {
   case ESortType::Selection:
     SelectionSort();

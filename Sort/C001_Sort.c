@@ -10,16 +10,9 @@ int main(void)
     int cnt = 0;
 
     InputRand(&cnt, &arr);
-
-    clock_t start = clock();
     Selector(&cnt, arr);
-    clock_t end = clock();
 
     free(arr);
-
-    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-    printf("Execution time: %.6f seconds\n", time_spent);
-    printf("Total swaps: %d\n", swap_count);
 
     return 0;
 }
@@ -63,8 +56,6 @@ void InputRand(int* cnt, int** arr)
             ++i;
         }
     }
-    
-    PrintArray(cnt, *arr);
 }
 
 void Selector(const int* const cnt, int *const arr)
@@ -80,6 +71,7 @@ void Selector(const int* const cnt, int *const arr)
 
     scanf("%d", &inp);
 
+    PrintArray(cnt, arr);
     switch (inp)
     {
     case Selection:
