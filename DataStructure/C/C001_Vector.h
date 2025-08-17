@@ -27,12 +27,12 @@ void arr_erase(DynamicArray* arr, int idx);
 void arr_remove(DynamicArray* arr, int value);
 void arr_clear(DynamicArray* arr);
 
-int* arr_begin(DynamicArray* arr); // 주소 반환
+int arr_at(DynamicArray* arr, int idx);
+int* arr_begin(DynamicArray* arr);
 int* arr_end(DynamicArray* arr);
 
-int arr_front(DynamicArray* arr);  // 값 반환
+int arr_front(DynamicArray* arr);
 int arr_back(DynamicArray* arr);
-int arr_at(DynamicArray* arr, int idx);
 
 int arr_find(DynamicArray* arr, int value);   // 값의 인덱스 반환, 없으면 -1
 bool arr_contains(DynamicArray* arr, int value); // 존재 여부 확인

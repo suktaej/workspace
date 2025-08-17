@@ -1,24 +1,5 @@
 #include "C001_Vector.h"
 
-int main(void)
-{
-    DynamicArray arr;
-    InitArray(&arr, 4);
-
-    push_back(&arr, 10);
-    push_back(&arr, 20);
-    push_back(&arr, 30);
-    pop_back(&arr);
-    push_back(&arr, 40);
-    arr_insert(&arr, 0, 5);
-    arr_erase(&arr, 1);
-
-    PrintArray(&arr);
-    FreeArray(&arr);
-
-    return 0;
-}
-
 void InitArray(DynamicArray* arr, int cap)
 {
     arr->data = (int*)malloc(sizeof(int) * cap);
@@ -107,7 +88,7 @@ int arr_at(DynamicArray* arr, int idx)
     if (idx < 0 || idx >= arr->size)
         return -1;
 
-	return *(arr->data + idx);
+    return *(arr->data + idx);
 }
 
 int arr_front(DynamicArray* arr)
