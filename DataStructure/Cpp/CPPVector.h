@@ -2,19 +2,19 @@
 
 #include <iostream>
 
-class Vector
+class CVector
 {
 public:
 	// Constructor
-	Vector() : size(0), capacity(4)
+	CVector() : size(0), capacity(4)
 	{
 		arr = new int[4] {};
 	}
-	Vector(int _cap) : size(0), capacity(_cap)
+	CVector(int _cap) : size(0), capacity(_cap)
 	{
 		arr = new int[_cap] {};
 	}
-	Vector(int* _arr, int _size) : size(_size), capacity(_size)
+	CVector(int* _arr, int _size) : size(_size), capacity(_size)
 	{
 		arr = new int[_size];
 		
@@ -22,7 +22,7 @@ public:
 			*(arr + i) = *(_arr + i);
 	}
 	// Copy
-	Vector(const Vector& vec) : size(vec.size), capacity(vec.capacity)
+	CVector(const CVector& vec) : size(vec.size), capacity(vec.capacity)
 	{
 		arr = new int[size];
 
@@ -30,7 +30,7 @@ public:
 			*(arr + i) = *(vec.arr + i);
 	}
 	// CopyAssignment
-	Vector& operator=(const Vector& vec)
+	CVector& operator=(const CVector& vec)
 	{
 		if (this != &vec)
 		{
@@ -49,7 +49,7 @@ public:
 	// Move
 	// 원본(인자값)의 소유권 이동 후 변경이 필요하므로 const 불가
 	// &&은 non-const rvalue refrence
-	Vector(Vector&& vec) noexcept
+	CVector(CVector&& vec) noexcept
 		: arr(vec.arr), size(vec.size), capacity(vec.capacity)
 	{
 		vec.arr = nullptr;
@@ -57,7 +57,7 @@ public:
 		vec.capacity = 0;
 	}
 	// MoveAssignment
-	Vector& operator=(Vector&& vec) noexcept
+	CVector& operator=(CVector&& vec) noexcept
 	{
 		if (this != &vec)
 		{
@@ -74,7 +74,7 @@ public:
 		return *this;
 	}
 	// Destructor
-	~Vector()
+	~CVector()
 	{
 		delete[] arr;
 	}
@@ -88,22 +88,22 @@ public:
 	void Resizing();
 	void PrintArray();
 
-	void arr_pushback(int value);
-	void arr_popback();
-	void arr_insert(int idx, int value);
-	//void arr_emplace(int idx, int value);
+	void push_back(int value);
+	void emplace_back(int idx, int value);
+	void pop_back();
+	void insert(int idx, int value);
 
-	void arr_erase(int idx);
-	void arr_remove(int value);
-	void arr_clear();
+	void erase(int idx);
+	void remove(int value);
+	void clear();
 
-	int arr_at(int idx);
-	int* arr_begin();
-	int* arr_end();
+	int at(int idx);
+	class CIterator& begin();
+	class CIterator& end();
 
-	int arr_front();
-	int arr_back();
+	int front();
+	int back();
 
-	int arr_find(int value);   
-	bool arr_contains(int value); 
+	int find(int value);   
+	bool contains(int value); 
 };
