@@ -1,32 +1,33 @@
 #pragma once
 
-#include <iostream>
+#include "CPPIterator.h"
 
+template<typename T>
 class CVector
 {
 public:
 	// Constructor
 	CVector() : size(0), capacity(4)
 	{
-		arr = new int[4] {};
+		arr = new T[4] {};
 	}
-	CVector(int _cap) : size(0), capacity(_cap)
+	CVector(size_t _cap) : size(0), capacity(_cap)
 	{
-		arr = new int[_cap] {};
+		arr = new T[_cap] {};
 	}
-	CVector(int* _arr, int _size) : size(_size), capacity(_size)
+	CVector(size_t* _arr, size_t _size) : size(_size), capacity(_size)
 	{
-		arr = new int[_size];
+		arr = new T[_size];
 		
-		for (int i = 0; i < _size; ++i)
+		for (size_t i = 0; i < _size; ++i)
 			*(arr + i) = *(_arr + i);
 	}
 	// Copy
 	CVector(const CVector& vec) : size(vec.size), capacity(vec.capacity)
 	{
-		arr = new int[size];
+		arr = new T[capacity];
 
-		for (int i = 0; i < size; ++i)
+		for (size_t i = 0; i < size; ++i)
 			*(arr + i) = *(vec.arr + i);
 	}
 	// CopyAssignment
@@ -38,9 +39,9 @@ public:
 			size = vec.size;
 			capacity = vec.capacity;
 
-			arr = new int[size];
+			arr = new T[capacity];
 
-			for (int i = 0; i < size; ++i)
+			for (size_t i = 0; i < size; ++i)
 				*(arr + i) = *(vec.arr + i);
 		}
 		// 현재 객체를 참조로 반환
@@ -80,30 +81,41 @@ public:
 	}
 
 private:
-	int* arr;
-	int size;
-	int capacity;
+	T* arr;
+	size_t size;
+	size_t capacity;
 
 public:
 	void Resizing();
 	void PrintArray();
 
-	void push_back(int value);
-	void emplace_back(int idx, int value);
+	void push_back(const T& value);
+	// Template Parameter Pack
+	// Args라는 이름으로 여러 타입을 받을 수 있음
+	template <class... Args>
+	// Args타입 값들을 Perfact forwarding으로 받음
+	// 함수호출 시 인자의 개수와 타입의 수에 구애받지 않음
+	void emplace_back(Args &&...args);
 	void pop_back();
-	void insert(int idx, int value);
-
-	void erase(int idx);
-	void remove(int value);
+	CIterator<T> insert(size_t idx, const T& value);
+	template <class... Args>
+    CIterator<T> emplace(size_t idx, Args&&... args);
+	CIterator<T> erase(size_t idx);
+	void vdelete(const T& value);
+	// void remove(const T& value);
 	void clear();
 
-	int at(int idx);
-	class CIterator& begin();
-	class CIterator& end();
+	CIterator<T> begin();
+	CIterator<T> end();
+	
+	T& at(size_t idx);
+	const T& at(size_t idx) const;
+	T& front();
+	const T& front() const;
+	T& back();
+	const T& back() const;
 
-	int front();
-	int back();
-
-	int find(int value);   
-	bool contains(int value); 
+	bool contains(const T& value); 
 };
+
+#include "CPPVector.inl"

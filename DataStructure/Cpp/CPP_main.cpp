@@ -2,7 +2,7 @@
 
 int main(void)
 {
-	Vector* vec = new Vector;
+	CVector<int>* vec = new CVector<int>;
 
 	vec->PrintArray();
 
