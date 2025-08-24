@@ -9,16 +9,16 @@ public:
 	// Constructor
 	CVector() : size(0), capacity(4)
 	{
-		arr = new T[4] {};
+		arr = new T[4]{};
 	}
 	CVector(size_t _cap) : size(0), capacity(_cap)
 	{
-		arr = new T[_cap] {};
+		arr = new T[_cap]{};
 	}
-	CVector(size_t* _arr, size_t _size) : size(_size), capacity(_size)
+	CVector(const T* _arr, size_t _size) : size(_size), capacity(_size)
 	{
 		arr = new T[_size];
-		
+
 		for (size_t i = 0; i < _size; ++i)
 			*(arr + i) = *(_arr + i);
 	}
@@ -96,18 +96,30 @@ public:
 	// Args타입 값들을 Perfact forwarding으로 받음
 	// 함수호출 시 인자의 개수와 타입의 수에 구애받지 않음
 	void emplace_back(Args &&...args);
-	void pop_back();
-	CIterator<T> insert(size_t idx, const T& value);
 	template <class... Args>
-    CIterator<T> emplace(size_t idx, Args&&... args);
+	CIterator<T> emplace(size_t idx, Args&&... args);
+	CIterator<T> insert(size_t idx, const T& value);
+
+	void pop_back();
 	CIterator<T> erase(size_t idx);
-	void vdelete(const T& value);
-	// void remove(const T& value);
+
+	// 범위검사 없음
+	void operator[](size_t idx)	
+	{
+		return arr[idx];
+	}
+
+	const T& operator[](size_t idx) const
+	{
+		return arr[idx];
+	}
+
+	void remove(const T& value);
 	void clear();
 
 	CIterator<T> begin();
 	CIterator<T> end();
-	
+
 	T& at(size_t idx);
 	const T& at(size_t idx) const;
 	T& front();
@@ -115,7 +127,10 @@ public:
 	T& back();
 	const T& back() const;
 
-	bool contains(const T& value); 
+	bool contains(const T& value);
+
+	size_t size() { return size; }
+	bool empty() { return size == 0; }
 };
 
 #include "CPPVector.inl"
