@@ -92,6 +92,8 @@ CIterator<T> CVector<T>::insert(size_t idx, const T& value)
     if (idx > mSize)
         throw std::out_of_range("insert: index out of range");
 
+    Resizing();
+    
     for (size_t i = mSize; i > idx; --i)
         mArr[i] = std::move(mArr[i - 1]);
     
