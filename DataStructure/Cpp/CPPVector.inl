@@ -5,26 +5,26 @@
 template<typename T>
 void CVector<T>::Resizing()
 {
-    if (size < capacity)
+    if (mSize < mCapacity)
         return;
 
-    size_t newCapacity = (capacity == 0) ? 1 : capacity * 2;
+    size_t newCapacity = (mCapacity == 0) ? 1 : mCapacity * 2;
     T* newArr = new T[newCapacity];
 
-    for (size_t i = 0; i < size; ++i)
+    for (size_t i = 0; i < mSize; ++i)
         //*(newArr + i) = *(arr + i);   // 복사 대입
-        newArr[i] = std::move(arr[i]); // std::move로 소유권을 이전
+        newArr[i] = std::move(mArr[i]); // std::move로 소유권을 이전
 
-    delete[] arr;
-    arr = newArr;
-    capacity = newCapacity;
+    delete[] mArr;
+    mArr = newArr;
+    mCapacity = newCapacity;
 }
 
 template<typename T>
 void CVector<T>::PrintArray()
 {
-    for (size_t i = 0; i < size; ++i)
-        std::cout << *(arr + i) << " ";
+    for (size_t i = 0; i < mSize; ++i)
+        std::cout << *(mArr + i) << " ";
 }
 
 template<typename T>
@@ -32,18 +32,18 @@ void CVector<T>::push_back(const T& value)
 {
     Resizing();
 
-    *(arr + size) = value;
-    ++size;
+    *(mArr + mSize) = value;
+    ++mSize;
 }
 
 template<typename T>
 void CVector<T>::pop_back()
 {
-    if (0 == size)
+    if (0 == mSize)
         throw std::out_of_range("pop_back : zero size");
 
-    --size;
-    arr[size].~T(); // 기존 타입(int, float..)이 아닌 동적할당 된 타입(std::string, class)이 존재할 경우 
+    --mSize;
+    mArr[mSize].~T(); // 기존 타입(int, float..)이 아닌 동적할당 된 타입(std::string, class)이 존재할 경우 
                     // 메모리 누수가 발생할 수 있음
 }
 
@@ -57,8 +57,8 @@ void CVector<T>::emplace_back(Args&&...args)
     Resizing();
     //Placement New : 이미 할당 된 메모리에 객체를 제자리에서 생성
     //Perfact Forwarding : 전달받은 인자들을 완벽하게 전달
-    new(&arr[size]) T(std::forward<Args>(args)...);
-    ++size;
+    new(&mArr[mSize]) T(std::forward<Args>(args)...);
+    ++mSize;
 }
 
 template<typename T>
@@ -66,65 +66,65 @@ template <class... Args>
 CIterator<T> CVector<T>::emplace(size_t idx, Args&&...args)
 {
     // 1. 인덱스 범위 체크 (0 <= idx <= size)
-    if (idx > size)
+    if (idx > mSize)
         throw std::out_of_range("emplace: index out of range");
 
     // 2. 공간이 부족하면 리사이즈
     Resizing();
 
     // 3. idx 위치 이후의 요소들을 뒤로 한 칸씩 이동
-    for (size_t i = size; i > idx; --i)
-        arr[i] = std::move(arr[i - 1]);
+    for (size_t i = mSize; i > idx; --i)
+        mArr[i] = std::move(mArr[i - 1]);
 
     // 4. idx 위치에 객체를 "제자리 생성" (Perfect Forwarding)
-    new(&arr[idx]) T(std::forward<Args>(args)...);
+    new(&mArr[idx]) T(std::forward<Args>(args)...);
 
     // 5. 요소 개수 증가
-    ++size;
+    ++mSize;
 
     // 6. 삽입된 위치를 가리키는 iterator 반환
-    return CIterator<T>(&arr[idx], arr, size);
+    return CIterator<T>(&mArr[idx], mArr, mSize);
 }
 
 template<typename T> 
 CIterator<T> CVector<T>::insert(size_t idx, const T& value) 
 {
-    if (size < idx)
+    if (idx > mSize)
         throw std::out_of_range("insert: index out of range");
 
-    for (size_t i = size; i > idx; --i)
-        arr[i] = std::move(arr[i - 1]);
+    for (size_t i = mSize; i > idx; --i)
+        mArr[i] = std::move(mArr[i - 1]);
     
-    arr[idx] = value;
-    ++size;
+    mArr[idx] = value;
+    ++mSize;
 
-    return CIterator<T>(&arr[idx], arr, size);
+    return CIterator<T>(&mArr[idx], mArr, mSize);
 }
 
 template<typename T>
 CIterator<T> CVector<T>::erase(size_t idx) 
 {
-    if (size <= idx)
+    if (mSize <= idx)
         throw std::out_of_range("erase: index out of range");
 
-    for(size_t i = idx; i-1 <size ; ++i)
-        arr[i] = std::move(arr[i+1]);
+    for(size_t i = idx; i < mSize-1; ++i)
+        mArr[i] = std::move(mArr[i+1]);
 
     // 크기를 줄이고 마지막 객체의 소멸자 호출
     pop_back();
 
-    return CIterator<T>(arr+idx, arr, size);
+    return CIterator<T>(mArr+idx, mArr, mSize);
 }
 
 template<typename T> 
 void CVector<T>::remove(const T& value)
 {
-    if (0 == size)
+    if (0 == mSize)
         return;
 
-    for (size_t i = 0; i < size; ++i)
+    for (size_t i = 0; i < mSize; ++i)
     {
-        if (value == *(arr + i))
+        if (value == *(mArr + i))
         {
             erase(i);
             return;
@@ -135,74 +135,74 @@ void CVector<T>::remove(const T& value)
 template<typename T> 
 CIterator<T> CVector<T>::begin() 
 {
-    return CIterator<T>(arr, arr, size);
+    return CIterator<T>(mArr, mArr, mSize);
 }
 
 template<typename T> CIterator<T> CVector<T>::end() 
 {
-    return CIterator<T>(arr+size, arr, size);
+    return CIterator<T>(mArr+ mSize, mArr, mSize);
 }
 
 template<typename T> 
 T& CVector<T>::at(size_t idx) 
 {
-    if (size < idx)
+    if (idx >= mSize)
         throw std::out_of_range("at : index out of range");
 
-    return *(arr+idx);
+    return *(mArr+idx);
 }
 
 template<typename T> 
 const T& CVector<T>::at(size_t idx) const 
 {
-    if (size < idx)
+    if (idx >= mSize)
         throw std::out_of_range("at : index out of range");
 
-    return *(arr + idx);
+    return *(mArr + idx);
 }
 
 template<typename T> 
 T& CVector<T>::front() 
 {
-    if (0 == size)
+    if (0 == mSize)
         throw std::out_of_range("front : zero size");
 
-    return *(arr);
+    return *(mArr);
 }
 
 template<typename T> 
 const T& CVector<T>::front() const 
 {
-    if (0 == size)
+    if (0 == mSize)
         throw std::out_of_range("front : zero size");
 
-    return *(arr);
+    return *(mArr);
 }
 
 template<typename T> 
 T& CVector<T>::back() 
 {
-    if (0 == size)
+    if (0 == mSize)
         throw std::out_of_range("back : zero size");
 
-    return *(arr+size-1);
+    return *(mArr+ mSize -1);
 }
 
 template<typename T> 
 const T& CVector<T>::back() const 
 {
-    if (0 == size)
+    if (0 == mSize)
         throw std::out_of_range("back : zero size");
 
-    return *(arr + size - 1);
+    return *(mArr + mSize - 1);
 }
 
 template<typename T> 
 bool CVector<T>::contains(const T& value) 
 {
-    for (size_t i = 0; i < size; ++i)
+    for (size_t i = 0; i < mSize; ++i)
     {
-        if (value == *(arr + i))
+        if (value == *(mArr + i))
             return true;
     }
 
@@ -211,8 +211,8 @@ bool CVector<T>::contains(const T& value)
 
 template<typename T> void CVector<T>::clear() 
 { 
-    for (size_t i = 0; i < size; ++i)
-        arr[i].~T();
+    for (size_t i = 0; i < mSize; ++i)
+        mArr[i].~T();
 
-    size = 0; 
+    mSize = 0;
 }

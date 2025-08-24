@@ -7,42 +7,42 @@ class CVector
 {
 public:
 	// Constructor
-	CVector() : size(0), capacity(4)
+	CVector() : mSize(0), mCapacity(4)
 	{
-		arr = new T[4]{};
+		mArr = new T[4]{};
 	}
-	CVector(size_t _cap) : size(0), capacity(_cap)
+	CVector(size_t _cap) : mSize(0), mCapacity(_cap)
 	{
-		arr = new T[_cap]{};
+		mArr = new T[_cap]{};
 	}
-	CVector(const T* _arr, size_t _size) : size(_size), capacity(_size)
+	CVector(const T* _arr, size_t _size) : mSize(_size), mCapacity(_size)
 	{
-		arr = new T[_size];
+		mArr = new T[_size];
 
 		for (size_t i = 0; i < _size; ++i)
-			*(arr + i) = *(_arr + i);
+			*(mArr + i) = *(_arr + i);
 	}
 	// Copy
-	CVector(const CVector& vec) : size(vec.size), capacity(vec.capacity)
+	CVector(const CVector& vec) : mSize(vec.mSize), mCapacity(vec.mCapacity)
 	{
-		arr = new T[capacity];
+		mArr = new T[mCapacity];
 
-		for (size_t i = 0; i < size; ++i)
-			*(arr + i) = *(vec.arr + i);
+		for (size_t i = 0; i < mSize; ++i)
+			*(mArr + i) = *(vec.mArr + i);
 	}
 	// CopyAssignment
 	CVector& operator=(const CVector& vec)
 	{
 		if (this != &vec)
 		{
-			delete[] arr;
-			size = vec.size;
-			capacity = vec.capacity;
+			delete[] mArr;
+			mSize = vec.mSize;
+			mCapacity = vec.mCapacity;
 
-			arr = new T[capacity];
+			mArr = new T[mCapacity];
 
-			for (size_t i = 0; i < size; ++i)
-				*(arr + i) = *(vec.arr + i);
+			for (size_t i = 0; i < mSize; ++i)
+				*(mArr + i) = *(vec.mArr + i);
 		}
 		// 현재 객체를 참조로 반환
 		return *this;
@@ -51,39 +51,39 @@ public:
 	// 원본(인자값)의 소유권 이동 후 변경이 필요하므로 const 불가
 	// &&은 non-const rvalue refrence
 	CVector(CVector&& vec) noexcept
-		: arr(vec.arr), size(vec.size), capacity(vec.capacity)
+		: mArr(vec.mArr), mSize(vec.mSize), mCapacity(vec.mCapacity)
 	{
-		vec.arr = nullptr;
-		vec.size = 0;
-		vec.capacity = 0;
+		vec.mArr = nullptr;
+		vec.mSize = 0;
+		vec.mCapacity = 0;
 	}
 	// MoveAssignment
 	CVector& operator=(CVector&& vec) noexcept
 	{
 		if (this != &vec)
 		{
-			delete[] arr;
+			delete[] mArr;
 
-			arr = vec.arr;
-			size = vec.size;
-			capacity = vec.capacity;
+			mArr = vec.mArr;
+			mSize = vec.mSize;
+			mCapacity = vec.mCapacity;
 
-			vec.arr = nullptr;
-			vec.size = 0;
-			vec.capacity = 0;
+			vec.mArr = nullptr;
+			vec.mSize = 0;
+			vec.mCapacity = 0;
 		}
 		return *this;
 	}
 	// Destructor
 	~CVector()
 	{
-		delete[] arr;
+		delete[] mArr;
 	}
 
 private:
-	T* arr;
-	size_t size;
-	size_t capacity;
+	T* mArr;
+	size_t mSize;
+	size_t mCapacity;
 
 public:
 	void Resizing();
@@ -104,14 +104,14 @@ public:
 	CIterator<T> erase(size_t idx);
 
 	// 범위검사 없음
-	void operator[](size_t idx)	
+	T& operator[](size_t idx)	
 	{
-		return arr[idx];
+		return mArr[idx];
 	}
 
 	const T& operator[](size_t idx) const
 	{
-		return arr[idx];
+		return mArr[idx];
 	}
 
 	void remove(const T& value);
@@ -129,8 +129,8 @@ public:
 
 	bool contains(const T& value);
 
-	size_t size() { return size; }
-	bool empty() { return size == 0; }
+	size_t size() { return mSize; }
+	bool empty() { return mSize == 0; }
 };
 
 #include "CPPVector.inl"
