@@ -93,7 +93,7 @@ CIterator<T> CVector<T>::insert(size_t idx, const T& value)
         throw std::out_of_range("insert: index out of range");
 
     Resizing();
-    
+
     for (size_t i = mSize; i > idx; --i)
         mArr[i] = std::move(mArr[i - 1]);
     
@@ -217,4 +217,48 @@ template<typename T> void CVector<T>::clear()
         mArr[i].~T();
 
     mSize = 0;
+}
+
+template<typename T>
+void CVector<T>::reserve(size_t newCapacity)
+{
+    // 요청한 용량이 현재 용량보다 작거나 같으면 아무것도 하지 않음
+    if (newCapacity <= mCapacity)
+        return;
+
+    T* newArr = new T[newCapacity];
+
+    for (size_t i = 0; i < mSize; ++i)
+        newArr[i] = std::move(mArr[i]);
+
+    delete[] mArr;
+    mArr = newArr;
+    mCapacity = newCapacity;
+}
+
+template<typename T>
+void CVector<T>::resize(size_t newSize)
+{
+    //값이 같다면 무시
+    if (newSize == mSize)
+        return;
+    //받아온 size가 기존 size보다 크고
+    else if (newSize > mSize)
+    {   
+        //capacity보다 크다면 메모리 증량
+        if(newSize > mCapacity)
+			reserve(newSize);
+        //새 공간을 기존 객체로 채움
+        for (size_t i = mSize; i < newSize; ++i)
+            // Placement New를 사용하여 메모리에 직접 객체 생성
+            new(&mArr[i]) T();
+    }
+    //기존 값보다 작다면
+    else if (newSize < mSize)
+    {
+        for (size_t i = newSize; i < mSize; ++i)
+            mArr[i].~T();
+    }
+    // 마지막으로 실제 크기를 업데이트
+    mSize = newSize;
 }

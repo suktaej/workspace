@@ -89,6 +89,9 @@ public:
 	void Resizing();
 	void PrintArray();
 
+	void reserve(size_t _capacity);
+	void resize(size_t _size);
+
 	void push_back(const T& value);
 	// Template Parameter Pack
 	// Args라는 이름으로 여러 타입을 받을 수 있음
