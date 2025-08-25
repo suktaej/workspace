@@ -140,6 +140,7 @@ public:
 		{
 			// 두 번째 노드 삽입 시, mHead와 mTail은 같은 노드를 가리키고 있음
 			// 때문에 mHead의 next 또한 newNode를 가르킴
+			// mHead->next = newNode;
 			mTail->next = newNode;
 			newNode->prev = mTail;
 			mTail = newNode;
