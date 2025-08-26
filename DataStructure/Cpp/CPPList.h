@@ -1,6 +1,7 @@
 #pragma once
 #include <cstddef>
 #include <utility>
+#include <initializer_list>
 
 template<typename T>
 class CList
@@ -11,7 +12,11 @@ private:
 		T data;
 		Node* prev;
 		Node* next;
-		
+		// std::forward : 템플릿 함수 안에서 인자는 이름을 갖는 순간 모두 lvalue화
+		// forward는 lvalue일 경우 lvalue의 참조값으로 변환하여 복사를
+		// ravlue일 경우 rvalue의 참조값으로 변환하여 이동을 지원
+
+		// std::move의 경우 무조건 rvalue로 변환(강제형변환)	
 		template<class... Args>
 		explicit Node(Args&&... args) : data(std::forward<Args>(args)...), prev(nullptr), next(nullptr) {}
 	};
@@ -34,6 +39,9 @@ public:
 		T* operator->() const { return &currentNode->data; }
 		iter& operator++() 
 		{
+			if (currentNode == nullptr)
+				throw std::out_of_range("operator++ : iterator at end");
+
 			currentNode = currentNode->next;
 			return *this;
 		}
@@ -45,6 +53,9 @@ public:
 		}
 		iter& operator--()
 		{
+			if (currentNode == nullptr)
+				throw std::out_of_range("operator-- : iterator at begin");
+
 			currentNode = currentNode->prev;
 			return *this;
 		}
@@ -124,9 +135,43 @@ public:
 
 public:
 	iter begin() const { return iter(mHead); }
+	iter begin() { return iter(mHead); }
 	iter end() const { return iter(nullptr); }
+	iter end() { return iter(nullptr); }
 	size_t size() const { return mSize; }
 	bool empty() const { return 0 == mSize; }
+
+	T& back()
+	{
+		if (nullptr == mTail)
+			throw std::out_of_range("back : empty list");
+
+		return mTail->data;
+	}
+	
+	const T& back() const
+	{
+		if (nullptr == mTail)
+			throw std::out_of_range("back : empty list");
+
+		return mTail->data;
+	}
+	
+	T& front()
+	{
+		if (nullptr == mHead)
+			throw std::out_of_range("front : empty list");
+
+		return mHead->data;
+	}
+	
+	const T& front() const
+	{
+		if (nullptr == mHead)
+			throw std::out_of_range("front : empty list");
+
+		return mHead->data;
+	}
 
 	template<class... Args>
 	void push_back(Args&&... args) 
@@ -140,7 +185,6 @@ public:
 		{
 			// 두 번째 노드 삽입 시, mHead와 mTail은 같은 노드를 가리키고 있음
 			// 때문에 mHead의 next 또한 newNode를 가르킴
-			// mHead->next = newNode;
 			mTail->next = newNode;
 			newNode->prev = mTail;
 			mTail = newNode;
@@ -152,7 +196,7 @@ public:
 	void pop_back()
 	{
 		if (nullptr == mTail)
-			return;
+			throw std::out_of_range("pop_back : empty list");
 
 		Node* popNode = mTail;
 		mTail = mTail->prev;
@@ -164,6 +208,24 @@ public:
 
 		delete popNode;
 		
+		--mSize;
+	}
+
+	void pop_front()
+	{
+		if (nullptr == mHead)
+			throw std::out_of_range("pop_front : empty list");
+
+		Node* popNode = mHead;
+		mHead = mHead->next;
+
+		if (nullptr != mHead)
+			mHead->prev = nullptr;
+		else
+			mTail = nullptr;
+
+		delete popNode;
+
 		--mSize;
 	}
 

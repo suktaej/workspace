@@ -13,7 +13,8 @@ void CVector<T>::Resizing()
 
     for (size_t i = 0; i < mSize; ++i)
         //*(newArr + i) = *(arr + i);   // 복사 대입
-        newArr[i] = std::move(mArr[i]); // std::move로 소유권을 이전
+        //newArr[i] = std::move(mArr[i]); // std::move로 소유권을 이전
+        std::move(mArr, mArr + mSize, newArr);
 
     delete[] mArr;
     mArr = newArr;
@@ -44,7 +45,7 @@ void CVector<T>::pop_back()
 
     --mSize;
     mArr[mSize].~T(); // 기존 타입(int, float..)이 아닌 동적할당 된 타입(std::string, class)이 존재할 경우 
-                    // 메모리 누수가 발생할 수 있음
+    // 메모리 누수가 발생할 수 있음
 }
 
 template<typename T>        // 바깥 템플릿(컨테이너가 어떤 타입을 담을지 결정)
@@ -86,8 +87,8 @@ CIterator<T> CVector<T>::emplace(size_t idx, Args&&...args)
     return CIterator<T>(&mArr[idx], mArr, mSize);
 }
 
-template<typename T> 
-CIterator<T> CVector<T>::insert(size_t idx, const T& value) 
+template<typename T>
+CIterator<T> CVector<T>::insert(size_t idx, const T& value)
 {
     if (idx > mSize)
         throw std::out_of_range("insert: index out of range");
@@ -96,7 +97,7 @@ CIterator<T> CVector<T>::insert(size_t idx, const T& value)
 
     for (size_t i = mSize; i > idx; --i)
         mArr[i] = std::move(mArr[i - 1]);
-    
+
     mArr[idx] = value;
     ++mSize;
 
@@ -104,21 +105,21 @@ CIterator<T> CVector<T>::insert(size_t idx, const T& value)
 }
 
 template<typename T>
-CIterator<T> CVector<T>::erase(size_t idx) 
+CIterator<T> CVector<T>::erase(size_t idx)
 {
     if (mSize <= idx)
         throw std::out_of_range("erase: index out of range");
 
-    for(size_t i = idx; i < mSize-1; ++i)
-        mArr[i] = std::move(mArr[i+1]);
+    for (size_t i = idx; i < mSize - 1; ++i)
+        mArr[i] = std::move(mArr[i + 1]);
 
     // 크기를 줄이고 마지막 객체의 소멸자 호출
     pop_back();
 
-    return CIterator<T>(mArr+idx, mArr, mSize);
+    return CIterator<T>(mArr + idx, mArr, mSize);
 }
 
-template<typename T> 
+template<typename T>
 void CVector<T>::remove(const T& value)
 {
     if (0 == mSize)
@@ -134,28 +135,19 @@ void CVector<T>::remove(const T& value)
     }
 }
 
-template<typename T> 
-CIterator<T> CVector<T>::begin() 
+template<typename T>
+CIterator<T> CVector<T>::begin()
 {
     return CIterator<T>(mArr, mArr, mSize);
 }
 
-template<typename T> CIterator<T> CVector<T>::end() 
+template<typename T> CIterator<T> CVector<T>::end()
 {
-    return CIterator<T>(mArr+ mSize, mArr, mSize);
+    return CIterator<T>(mArr + mSize, mArr, mSize);
 }
 
-template<typename T> 
-T& CVector<T>::at(size_t idx) 
-{
-    if (idx >= mSize)
-        throw std::out_of_range("at : index out of range");
-
-    return *(mArr+idx);
-}
-
-template<typename T> 
-const T& CVector<T>::at(size_t idx) const 
+template<typename T>
+T& CVector<T>::at(size_t idx)
 {
     if (idx >= mSize)
         throw std::out_of_range("at : index out of range");
@@ -163,8 +155,17 @@ const T& CVector<T>::at(size_t idx) const
     return *(mArr + idx);
 }
 
-template<typename T> 
-T& CVector<T>::front() 
+template<typename T>
+const T& CVector<T>::at(size_t idx) const
+{
+    if (idx >= mSize)
+        throw std::out_of_range("at : index out of range");
+
+    return *(mArr + idx);
+}
+
+template<typename T>
+T& CVector<T>::front()
 {
     if (0 == mSize)
         throw std::out_of_range("front : zero size");
@@ -172,8 +173,8 @@ T& CVector<T>::front()
     return *(mArr);
 }
 
-template<typename T> 
-const T& CVector<T>::front() const 
+template<typename T>
+const T& CVector<T>::front() const
 {
     if (0 == mSize)
         throw std::out_of_range("front : zero size");
@@ -181,17 +182,8 @@ const T& CVector<T>::front() const
     return *(mArr);
 }
 
-template<typename T> 
-T& CVector<T>::back() 
-{
-    if (0 == mSize)
-        throw std::out_of_range("back : zero size");
-
-    return *(mArr+ mSize -1);
-}
-
-template<typename T> 
-const T& CVector<T>::back() const 
+template<typename T>
+T& CVector<T>::back()
 {
     if (0 == mSize)
         throw std::out_of_range("back : zero size");
@@ -199,8 +191,17 @@ const T& CVector<T>::back() const
     return *(mArr + mSize - 1);
 }
 
-template<typename T> 
-bool CVector<T>::contains(const T& value) 
+template<typename T>
+const T& CVector<T>::back() const
+{
+    if (0 == mSize)
+        throw std::out_of_range("back : zero size");
+
+    return *(mArr + mSize - 1);
+}
+
+template<typename T>
+bool CVector<T>::contains(const T& value)
 {
     for (size_t i = 0; i < mSize; ++i)
     {
@@ -211,8 +212,8 @@ bool CVector<T>::contains(const T& value)
     return false;
 }
 
-template<typename T> void CVector<T>::clear() 
-{ 
+template<typename T> void CVector<T>::clear()
+{
     for (size_t i = 0; i < mSize; ++i)
         mArr[i].~T();
 
@@ -244,10 +245,10 @@ void CVector<T>::resize(size_t newSize)
         return;
     //받아온 size가 기존 size보다 크고
     else if (newSize > mSize)
-    {   
+    {
         //capacity보다 크다면 메모리 증량
-        if(newSize > mCapacity)
-			reserve(newSize);
+        if (newSize > mCapacity)
+            reserve(newSize);
         //새 공간을 기존 객체로 채움
         for (size_t i = mSize; i < newSize; ++i)
             // Placement New를 사용하여 메모리에 직접 객체 생성
