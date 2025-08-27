@@ -130,7 +130,9 @@ public:
 	bool contains(const T& value);
 
 	size_t size() { return mSize; }
+	size_t size() const { return mSize; }
 	bool empty() { return mSize == 0; }
+	bool empty() const { return mSize == 0; }
 
 	void reserve(size_t _capacity);
 	void resize(size_t _size);
