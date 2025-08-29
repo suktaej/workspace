@@ -116,3 +116,78 @@ void CGraph::Dijkstra(size_t start, size_t end)
 		std::cout << path[i] << (i > 0 ? " -> " : "\n");
 }
 
+void CGraph::DFS(size_t start)
+{
+	CVector<bool> visited(mVtxCnt, false);
+	DFS_Recursive(start, visited);
+}
+
+void CGraph::DFS_Recursive(size_t node, CVector<bool>& visited)
+{
+	visited[node] = true;
+	std::cout << node << ' ';
+
+	for (CList<CGraph::Edge>::iter it = mAdj[node].begin(); it != mAdj[node].end(); ++it)
+	{
+		size_t nextNode = it->to;
+		if (false == visited[nextNode])
+			DFS_Recursive(nextNode, visited);
+	}
+}
+
+void CGraph::DFS_Stack(size_t start)
+{
+	CVector<bool> visited(mVtxCnt, false);
+	CVector<size_t> stack;
+	stack.push_back(start);
+
+	while (false == stack.empty())
+	{
+		size_t node = stack.back();
+		stack.pop_back();
+
+		if (false == visited[node])
+		{
+			visited[node] = true;
+			std::cout << node << ' ';
+
+			//for(auto it = mAdj[node].rbegin(); it != mAdj[node].rend();++i)
+			for (auto it = mAdj[node].end(); it != mAdj[node].begin();)
+			{
+				--it;						 //end()는 nullptr을 가르키므로 내부에서 선행연산 후 진행
+				size_t nextNode = it->to;
+
+				if(!visited[nextNode])
+					stack.push_back(nextNode);
+			}
+		}
+	}
+}
+
+void CGraph::BFS(size_t start)
+{
+	CVector<bool> visited(mVtxCnt, false);
+	CCircuitQueue<size_t> queue(mVtxCnt);
+
+	visited[start] = true;
+	queue.enqueue(start);
+
+	while (false == queue.empty())
+	{
+		size_t node = queue.front();
+		queue.dequeue();
+
+		std::cout << node << " ";
+
+		for (auto it = mAdj[node].begin(); it != mAdj[node].end(); ++it)
+		{
+			size_t nextNode = it->to;
+			if (false == visited[nextNode])
+			{
+				visited[nextNode] = true;
+				queue.enqueue(nextNode);
+			}
+		}
+	}
+}
+
