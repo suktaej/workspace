@@ -45,7 +45,7 @@ public:
 			currentNode = currentNode->next;
 			return *this;
 		}
-		iter& operator++(int)
+		iter operator++(int)
 		{
 			iter temp = *this;
 			++(*this);
@@ -59,7 +59,7 @@ public:
 			currentNode = currentNode->prev;
 			return *this;
 		}
-		iter& operator--(int)
+		iter operator--(int)
 		{
 			iter temp = *this;
 			--(*this);

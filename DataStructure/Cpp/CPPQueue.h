@@ -132,13 +132,12 @@ public:
     }
 };
 
-// HeapTree
 template<typename T>
-class CPriorityQueue
+class CPriorityQueue_Max
 {
 public:
-    CPriorityQueue() = default;
-    CPriorityQueue(std::initializer_list<T> items)
+    CPriorityQueue_Max() = default;
+    CPriorityQueue_Max(std::initializer_list<T> items)
     {
         for (const T& it : items)
             push(it);
@@ -202,7 +201,7 @@ public:
             HeapifyDown(0);
     }
 
-    int top() const
+    T top() const
     {
         if (true == mHeap.empty())
             throw std::out_of_range("Heap is empty");
@@ -216,4 +215,101 @@ public:
             std::cout << mHeap[i] << " ";
         std::cout << "\n";
     }
+
+    bool empty() const { return mHeap.empty(); }
+};
+
+template<typename T>
+class CPriorityQueue_Min
+{
+public:
+    CPriorityQueue_Min() = default;
+    CPriorityQueue_Min(std::initializer_list<T> items)
+    {
+        for (const T& it : items)
+            push(it);
+    }
+private:
+    CVector<T> mHeap;
+
+public:
+    // 0-indexed
+    int Parent(int i) { return (i - 1) / 2; }
+    int LChild(int i) { return 2 * i + 1; }
+    int RChild(int i) { return 2 * i + 2; }
+
+    // 1-indexed
+    //int Parent(int i) { return i / 2; }
+    //int LChild(int i) { return 2 * i ; }
+    //int RChild(int i) { return 2 * i + 1; }
+
+    void HeapifyUp(int idx)
+    {
+        while (idx != 0 && mHeap[Parent(idx)] > mHeap[idx])
+        {
+            std::swap(mHeap[Parent(idx)], mHeap[idx]);
+            idx = Parent(idx);
+        }
+    }
+
+    void HeapifyDown(int idx)
+    {
+        int smallestIdx = idx;
+        int left = LChild(idx);
+        int right = RChild(idx);
+
+        if (left < mHeap.size() && mHeap[left] < mHeap[smallestIdx])
+            smallestIdx = left;
+        if (right < mHeap.size() && mHeap[right] < mHeap[smallestIdx])
+            smallestIdx = right;
+
+        if (smallestIdx != idx)
+        {
+            std::swap(mHeap[idx], mHeap[smallestIdx]);
+            HeapifyDown(smallestIdx);
+        }
+    }
+
+    void push(const T& value)
+    {
+        mHeap.push_back(value);
+        HeapifyUp((int)mHeap.size()-1);
+    }
+
+    void pop()
+    {
+        if (true == mHeap.empty())
+            throw std::out_of_range("Heap is empty");
+
+        mHeap[0] = mHeap.back();
+        mHeap.pop_back();
+
+        if (false == mHeap.empty())
+            HeapifyDown(0);
+    }
+
+    T& top() 
+    {
+        if (true == mHeap.empty())
+            throw std::out_of_range("Heap is empty");
+
+        return mHeap[0];
+    }
+    
+    const T& top() const
+    {
+        if (true == mHeap.empty())
+            throw std::out_of_range("Heap is empty");
+
+        return mHeap[0];
+    }
+
+    void PrintHeap() const
+    {
+        for (size_t i=0 ; i< mHeap.size(); ++i)
+            std::cout << mHeap[i] << " ";
+        std::cout << "\n";
+    }
+
+    bool empty() const { return mHeap.empty(); }
 };

@@ -1,5 +1,6 @@
 #include "CPPVector.h"
 #include "CPPList.h"
+#include <utility>
 #include <limits>
 
 class CGraph
@@ -40,5 +41,5 @@ public:
 	void SetDirection(bool value);
 
 	void PrintGraph();
-	void Dijkstra(const CGraph& graph, size_t start);
+	void Dijkstra(size_t start, size_t end);
 };

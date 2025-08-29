@@ -15,12 +15,12 @@ public:
 	{
 		mArr = new T[_cap]{};
 	}
-	CVector(const T* _arr, size_t _size) : mSize(_size), mCapacity(_size)
+	CVector(size_t _cap, const T& _def) : mSize(_cap), mCapacity(_cap)
 	{
-		mArr = new T[_size];
+		mArr = new T[_cap];
 
-		for (size_t i = 0; i < _size; ++i)
-			*(mArr + i) = *(_arr + i);
+		for (size_t i = 0; i < _cap; ++i)
+			*(mArr + i) = _def;
 	}
 	// Copy
 	CVector(const CVector& vec) : mSize(vec.mSize), mCapacity(vec.mCapacity)
