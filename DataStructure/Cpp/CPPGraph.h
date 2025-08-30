@@ -23,7 +23,7 @@ public:
 	};
 
 public:
-	explicit CGraph(size_t _vertex = 0) : mVtxCnt(_vertex), mAdj(_vertex), mDir(true) { }
+	explicit CGraph(size_t _vertex = 0) : mVtxCnt(_vertex), mAdj(_vertex), mDir(true) {}
 
 	~CGraph()
 	{

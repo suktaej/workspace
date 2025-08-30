@@ -1,15 +1,18 @@
 #include "CPPVector.h"
 #include "CPPList.h"
 #include "CPPGraph.h"
+#include "CPPTree.h"
 
 void VectorTest();
 void ListTest();
 void PrintList(const CList<int>& list);
 void GraphTest();
+void TreeTest();
 
 int main()
 {
-	GraphTest();
+	//GraphTest();
+	TreeTest();
 }
 
 void VectorTest()
@@ -72,9 +75,7 @@ void PrintList(const CList<int>& list)
 
 void GraphTest()
 {
-	CGraph* grp = new CGraph;
-
-	grp->AddVertex(5);
+	CGraph* grp = new CGraph(5);
 
 	grp->AddEdge(0, 1, 10);
 	grp->AddEdge(0,2,20);
@@ -88,4 +89,27 @@ void GraphTest()
 	grp->AddEdge(3,0,60);
 
 	grp->Dijkstra(0, 4);
+}
+
+void TreeTest()
+{
+	CBinaryTree<int>* bt = new CBinaryTree<int>;
+	
+	bt->insert(10);
+	bt->insert(20);
+	bt->insert(50);
+	bt->insert(100);
+	bt->insert(60);
+	bt->insert(30);
+	bt->insert(70);
+	bt->insert(40);
+	bt->insert(90);
+
+	std::cout<<"PreOrder: ";
+	bt->preorder();
+	std::cout<<"InOrder: ";   
+	bt->inorder();
+	std::cout<<"PostOrder: "; 
+	bt->postorder();
+
 }
