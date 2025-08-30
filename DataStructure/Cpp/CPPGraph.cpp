@@ -9,6 +9,15 @@ void CGraph::AddVertex()
 	++mVtxCnt;
 }
 
+void CGraph::AddVertex(int _cnt)
+{
+	for(int i=0;i<_cnt;++i)
+	{
+		mAdj.emplace_back(CList<Edge>{});	// 임시객체 생성
+		++mVtxCnt;
+	}
+}
+
 void CGraph::AddEdge(size_t src, size_t dest, const int& weight)
 {
 	if (src >= mVtxCnt || dest >= mVtxCnt)

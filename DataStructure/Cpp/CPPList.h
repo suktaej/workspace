@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <utility>
 #include <initializer_list>
+#include <stdexcept>
 
 template<typename T>
 class CList

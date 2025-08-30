@@ -1,13 +1,15 @@
 #include "CPPVector.h"
 #include "CPPList.h"
+#include "CPPGraph.h"
 
 void VectorTest();
 void ListTest();
 void PrintList(const CList<int>& list);
+void GraphTest();
 
 int main()
 {
-
+	GraphTest();
 }
 
 void VectorTest()
@@ -66,4 +68,24 @@ void PrintList(const CList<int>& list)
 
 		std::cout << "nullptr\n";
 	}
+}
+
+void GraphTest()
+{
+	CGraph* grp = new CGraph;
+
+	grp->AddVertex(5);
+
+	grp->AddEdge(0, 1, 10);
+	grp->AddEdge(0,2,20);
+	grp->AddEdge(0,3,50);
+	grp->AddEdge(1,2,60);
+	grp->AddEdge(1,4,20);
+	grp->AddEdge(2,3,20);
+	grp->AddEdge(2,4,10);
+	grp->AddEdge(3,4,50);
+	grp->AddEdge(4,1,20);
+	grp->AddEdge(3,0,60);
+
+	grp->Dijkstra(0, 4);
 }

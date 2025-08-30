@@ -36,6 +36,7 @@ private:
 
 public:
 	void AddVertex();
+	void AddVertex(int _cnt);
 	void AddEdge(size_t _u, size_t _v, const int& _w);
 	bool RemoveEdge(size_t _u, size_t _v);
 	void SetDirection(bool value);

@@ -31,9 +31,9 @@ template<typename T>
 class CCircuitQueue {
 public:
     explicit CCircuitQueue(size_t cap)
-        : mCapacity(cap), mArr(new T[cap]), mFront(0), mRear(0), mSize(0) { }
+        : mArr(new T[cap]), mCapacity(cap), mSize(0), mFront(-2), mRear(0) { }
     CCircuitQueue(const CCircuitQueue& queue)
-        : mCapacity(queue.mCapacity), mFront(queue.mFront), mRear(queue.mRear), mSize(queue.mSize)
+        : mCapacity(queue.mCapacity), mSize(queue.mSize), mFront(queue.mFront), mRear(queue.mRear)
     {
         mArr = new T[queue.mCapacity];
 
@@ -258,9 +258,9 @@ public:
         int left = LChild(idx);
         int right = RChild(idx);
 
-        if (left < mHeap.size() && mHeap[left] < mHeap[smallestIdx])
+        if (left < static_cast<int>(mHeap.size()) && mHeap[left] < mHeap[smallestIdx])
             smallestIdx = left;
-        if (right < mHeap.size() && mHeap[right] < mHeap[smallestIdx])
+        if (right < static_cast<int>(mHeap.size()) && mHeap[right] < mHeap[smallestIdx])
             smallestIdx = right;
 
         if (smallestIdx != idx)
