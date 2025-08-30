@@ -140,8 +140,8 @@ private:
                 // 남아있는 복사대상을 제거
                 node->right = delete_Recursive(node->right,successor->data);
             }
-        return node;
         }
+        return node;
     }
 
     // 자식 노드가 2개 일 때 탐색용

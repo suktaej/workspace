@@ -93,7 +93,7 @@ void GraphTest()
 
 void TreeTest()
 {
-	CBinaryTree<int>* bt = new CBinaryTree<int>;
+	CBinarySearchTree<int>* bt = new CBinarySearchTree<int>;
 	
 	bt->insert(10);
 	bt->insert(20);
@@ -104,6 +104,7 @@ void TreeTest()
 	bt->insert(70);
 	bt->insert(40);
 	bt->insert(90);
+	bt->remove(100);
 
 	std::cout<<"PreOrder: ";
 	bt->preorder();
@@ -111,5 +112,4 @@ void TreeTest()
 	bt->inorder();
 	std::cout<<"PostOrder: "; 
 	bt->postorder();
-
 }
