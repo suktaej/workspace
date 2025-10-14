@@ -1,6 +1,5 @@
 #include "CPPGraph.h"
 #include "CPPQueue.h"
-#include <vector>
 #include <limits>
 
 void CGraph::AddVertex()

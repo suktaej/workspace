@@ -7,10 +7,11 @@ public:
     T data;
     TreeNode* left;
     TreeNode* right;
+    int balanceFactor;
 
 public:
     TreeNode(T value) 
-    : data(value), left(nullptr), right(nullptr) {}
+    : data(value), left(nullptr), right(nullptr), balanceFactor(0) {}
 };
 
 template<typename T>
@@ -152,4 +153,14 @@ private:
 
         return node;
     }
+};
+
+template<typename T>
+class CAVLTree : public CBinarySearchTree<T>
+{
+public:
+    void LLRot();
+    void RRRot();
+    void LRRot();
+    void RLRot();
 };
