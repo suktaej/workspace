@@ -43,6 +43,8 @@ public:
 
 	void PrintGraph();
 	void Dijkstra(size_t start, size_t end);
+	void Prim(size_t start);
+	void Kruskal();
 	void DFS(size_t start);
 	void DFS_Recursive(size_t start, CVector<bool>& visited);
 	void DFS_Stack(size_t start);

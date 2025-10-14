@@ -124,6 +124,43 @@ void CGraph::Dijkstra(size_t start, size_t end)
 		std::cout << path[i] << (i > 0 ? " -> " : "\n");
 }
 
+void CGraph::Prim(size_t start)
+{
+	CVector<bool> visited(mVtxCnt, false);
+	CPriorityQueue_Min<std::pair<int, std::pair<size_t, size_t>>> edgeHeap; // {weight, {src, dest}}
+
+	visited[start] = true;
+
+	for (auto it = mAdj[start].begin(); it != mAdj[start].end(); ++it)
+		edgeHeap.push({ it->weight,{start,it->to} });
+
+	while (false == edgeHeap.empty())
+	{
+		auto top = edgeHeap.top();
+		edgeHeap.pop();
+
+		int weight = top.first;
+		size_t src = top.second.first;
+		size_t dest = top.second.second;
+
+		if (visited[dest])
+			continue;
+
+		visited[dest] = true;
+		std::cout << "(" << src << " -> " << dest << " weight: " << weight << ")\n";
+
+		for (auto it = mAdj[dest].begin();it != mAdj[dest].end(); ++it)
+		{
+			if (false == visited[it->to])
+				edgeHeap.push({ it->weight,{dest,it->to} });
+		}
+	}
+}
+
+void CGraph::Kruskal()
+{
+}
+
 void CGraph::DFS(size_t start)
 {
 	CVector<bool> visited(mVtxCnt, false);
@@ -198,4 +235,3 @@ void CGraph::BFS(size_t start)
 		}
 	}
 }
-
