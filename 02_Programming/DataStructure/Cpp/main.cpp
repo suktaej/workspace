@@ -8,11 +8,12 @@ void ListTest();
 void PrintList(const CList<int>& list);
 void GraphTest();
 void TreeTest();
+void AVLTreeTest();
 
 int main()
 {
-	//GraphTest();
-	TreeTest();
+	AVLTreeTest();
+	return 0;
 }
 
 void VectorTest()
@@ -94,6 +95,29 @@ void GraphTest()
 void TreeTest()
 {
 	CBinarySearchTree<int>* bt = new CBinarySearchTree<int>;
+	
+	bt->insert(10);
+	bt->insert(20);
+	bt->insert(50);
+	bt->insert(100);
+	bt->insert(60);
+	bt->insert(30);
+	bt->insert(70);
+	bt->insert(40);
+	bt->insert(90);
+	bt->remove(100);
+
+	std::cout<<"PreOrder: ";
+	bt->preorder();
+	std::cout<<"InOrder: ";   
+	bt->inorder();
+	std::cout<<"PostOrder: "; 
+	bt->postorder();
+}
+
+void AVLTreeTest()
+{
+	CAVLTree<int>* bt = new CAVLTree<int>;
 	
 	bt->insert(10);
 	bt->insert(20);

@@ -7,11 +7,11 @@ public:
     T data;
     TreeNode* left;
     TreeNode* right;
-    int balanceFactor;
+    int nodeHeight;
 
 public:
     TreeNode(T value) 
-    : data(value), left(nullptr), right(nullptr), balanceFactor(0) {}
+    : data(value), left(nullptr), right(nullptr), nodeHeight(0) {}
 };
 
 template<typename T>
@@ -20,6 +20,11 @@ class CBinarySearchTree
 public:
     CBinarySearchTree() 
     : root(nullptr) {}
+
+    virtual ~CBinarySearchTree()
+    {
+        DestroyTree(root);
+    }
 
 private:
     TreeNode<T>* root;
@@ -54,51 +59,41 @@ public:
         std::cout<<std::endl; 
     }
 
+protected:
+    // 자식 노드가 2개 일 때 탐색용
+    TreeNode<T>* FindMin(TreeNode<T>* node)
+    {
+        while(node && node->left != nullptr)
+            node =  node->left;
+
+        return node;
+    }
+
 private:
-    TreeNode<T>* insert_Recursive(TreeNode<T>* node, const T& value)
+    void DestroyTree(TreeNode<T>* node)
+    {
+        if (nullptr == node)
+            return;
+
+        DestroyTree(node->left);
+        DestroyTree(node->right);
+        delete node;
+    }
+
+    virtual TreeNode<T>* insert_Recursive(TreeNode<T>* node, const T& value)
     {
         if(nullptr == node)
             return new TreeNode<T>(value);
 
-        if(value < node->data)
+        if (value < node->data)
             node->left = insert_Recursive(node->left, value);
-        else if(value > node->data)
+        else if (value > node->data)
             node->right = insert_Recursive(node->right, value);
 
         return node;
     }
 
-    void inorder_Recursive(TreeNode<T>* node)
-    {
-        if(nullptr == node)
-            return;
-
-        inorder_Recursive(node->left);
-        std::cout<<node->data<<" ";
-        inorder_Recursive(node->right);
-    }
-
-    void preorder_Recursive(TreeNode<T>* node)
-    {
-        if(nullptr == node)
-            return;
-
-        std::cout<<node->data<<" ";
-        preorder_Recursive(node->left);
-        preorder_Recursive(node->right);
-    }
-
-    void postorder_Recursive(TreeNode<T>* node)
-    {
-        if(nullptr == node)
-            return;
-
-        postorder_Recursive(node->left);
-        postorder_Recursive(node->right);
-        std::cout<<node->data<<" ";
-    }
-
-    TreeNode<T>* delete_Recursive(TreeNode<T>* node, const T& value)
+    virtual TreeNode<T>* delete_Recursive(TreeNode<T>* node, const T& value)
     {
         if(nullptr == node)
             return node;
@@ -145,13 +140,34 @@ private:
         return node;
     }
 
-    // 자식 노드가 2개 일 때 탐색용
-    TreeNode<T>* FindMin(TreeNode<T>* node)
+    void inorder_Recursive(TreeNode<T>* node)
     {
-        while(node && node->left != nullptr)
-            node =  node->left;
+        if(nullptr == node)
+            return;
 
-        return node;
+        inorder_Recursive(node->left);
+        std::cout<<node->data<<" ";
+        inorder_Recursive(node->right);
+    }
+
+    void preorder_Recursive(TreeNode<T>* node)
+    {
+        if(nullptr == node)
+            return;
+
+        std::cout<<node->data<<" ";
+        preorder_Recursive(node->left);
+        preorder_Recursive(node->right);
+    }
+
+    void postorder_Recursive(TreeNode<T>* node)
+    {
+        if(nullptr == node)
+            return;
+
+        postorder_Recursive(node->left);
+        postorder_Recursive(node->right);
+        std::cout<<node->data<<" ";
     }
 };
 
@@ -212,7 +228,7 @@ private:
         return LRot(node);
     }
 
-public:
+private:
     TreeNode<T>* insert_Recursive(TreeNode<T>* node, const T& value) override
     {
         if (!node)
@@ -239,6 +255,59 @@ public:
             return LRRot(node); // LR
         if (balance < -1 && value < node->right->data)
             return RLRot(node); // RL
+
+        return node;
+    }
+
+    TreeNode<T>* delete_Recursive(TreeNode<T>* node, const T& value) override
+    {
+        if (nullptr == node)
+            return node;
+
+        if (value < node->data)
+            node->left = delete_Recursive(node->left, value);
+        else if (value > node->data)
+            node->right = delete_Recursive(node->right, value);
+		else    
+		{
+            // 삭제노드 발견 시 자식노드 탐색
+            if (nullptr == node->left || nullptr == node->right)
+            {
+                TreeNode<T>* temp = node->left ? node->left : node->right;
+                if (nullptr == temp) // Leaf node
+                {
+                    temp = node;
+                    node = nullptr;
+                }
+                else                // 자식이 하나일 경우
+                    *node = *temp;  // 값을 복사
+
+                delete temp;　      // Heap에서 삭제
+            }
+            else                    // 자식이 두 개일 경우
+            {
+                // 오른쪽 서브트리 최소값으로 대체
+                TreeNode<T>* temp = FindMin(node->right);
+                node->data = temp->data;
+                node->right = delete_Recursive(node->right, temp->data);
+            }
+		}
+
+        if (nullptr == node) // Leaf삭제 후 null처리
+            return node;
+
+        node->nodeHeight = 1 + std::max(GetHeight(node->left), GetHeight(node->right));
+
+        int balance = GetBalance(node);
+
+        if (balance > 1 && GetBalance(node->left) >= 0) 
+            return RRot(node);     // LL
+        if (balance > 1 && GetBalance(node->left) < 0)
+            return LRRot(node);    // LR
+        if (balance < -1 && GetBalance(node->right) <= 0)
+            return LRot(node);     // RR
+        if (balance < -1 && GetBalance(node->right) > 0)  
+            return RLRot(node);    // RL
 
         return node;
     }

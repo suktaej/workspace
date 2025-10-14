@@ -4,7 +4,7 @@
 CC = g++
 
 # 실행 파일 이름
-TARGET = as
+TARGET = exe 
 
 # 소스 파일 (헤더 파일은 제외)
 SRCS = main.cpp CPPGraph.cpp
