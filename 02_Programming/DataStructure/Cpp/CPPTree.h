@@ -159,52 +159,43 @@ template<typename T>
 class CAVLTree : public CBinarySearchTree<T>
 {
 private:
-    int HeightCalc(TreeNode<T>* node)
+    int GetHeight(TreeNode<T>* node)
     {
-		if (nullptr == node)
-			return 0;
-
-        return 1 + std::max(HeightCalc(node->left), HeightCalc(node->right));
+        return node ? node->nodeHeight : 0; //leaf node는 0, Internal node는 자신의 height
     }
 
     int GetBalance(TreeNode<T>* node)
     {
-        if (nullptr == node)
+        if (!node)
             return 0;
-        
-        return HeightCalc(node->left) - HeightCalc(node->right);
+
+        return GetHeight(node->left) - GetHeight(node->right);
     }
-    
+
     TreeNode<T>* LRot(TreeNode<T>* node)
     {
-        if (nullptr == node)
-            return nullptr;
-
         TreeNode<T>* newRoot = node->right;
         TreeNode<T>* movedSubTree = newRoot->left;
 
         newRoot->left = node;
         node->right = movedSubTree;
 
-        node->balanceFactor = GetBalance(node);
-        newRoot->balanceFactor = GetBalance(newRoot);
+        node->nodeHeight = 1 + std::max(GetHeight(node->left), GetHeight(node->right));
+        newRoot->nodeHeight = 1 + std::max(GetHeight(newRoot->left), GetHeight(newRoot->right));
 
         return newRoot;
     }
 
     TreeNode<T>* RRot(TreeNode<T>* node)
     {
-        if (nullptr == node)
-            return nullptr;
-
         TreeNode<T>* newRoot = node->left;
         TreeNode<T>* movedSubTree = newRoot->right;
 
         newRoot->right = node;
         node->left = movedSubTree;
 
-        node->balanceFactor = GetBalance(node);
-        newRoot->balanceFactor = GetBalance(newRoot);
+        node->nodeHeight = 1 + std::max(GetHeight(node->left), GetHeight(node->right));
+        newRoot->nodeHeight = 1 + std::max(GetHeight(newRoot->left), GetHeight(newRoot->right));
 
         return newRoot;
     }
@@ -224,7 +215,7 @@ private:
 public:
     TreeNode<T>* insert_Recursive(TreeNode<T>* node, const T& value) override
     {
-        if(nullptr == node)
+        if (!node)
             return new TreeNode<T>(value);
 
         if (value < node->data)
@@ -232,19 +223,21 @@ public:
         else if (value > node->data)
             node->right = insert_Recursive(node->right, value);
         else
-            return node;    // 중복 값 없음
+            return node;
 
-        // 밸런스 갱신
-        node->balanceFactor = GetBalance(node);
+        // 높이 갱신
+        node->nodeHeight = 1 + std::max(GetHeight(node->left), GetHeight(node->right));
+
+        int balance = GetBalance(node);
 
         // 불균형 시 회전
-        if (node->balanceFactor > 1 && value < node->left->data)
+        if (balance > 1 && value < node->left->data)
             return RRot(node); // LL
-        if (node->balanceFactor < -1 && value > node->right->data)
+        if (balance < -1 && value > node->right->data)
             return LRot(node); // RR
-        if (node->balanceFactor > 1 && value > node->left->data)
+        if (balance > 1 && value > node->left->data)
             return LRRot(node); // LR
-        if (node->balanceFactor < -1 && value < node->right->data)
+        if (balance < -1 && value < node->right->data)
             return RLRot(node); // RL
 
         return node;
