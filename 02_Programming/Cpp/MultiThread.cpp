@@ -7,7 +7,7 @@ void worker(std::vector<int>::iterator start, std::vector<int>::iterator end, in
     int sum = 0;
 
     for(auto it = start; it<end;++it)
-    sum+= *it;
+        sum += *it;
 
     *result = sum;
 
@@ -48,6 +48,7 @@ void threadTest1()
 void threadTest2()
 {
     std::vector<int> data(10000);
+
     for(int i = 0; i< 10000; ++i)
         data[i] = i;
 
@@ -70,6 +71,6 @@ void threadTest2()
 
 int main(void)
 {
-   threadTest2();
+   threadTest1();
    return 0;
 }

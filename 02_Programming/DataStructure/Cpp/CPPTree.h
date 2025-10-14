@@ -158,9 +158,95 @@ private:
 template<typename T>
 class CAVLTree : public CBinarySearchTree<T>
 {
+private:
+    int HeightCalc(TreeNode<T>* node)
+    {
+		if (nullptr == node)
+			return 0;
+
+        return 1 + std::max(HeightCalc(node->left), HeightCalc(node->right));
+    }
+
+    int GetBalance(TreeNode<T>* node)
+    {
+        if (nullptr == node)
+            return 0;
+        
+        return HeightCalc(node->left) - HeightCalc(node->right);
+    }
+    
+    TreeNode<T>* LRot(TreeNode<T>* node)
+    {
+        if (nullptr == node)
+            return nullptr;
+
+        TreeNode<T>* newRoot = node->right;
+        TreeNode<T>* movedSubTree = newRoot->left;
+
+        newRoot->left = node;
+        node->right = movedSubTree;
+
+        node->balanceFactor = GetBalance(node);
+        newRoot->balanceFactor = GetBalance(newRoot);
+
+        return newRoot;
+    }
+
+    TreeNode<T>* RRot(TreeNode<T>* node)
+    {
+        if (nullptr == node)
+            return nullptr;
+
+        TreeNode<T>* newRoot = node->left;
+        TreeNode<T>* movedSubTree = newRoot->right;
+
+        newRoot->right = node;
+        node->left = movedSubTree;
+
+        node->balanceFactor = GetBalance(node);
+        newRoot->balanceFactor = GetBalance(newRoot);
+
+        return newRoot;
+    }
+
+    TreeNode<T>* LRRot(TreeNode<T>* node)
+    {
+        node->left = LRot(node->left);
+        return RRot(node);
+    }
+
+    TreeNode<T>* RLRot(TreeNode<T>* node)
+    {
+        node->right = RRot(node->right);
+        return LRot(node);
+    }
+
 public:
-    void LLRot();
-    void RRRot();
-    void LRRot();
-    void RLRot();
+    TreeNode<T>* insert_Recursive(TreeNode<T>* node, const T& value) override
+    {
+        if(nullptr == node)
+            return new TreeNode<T>(value);
+
+        if (value < node->data)
+            node->left = insert_Recursive(node->left, value);
+        else if (value > node->data)
+            node->right = insert_Recursive(node->right, value);
+        else
+            return node;    // 중복 값 없음
+
+        // 밸런스 갱신
+        node->balanceFactor = GetBalance(node);
+
+        // 불균형 시 회전
+        if (node->balanceFactor > 1 && value < node->left->data)
+            return RRot(node); // LL
+        if (node->balanceFactor < -1 && value > node->right->data)
+            return LRot(node); // RR
+        if (node->balanceFactor > 1 && value > node->left->data)
+            return LRRot(node); // LR
+        if (node->balanceFactor < -1 && value < node->right->data)
+            return RLRot(node); // RL
+
+        return node;
+    }
 };
