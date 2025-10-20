@@ -136,6 +136,7 @@ public:
 
 	void reserve(size_t _capacity);
 	void resize(size_t _size);
+	void resize(size_t _size, const T& _init);
 };
 
 #include "CPPVector.inl"

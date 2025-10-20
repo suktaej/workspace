@@ -4,7 +4,7 @@ class CDisjointSet
 {
 public:
 	explicit CDisjointSet(size_t _inp = 0)
-		: parent(_inp), rank(_n, 0)
+		: parent(_inp), rank(_inp, 0)
 	{
 		for (size_t i = 0;i < _inp;++i)
 			parent[i] = i;
@@ -13,7 +13,7 @@ public:
 	void Resize(size_t _inp)
 	{
 		parent.resize(_inp);
-		rank.resize(_inp, 0);
+		rank.resize(_inp,0);
 
 		for (size_t i = 0; i < _inp; ++i)
 			parent[i] = i;
@@ -22,7 +22,7 @@ public:
 	size_t Find(size_t _find)
 	{
 		if (parent[_find] != _find)
-			parent[_find] = Find(parent[_find]);	// °æ·Î¾ĞÃà (Path Compression)
+			parent[_find] = Find(parent[_find]);	// ê²½ë¡œì••ì¶• (Path Compression)
 
 		return parent[_find];
 	}
@@ -36,7 +36,7 @@ public:
 			return false;
 
 		if (rank[x] < rank[y])
-			parnet[x] = y;
+			parent[x] = y;
 		else if (rank[x] > rank[y])
 			parent[y] = x;
 		else
@@ -54,7 +54,7 @@ public:
 	}
 
 private:
-	CVector<size_t> parent; // Node iÀÇ parentNode index
-							// Node¿Í parent°¡ °°Àº °ªÀÏ °æ¿ì ÀÚ±â ÀÚ½ÅÀÌ ·çÆ®(´ëÇ¥³ëµå)
-	CVector<size_t> rank;	// Node i°¡ rootÀÏ °æ¿ì treeÀÇ ³ôÀÌ
+	CVector<size_t> parent; // Node iì˜ parentNode index
+							// Nodeì™€ parentê°€ ê°™ì€ ê°’ì¼ ê²½ìš° ìê¸° ìì‹ ì´ ë£¨íŠ¸(ëŒ€í‘œë…¸ë“œ)
+	CVector<size_t> rank;	// Node iê°€ rootì¼ ê²½ìš° treeì˜ ë†’ì´
 };

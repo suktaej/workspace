@@ -263,3 +263,26 @@ void CVector<T>::resize(size_t newSize)
     // 마지막으로 실제 크기를 업데이트
     mSize = newSize;
 }
+
+template<typename T>
+void CVector<T>::resize(size_t newSize, const T& init)
+{
+    if (newSize == mSize)
+        return;
+    
+    else if (newSize > mSize)
+    {
+        if (newSize > mCapacity)
+            reserve(newSize);
+
+        for (size_t i = mSize; i < newSize; ++i)
+            new(&mArr[i]) T(init);  // const T&를 복사
+    }
+    else
+    {
+        for (size_t i = newSize; i < mSize; ++i)
+            mArr[i].~T();
+    }
+
+    mSize = newSize;
+}
