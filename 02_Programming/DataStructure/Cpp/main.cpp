@@ -12,7 +12,8 @@ void AVLTreeTest();
 
 int main()
 {
-	AVLTreeTest();
+	// AVLTreeTest();
+	GraphTest();
 	return 0;
 }
 
@@ -89,7 +90,8 @@ void GraphTest()
 	grp->AddEdge(4,1,20);
 	grp->AddEdge(3,0,60);
 
-	grp->Dijkstra(0, 4);
+	// grp->Dijkstra(0, 4);
+	grp->Kruskal();
 }
 
 void TreeTest()

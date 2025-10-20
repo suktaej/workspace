@@ -287,7 +287,7 @@ private:
             else                    // 자식이 두 개일 경우
             {
                 // 오른쪽 서브트리 최소값으로 대체
-                TreeNode<T>* temp = FindMin(node->right);
+                TreeNode<T>* temp = this->FindMin(node->right);
                 node->data = temp->data;
                 node->right = delete_Recursive(node->right, temp->data);
             }
