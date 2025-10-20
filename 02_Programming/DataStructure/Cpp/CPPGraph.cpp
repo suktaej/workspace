@@ -1,6 +1,8 @@
 #include "CPPGraph.h"
 #include "CPPQueue.h"
+#include "CPPDisjointSet.h"
 #include <limits>
+#include <algorithm>
 
 void CGraph::AddVertex()
 {
@@ -159,6 +161,56 @@ void CGraph::Prim(size_t start)
 
 void CGraph::Kruskal()
 {
+	struct EdgeInfo
+	{
+		size_t src;
+		size_t dest;
+		int weight;
+	};
+
+	if (mDir)
+	{
+		std::cout << "Kruskal Algorithm requires an undirected graph.\n";
+		return;
+	}
+
+	CVector<EdgeInfo> edges;
+
+	for (size_t srcIdx = 0; srcIdx < mVtxCnt; ++srcIdx)
+	{
+		for (auto it = mAdj[srcIdx].begin(); it != mAdj[srcIdx].end();++it)
+		{
+			size_t destIdx = it->to;
+			int edgeWeight = it->weight;
+
+			if (srcIdx > destIdx)	// 방향성이 없으므로
+				continue;
+
+			edges.push_back({ srcIdx, destIdx, edgeWeight });
+		}
+	}
+
+	std::sort(&edges[0], &edges[0] + edges.size(),
+		[](const EdgeInfo& f, const EdgeInfo& s)
+		{
+			return f.weight < s.weight;
+		});
+
+	CDisjointSet ds(mVtxCnt);
+
+	int totalWeight = 0;
+
+	for (size_t i = 0; i < edges.size(); ++i)
+	{
+		const auto& edge = edges[i];
+
+		if (ds.Union(edge.src, edge.dest))
+		{
+			totalWeight += edge.weight;
+			std::cout << "Edge (" << edge.src << " - " << edge.dest << ") : " << edge.weight << "\n";
+		}
+	}
+	std::cout << "Total Weight = " << totalWeight << "\n";
 }
 
 void CGraph::DFS(size_t start)
