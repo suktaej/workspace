@@ -175,6 +175,24 @@ public:
 	}
 
 	template<class... Args>
+	void push_front(Args&&... args)
+	{
+		Node* newNode = new Node(std::forward<Args>(args)...);
+
+		// 처음 노드가 삽입될 경우
+		if (nullptr == mHead)
+			mHead = mTail = newNode;
+		else
+		{
+			newNode->next = mHead;	// 새 Node를 Head 앞으로
+			mHead->prev = newNode;	// 기존 head의 prev를 새 Node로
+			mHead = newNode;		// head 갱신
+		}
+
+		++mSize;
+	}
+
+	template<class... Args>
 	void push_back(Args&&... args) 
 	{
 		Node* newNode = new Node(std::forward<Args>(args)...);
