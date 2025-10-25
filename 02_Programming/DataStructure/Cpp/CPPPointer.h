@@ -323,6 +323,7 @@ private:
 		}
 	}
 
+public:
 	bool expired() const
 	{
 		return !ctr || ctr->useCount == 0;
