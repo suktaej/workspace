@@ -13,11 +13,11 @@ public:
     T data;
     TreeNode* left;
     TreeNode* right;
-    int nodeHeight;     //AVL Tree
-    NodeColor color;    // RedBlack Tree
+    int nodeHeight;     // AVL Tree
     TreeNode* parent;   // RedBlack Tree
+    NodeColor color;    // RedBlack Tree
 
-public:
+    public:
     TreeNode(T value) 
     : data(value), left(nullptr), right(nullptr), nodeHeight(0), parent(nullptr), color(Red) {}
 };
@@ -94,17 +94,6 @@ protected:
         return node;
     }
 
-private:
-    void DestroyTree(TreeNode<T>* node)
-    {
-        if (nullptr == node)
-            return;
-
-        DestroyTree(node->left);
-        DestroyTree(node->right);
-        delete node;
-    }
-
     virtual TreeNode<T>* insert_Recursive(TreeNode<T>* node, const T& value)
     {
         if(nullptr == node)
@@ -163,6 +152,17 @@ private:
             }
         }
         return node;
+    }
+
+private:
+    void DestroyTree(TreeNode<T>* node)
+    {
+        if (nullptr == node)
+            return;
+
+        DestroyTree(node->left);
+        DestroyTree(node->right);
+        delete node;
     }
 
     void inorder_Recursive(TreeNode<T>* node)
@@ -305,12 +305,12 @@ private:
                 else                // 자식이 하나일 경우
                     *node = *temp;  // 값을 복사
 
-                delete temp;　      // Heap에서 삭제
+                delete temp;      // Heap에서 삭제
             }
             else                    // 자식이 두 개일 경우
             {
                 // 오른쪽 서브트리 최소값으로 대체
-                TreeNode<T>* temp = FindMin(node->right);
+                TreeNode<T>* temp = this->FindMin(node->right);
                 node->data = temp->data;
                 node->right = delete_Recursive(node->right, temp->data);
             }
@@ -339,15 +339,16 @@ private:
 template<typename T>
 class CRedBlackTree : public CBinarySearchTree<T>
 {
+protected:
     using CBinarySearchTree<T>::insert_Recursive;   // name hiding 방지
     using CBinarySearchTree<T>::root;               // 부모 클래스의 root를 자식의 scope에 노출
 
 public:
     void insert(const T& value) override
     {
-        TreeNode<T>* newNode = insert_Recursive(root, nullptr, value);
-        FixInsert(newNode);
-        root->color = Black;
+        this->root = insert_Recursive(this->root, nullptr, value);
+        FixInsert(this->FindNode(value)); // 새로 삽입된 노드 포인터를 이용
+        this->root->color = Black;
     }
 
     void remove(const T& value) override

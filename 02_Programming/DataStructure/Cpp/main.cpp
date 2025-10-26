@@ -1,7 +1,7 @@
 #include "CPPVector.h"
 #include "CPPList.h"
 #include "CPPGraph.h"
-#include "CPPTree.h"
+#include "CPPMap.h"
 
 void VectorTest();
 void ListTest();
@@ -9,11 +9,13 @@ void PrintList(const CList<int>& list);
 void GraphTest();
 void TreeTest();
 void AVLTreeTest();
+void MapTest();
 
 int main()
 {
 	// AVLTreeTest();
-	GraphTest();
+	//GraphTest();
+	MapTest();
 	return 0;
 }
 
@@ -138,4 +140,17 @@ void AVLTreeTest()
 	bt->inorder();
 	std::cout<<"PostOrder: "; 
 	bt->postorder();
+}
+
+void MapTest()
+{
+	CMap<int, std::string> myMap;
+	myMap.insert(10, "apple");
+	myMap.insert(5, "banana");
+	myMap.insert(20, "cherry");
+
+	if (auto v = myMap.find(20))
+		std::cout << *v << std::endl; // banana
+
+	myMap.remove(10);
 }
