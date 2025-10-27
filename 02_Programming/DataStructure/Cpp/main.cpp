@@ -1,6 +1,7 @@
 #include "CPPVector.h"
 #include "CPPList.h"
 #include "CPPGraph.h"
+#include "CPPHashMap.h"
 #include "CPPMap.h"
 
 void VectorTest();
@@ -10,12 +11,11 @@ void GraphTest();
 void TreeTest();
 void AVLTreeTest();
 void MapTest();
+void HashTest();
 
 int main()
 {
-	// AVLTreeTest();
-	//GraphTest();
-	MapTest();
+	HashTest();
 	return 0;
 }
 
@@ -152,5 +152,47 @@ void MapTest()
 	if (auto v = myMap.find(20))
 		std::cout << *v << std::endl; // banana
 
+	std::string ex = myMap.contains(10) ? "eixst" : "not exist";
+	std::cout << ex <<std::endl;
+
 	myMap.remove(10);
+	ex = myMap.contains(10) ? "eixst" : "not exist";
+	std::cout << ex <<std::endl;
+
+	for (auto it = myMap.begin(); it != myMap.end(); ++it)
+		std::cout << it->key << " : " << it->value << std::endl;
+}
+
+void HashTest()
+{
+	CHashMap<int, std::string> map;
+
+    map.insert(10, "Ten");
+    map.insert(20, "Twenty");
+    map.insert(30, "Thirty");
+
+    // 기존 키 업데이트
+    map.insert(20, "Twenty Updated");
+
+    // find 확인
+    if (auto val = map.find(20))
+        std::cout << "Key 20 -> " << *val << "\n";
+
+    // contains 확인
+    std::cout << "Contains 10 : " << (map.contains(10) ? "exist" : "does not exist") << "\n";
+    std::cout << "Contains 40 : " << (map.contains(40) ? "exist" : "does not exist") << "\n";
+
+    // operator[]
+    map[40] = "Forty";
+    std::cout << "Key 40 -> " << map[40] << "\n";
+
+    // remove 확인
+    map.remove(10);
+    std::cout << "Contains 10 after remove : " << (map.contains(10)? "exist" : "does not exist") << "\n";
+
+    // Rehash 테스트
+    for (int i = 0; i < 100; ++i)
+        map.insert(i, "Num" + std::to_string(i));
+
+    std::cout << "Size after inserts: " << map.size() << "\n";
 }

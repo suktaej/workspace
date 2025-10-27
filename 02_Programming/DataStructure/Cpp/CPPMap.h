@@ -75,8 +75,8 @@ public:
         }
 	};
 
-	CMapIterator begin() { return CMapIterator(leftmost(this->root)); }
-    CMapIterator end() { return CMapIterator(nullptr); }
+	CMapIterator begin() { return CMapIterator(leftmost(this->root),this); }
+    CMapIterator end() { return CMapIterator(nullptr,this); }
 
 public:
 	CMap()
@@ -92,7 +92,7 @@ public:
 	void insert(const K& key, const V& value);
 	V* find(const K& key);
 	void remove(const K& key);
-	bool contains(const K& key) const; 
+	bool contains(const K& key); 
 
 	V& operator[](const K& key) 
 	{
@@ -121,6 +121,7 @@ private:
 
 		// 2. 오른쪽 자식이 없으면, 부모를 따라 올라가면서 자신이 왼쪽 자식인 경우
 		TreeNode<MapNode<K,V>>* parent = node->parent;
+
 		while (parent && node == parent->right)
 		{
 			node = parent;
@@ -134,25 +135,36 @@ private:
 		if (!node) return nullptr;
 	
 		// 왼쪽 서브트리가 있으면 가장 오른쪽 노드
-		if (node->left) {
+		if (node->left) 
+		{
 			node = node->left;
-			while (node->right) node = node->right;
+
+			while (node->right) 
+				node = node->right;
+
 			return node;
 		}
 	
 		// 왼쪽 서브트리가 없으면 부모를 따라 올라가기
 		TreeNode<MapNode<K,V>>* parent = node->parent;
-		while (parent && node == parent->left) {
+
+		while (parent && node == parent->left) 
+		{
 			node = parent;
 			parent = parent->parent;
 		}
+
 		return parent;
 	}
 
 	TreeNode<MapNode<K,V>>* leftmost(TreeNode<MapNode<K,V>>* node)
     {
-        if (!node) return nullptr;
-        while (node->left) node = node->left;
+        if (!node) 
+			return nullptr;
+	
+        while (node->left) 
+			node = node->left;
+
         return node;
     }
 };
@@ -191,11 +203,12 @@ inline MapNode<K,V>* CMap<K, V>::FindNode(const K& key)
 		else
 			current = current->right;
 	}
+
 	return nullptr;
 }
 
 template<typename K, typename V>
-inline bool CMap<K, V>::contains(const K& key) const
+inline bool CMap<K, V>::contains(const K& key) 
 {
 	return FindNode(key) != nullptr;
 }
