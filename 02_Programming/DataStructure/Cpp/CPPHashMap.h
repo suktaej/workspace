@@ -153,6 +153,60 @@ private:
 public:
     explicit CHashMap(size_t _bucketCount = 16)
         : buckets(_bucketCount), bucketCount(_bucketCount), elementCount(0) { }
+    
+    // Copy Constructor
+    CHashMap(const CHashMap& other)
+        : buckets(other.bucketCount), bucketCount(other.bucketCount), elementCount(other.elementCount), hasher(other.hasher), loadFactor(other.loadFactor)
+    {
+        for (size_t i = 0; i < bucketCount; ++i)
+            buckets[i] = other.buckets[i]; // CList 복사
+    }
+
+    // Copy Assignment
+    CHashMap& operator=(const CHashMap& other)
+    {
+        if (this == &other)
+            return *this;
+
+        bucketCount = other.bucketCount;
+        elementCount = other.elementCount;
+        hasher = other.hasher;
+        loadFactor = other.loadFactor;
+
+        buckets.resize(bucketCount);
+
+        for (size_t i = 0; i < bucketCount; ++i)
+            buckets[i] = other.buckets[i]; // CList 복사
+
+        return *this;
+    }
+
+    // Move Constructor
+    CHashMap(CHashMap&& other) noexcept
+        : buckets(std::move(other.buckets)), bucketCount(other.bucketCount), elementCount(other.elementCount), hasher(std::move(other.hasher)), loadFactor(other.loadFactor)
+    {
+        other.bucketCount = 0;
+        other.elementCount = 0;
+    }
+
+    // Move Assignment
+    CHashMap& operator=(CHashMap&& other) noexcept
+    {
+        if (this == &other)
+            return *this;
+
+        buckets = std::move(other.buckets);
+        bucketCount = other.bucketCount;
+        elementCount = other.elementCount;
+        hasher = std::move(other.hasher);
+        loadFactor = other.loadFactor;
+
+        other.bucketCount = 0;
+        other.elementCount = 0;
+
+        return *this;
+    }
+
     ~CHashMap() = default;
 
 public:

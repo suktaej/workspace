@@ -144,7 +144,7 @@ public:
 	iter end() { return iter(nullptr); }
 	size_t size() const { return mSize; }
 	bool empty() const { return 0 == mSize; }
-	iter back_iterator() { return iter(mTail); }
+	iter back_iterator() { return iter(mTail); }	// not rbegin
     const iter back_iterator() const { return iter(mTail); }
 
 	T& back()

@@ -15,17 +15,9 @@ void CVector<T>::Resizing()
 
     for (size_t i = 0; i < mSize; ++i) 
     {
-        /* 기존 코드
-        std::move(mArr, mArr + mSize, newArr);
-        // *(newArr + i) = *(arr + i);   // 복사 대입
-        // newArr[i] = std::move(mArr[i]); // std::move로 소유권을 이전
-        */
-
-        // placement new와 std::move를 사용하여 기존 객체를 새 위치로 "이동 생성"
-        new(&newArr[i]) T(std::move(mArr[i])); // T의 이동 생성자 호출
-        // 기존 위치의 객체는 소멸자 호출
-        // (T가 non-trivial 타입일 경우 필수. trivial 타입(int, float 등)은 생략 가능하나 안전을 위해 호출)
-        mArr[i].~T();
+        new(&newArr[i]) T(std::move(mArr[i]));  // placement new와 std::move를 사용하여 기존 객체를 새 위치로 "이동 생성"
+                                                // (T가 non-trivial 타입일 경우 필수. trivial 타입(int, float 등)은 생략 가능하나 안전을 위해 호출)
+        mArr[i].~T(); // 기존 위치의 객체는 소멸자 호출
     }
 
     delete[] mArr;      // 기존 배열 메모리 해제
