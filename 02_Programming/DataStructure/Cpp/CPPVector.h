@@ -11,7 +11,7 @@ public:
 	{
 		mArr = new T[4]{};
 	}
-	CVector(size_t _cap) : mSize(0), mCapacity(_cap)
+	CVector(size_t _cap) : mSize(_cap), mCapacity(_cap)
 	{
 		mArr = new T[_cap]{};
 	}

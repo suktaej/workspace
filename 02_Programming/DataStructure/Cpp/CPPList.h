@@ -57,6 +57,9 @@ public:
 			if (currentNode == nullptr)
 				throw std::out_of_range("operator-- : iterator at begin");
 
+			if (currentNode->prev == nullptr) // CList의 begin()에서 감소 시도
+				throw std::out_of_range("CListIterator::operator-- : iterator at begin");
+
 			currentNode = currentNode->prev;
 			return *this;
 		}
@@ -141,6 +144,8 @@ public:
 	iter end() { return iter(nullptr); }
 	size_t size() const { return mSize; }
 	bool empty() const { return 0 == mSize; }
+	iter back_iterator() { return iter(mTail); }
+    const iter back_iterator() const { return iter(mTail); }
 
 	T& back()
 	{

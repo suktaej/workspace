@@ -5,20 +5,32 @@
 template<typename T>
 void CVector<T>::Resizing()
 {
+    // 현재 사이즈가 용량보다 작으면 리사이징 필요 없음
     if (mSize < mCapacity)
         return;
 
+    // 용량이 0이면 초기 용량 1, 아니면 2배
     size_t newCapacity = (mCapacity == 0) ? 1 : mCapacity * 2;
-    T* newArr = new T[newCapacity];
+    T* newArr = new T[newCapacity]; // 새로운 배열 할당
 
-    for (size_t i = 0; i < mSize; ++i)
-        //*(newArr + i) = *(arr + i);   // 복사 대입
-        //newArr[i] = std::move(mArr[i]); // std::move로 소유권을 이전
+    for (size_t i = 0; i < mSize; ++i) 
+    {
+        /* 기존 코드
         std::move(mArr, mArr + mSize, newArr);
+        // *(newArr + i) = *(arr + i);   // 복사 대입
+        // newArr[i] = std::move(mArr[i]); // std::move로 소유권을 이전
+        */
 
-    delete[] mArr;
-    mArr = newArr;
-    mCapacity = newCapacity;
+        // placement new와 std::move를 사용하여 기존 객체를 새 위치로 "이동 생성"
+        new(&newArr[i]) T(std::move(mArr[i])); // T의 이동 생성자 호출
+        // 기존 위치의 객체는 소멸자 호출
+        // (T가 non-trivial 타입일 경우 필수. trivial 타입(int, float 등)은 생략 가능하나 안전을 위해 호출)
+        mArr[i].~T();
+    }
+
+    delete[] mArr;      // 기존 배열 메모리 해제
+    mArr = newArr;      // mArr이 새 배열을 가리키도록
+    mCapacity = newCapacity; // 용량 갱신
 }
 
 template<typename T>

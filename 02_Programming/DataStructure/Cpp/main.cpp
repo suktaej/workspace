@@ -170,6 +170,7 @@ void HashTest()
     map.insert(10, "Ten");
     map.insert(20, "Twenty");
     map.insert(30, "Thirty");
+	map.insert(40, "Forty");
 
     // 기존 키 업데이트
     map.insert(20, "Twenty Updated");
@@ -180,7 +181,7 @@ void HashTest()
 
     // contains 확인
     std::cout << "Contains 10 : " << (map.contains(10) ? "exist" : "does not exist") << "\n";
-    std::cout << "Contains 40 : " << (map.contains(40) ? "exist" : "does not exist") << "\n";
+    std::cout << "Contains 50 : " << (map.contains(50) ? "exist" : "does not exist") << "\n";
 
     // operator[]
     map[40] = "Forty";
@@ -195,4 +196,20 @@ void HashTest()
         map.insert(i, "Num" + std::to_string(i));
 
     std::cout << "Size after inserts: " << map.size() << "\n";
+
+	// begin() ~ end()를 사용해서 전체 요소 순회
+	for (auto it = map.begin(); it != map.end(); ++it)
+	{
+		std::cout << "Key: " << it->first << ", Value: " << it->second << "\n";
+	}
+
+	std::cout << "\nTesting reverse iteration:\n";
+
+	// end()에서 하나 뒤로 이동해서 마지막 요소부터 역순 순회
+	auto it = map.end();
+	while (it != map.begin())
+	{
+		--it;
+		std::cout << "Key: " << it->first << ", Value: " << it->second << "\n";
+	}
 }
