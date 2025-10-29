@@ -3,6 +3,7 @@
 #include "CPPGraph.h"
 #include "CPPHashMap.h"
 #include "CPPMap.h"
+#include "CPPTrie.h"
 
 void VectorTest();
 void ListTest();
@@ -12,10 +13,12 @@ void TreeTest();
 void AVLTreeTest();
 void MapTest();
 void HashTest();
+void TrieTest();
 
 int main()
 {
-	HashTest();
+	//HashTest();
+	TrieTest();
 	return 0;
 }
 
@@ -212,4 +215,21 @@ void HashTest()
 		--it;
 		std::cout << "Key: " << it->first << ", Value: " << it->second << "\n";
 	}
+}
+
+void TrieTest()
+{
+	CTrie trie;
+	trie.insert("apple");
+	trie.insert("app");
+	trie.insert("banana");
+	trie.insert("band");
+	trie.insert("bat");
+
+	std::cout << std::boolalpha;
+	std::cout << "Search 'app': " << trie.search("app") << std::endl;        // true
+	std::cout << "Search 'appl': " << trie.search("appl") << std::endl;      // false
+	std::cout << "StartsWith 'ban': " << trie.StartsWith("ban") << std::endl; // true
+	std::cout << "\nAll words in trie:\n";
+	trie.PrintAll();
 }

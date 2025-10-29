@@ -143,6 +143,20 @@ public:
         return HashIterator(this, bucketCount, typename CList<std::pair<K, V>>::CListIterator(nullptr));
     }
 
+    HashIterator iter_find(const K& key)
+    {
+    size_t index = hasher(key, bucketCount);
+    CList<std::pair<K, V>>& bucket = buckets[index];
+
+    for (auto it = bucket.begin(); it != bucket.end(); ++it)
+    {
+        if (it->first == key)
+            return HashIterator(this, index, it);
+    }
+
+    return end();
+    }
+
 private:
     CVector<CList<std::pair<K, V>>> buckets;    //Separate Chaining
     size_t bucketCount;
