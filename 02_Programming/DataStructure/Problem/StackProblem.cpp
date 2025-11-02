@@ -3,12 +3,17 @@
 #include <iostream>
 #include <sstream>
 
+namespace StringUtils
+{
+	bool isNumber(const std::string& token);
+	bool isOperator(const std::string& token);
+}
+
 namespace StackProblems
 {
 	void ReverseOutput(const std::string& src);
 	bool IsValidParentheses(const std::string& exp);
 	int EvaluatePostfix(const std::string& exp);
-	bool isNumber(const std::string& token);
 }
 
 struct ExprNode
@@ -23,11 +28,13 @@ struct ExprNode
 
 namespace ExpressionTree
 {
+	std::string InfixToPostfix(const std::string& exp);
     ExprNode* buildFromPostfix(const std::string& exp);
+	ExprNode* buildFromPrefix(const std::string& exp);
+	ExprNode* recursivePrefix(std::istringstream& iss);
+	int Evaluate(ExprNode* root);
     void Inorder(ExprNode* root);
     void Postorder(ExprNode* root);
-    int Evaluate(ExprNode* root);
-    bool isOperator(const std::string& token);
 }
 
 int main()
@@ -35,20 +42,48 @@ int main()
 	using namespace StackProblems;
 	using namespace ExpressionTree;
 
+	int maze[16][16] = 
+	{ // row 0
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,2,1,1,1,0,1,1,1,0,1,0,1,1,1,0},
+{0,0,0,1,0,0,1,0,1,0,1,0,0,0,1,0},
+{0,1,1,1,1,1,1,0,1,1,1,1,1,0,1,0},
+{0,1,0,0,0,0,1,0,0,0,0,0,1,0,1,0},
+{0,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0},
+{0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0},
+{0,1,1,0,1,1,1,1,1,0,1,1,1,0,1,0},
+{0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,0},
+{0,1,1,1,1,1,1,0,1,1,1,0,1,1,1,0},
+{0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0},
+{0,1,1,1,1,0,1,1,1,0,1,1,1,0,1,0},
+{0,1,0,0,1,0,0,0,1,0,0,0,1,0,1,0},
+{0,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0},
+{0,0,1,0,0,0,1,0,0,0,1,0,0,0,3,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+
 	// ReverseOutput("HelloWorld!");
 	// std::cout<<(IsValidParentheses("f+{a+b*(c-d)/}") ? "True" : "False")<<std::endl;
 	// std::cout<<EvaluatePostfix("10 2 8 + * 50 -")<<std::endl;
 
-	std::string postfix = "3 4 + 5 *";
-	ExprNode* root = buildFromPostfix(postfix);
-	
-    std::cout << "Inorder: ";
-	Inorder(root);
-	std::cout << "\nPostorder: ";
-	Postorder(root);
+	std::string infixExp = "10 * 20 + ( 5 / 10 - 2 )";
+	std::string postfixExp = InfixToPostfix(infixExp);
+	ExprNode* root = buildFromPostfix(postfixExp);
 	std::cout << "\nResult: " << Evaluate(root) <<"\n";
 
 	return 0;
+}
+
+bool StringUtils::isNumber(const std::string& token)
+{
+    for (char c : token)
+        if (!isdigit(c))
+            return false;
+    return true;
+}
+
+inline bool StringUtils::isOperator(const std::string& token)
+{
+    return token == "+" || token == "-" || token == "*" || token == "/";
 }
 
 inline void StackProblems::ReverseOutput(const std::string& src)
@@ -110,12 +145,11 @@ inline int StackProblems::EvaluatePostfix(const std::string& exp)
 
 	while (iss >> token)	// stream input operator
 	{
-		//if (isdigit(token[0]))  // int isdigit(int ch) 하나의 문자에 대해서만 검사
-		if(isNumber(token))
+		if(StringUtils::isNumber(token))
 		{
 			stk.push(std::stoi(token));
 		}
-		else if (token == "+" || token == "-" || token == "*" || token == "/")
+		else if (StringUtils::isOperator(token))
 		{
 			if (stk.size() < 2)
 				throw std::runtime_error("Invalid postfix expression");
@@ -139,12 +173,27 @@ inline int StackProblems::EvaluatePostfix(const std::string& exp)
 	return stk.empty() ? 0 : stk.top();
 }
 
-bool StackProblems::isNumber(const std::string& token)
+inline ExprNode* ExpressionTree::recursivePrefix(std::istringstream& iss)
 {
-    for (char c : token)
-        if (!isdigit(c))
-            return false;
-    return true;
+    std::string token;
+
+    if (!(iss >> token))
+        return nullptr;
+
+    ExprNode* node = new ExprNode(token);
+
+    if (StringUtils::isOperator(token)) {
+        node->left = recursivePrefix(iss);
+        node->right = recursivePrefix(iss);
+    }
+
+    return node;
+}
+
+inline ExprNode* ExpressionTree::buildFromPrefix(const std::string& exp)
+{
+    std::istringstream iss(exp);
+    return recursivePrefix(iss);
 }
 
 inline ExprNode* ExpressionTree::buildFromPostfix(const std::string &exp)
@@ -155,17 +204,17 @@ inline ExprNode* ExpressionTree::buildFromPostfix(const std::string &exp)
 
     while(iss>>token)
     {
-        if(!isOperator(token))
+        if(!StringUtils::isOperator(token))
             stk.push(new ExprNode(token));
         else
         {
-            ExprNode* right = stk.top();
+			ExprNode* operNode = new ExprNode(token);
+
+            operNode->right = stk.top();
             stk.pop();
-            ExprNode* left = stk.top();
+            operNode->left = stk.top();
             stk.pop();
-            ExprNode* operNode = new ExprNode(token);
-            operNode->left = left;
-            operNode->right = right;
+
             stk.push(operNode);
         }
     }
@@ -177,14 +226,14 @@ inline void ExpressionTree::Inorder(ExprNode* root)
     if(!root)
         return;
 
-    if(isOperator(root->value))
+    if(StringUtils::isOperator(root->value))
         std::cout<<"( ";
 
 	Inorder(root->left);
 	std::cout<<root->value<<" ";
 	Inorder(root->right);
 
-	if(isOperator(root->value))
+	if(StringUtils::isOperator(root->value))
 		std::cout<<") ";
 }
 
@@ -203,7 +252,7 @@ inline int ExpressionTree::Evaluate(ExprNode* root)
     if (!root)
         return 0;
 
-    if (!isOperator(root->value)) 
+    if (!StringUtils::isOperator(root->value)) 
         return std::stoi(root->value);
 
     int left = Evaluate(root->left);
@@ -221,8 +270,64 @@ inline int ExpressionTree::Evaluate(ExprNode* root)
     return 0;
 }
 
-inline bool ExpressionTree::isOperator(const std::string& token)
+inline std::string ExpressionTree::InfixToPostfix(const std::string& exp)
 {
-    return token == "+" || token == "-" || token == "*" || token == "/";
-}
+	using namespace StackProblems;
 
+    std::istringstream iss(exp);
+    std::string token;
+    std::stack<std::string> opStack;
+    std::ostringstream output;
+
+    auto precedence = [](const std::string& op) 
+	{
+        if (op == "+" || op == "-") 
+			return 1;
+        if (op == "*" || op == "/") 
+			return 2;
+
+        return 0;
+    };
+
+    while (iss >> token)
+    {
+        
+		if(StringUtils::isNumber(token)) // if (!isOperator(token) && token != "(" && token != ")")
+        {
+            output << token << " ";
+        }
+		else if (token == "(")
+        {
+            opStack.push(token);
+        }
+		else if (token == ")")
+        {
+            while (!opStack.empty() && opStack.top() != "(")
+            {
+                output << opStack.top() << " ";
+                opStack.pop();
+            }
+
+            opStack.pop(); // '(' 제거
+        }
+		else // Operator
+        {
+            while (!opStack.empty() && precedence(opStack.top()) >= precedence(token)) // Stack에서 연산자 우선순위는 별도로 확인
+            {
+                output << opStack.top() << " ";
+                opStack.pop();
+            }
+
+            opStack.push(token);
+        }
+    }
+
+    // 남은 연산자 처리
+    while (!opStack.empty())
+    {
+        output << opStack.top() << " ";
+        opStack.pop();
+    }
+
+    return output.str();
+}
