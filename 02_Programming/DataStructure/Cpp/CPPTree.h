@@ -291,7 +291,7 @@ private:
             node->left = delete_Recursive(node->left, value);
         else if (value > node->data)
             node->right = delete_Recursive(node->right, value);
-		else
+        else
 		{
             // 삭제노드 발견 시 자식노드 탐색
             if (nullptr == node->left || nullptr == node->right)
