@@ -31,7 +31,7 @@ template<typename T>
 class CCircuitQueue {
 public:
     explicit CCircuitQueue(size_t cap)
-        : mArr(new T[cap]), mCapacity(cap), mSize(0), mFront(-2), mRear(0) { }
+        : mArr(new T[cap]), mCapacity(cap), mSize(0), mFront(0), mRear(0) { }
     CCircuitQueue(const CCircuitQueue& queue)
         : mCapacity(queue.mCapacity), mSize(queue.mSize), mFront(queue.mFront), mRear(queue.mRear)
     {
@@ -258,9 +258,11 @@ public:
         int left = LChild(idx);
         int right = RChild(idx);
 
-        if (left < static_cast<int>(mHeap.size()) && mHeap[left] < mHeap[smallestIdx])
+        if (left < static_cast<int>(mHeap.size()) &&    // Array의 크기 확인(left의 index가 전체 크기보다 작아야 함)
+            mHeap[left] < mHeap[smallestIdx])               // Parent와 Chlid 비교
             smallestIdx = left;
-        if (right < static_cast<int>(mHeap.size()) && mHeap[right] < mHeap[smallestIdx])
+        if (right < static_cast<int>(mHeap.size()) && 
+            mHeap[right] < mHeap[smallestIdx])
             smallestIdx = right;
 
         if (smallestIdx != idx)
