@@ -5,7 +5,6 @@
 #include <queue>
 #include <limits>
 #include <numeric>
-#include <algorithm>
 
 void GraphTest();
 
@@ -299,6 +298,57 @@ public:
                 break;
         }
     }
+
+    bool Dijkstra(const int& start, const int& goal)
+    {
+        std::vector<int> accDist(mVertexCount, std::numeric_limits<int>::max());    // 거리누적
+        std::vector<int> prev(mVertexCount, -1);    // 경로 저장(이전노드)
+        std::vector<int> route;                             // 저장경로 복원
+        std::priority_queue<std::pair<int, int>, std::vector<std::pair<int,int>>, std::greater<>> minHeap;   // weight, Node
+
+        accDist[start] = 0;
+        minHeap.push({accDist[start], start});
+
+        while (!minHeap.empty())
+        {
+            int curDist = minHeap.top().first;
+            int curNode = minHeap.top().second;
+            minHeap.pop();
+
+            if (curDist > accDist[curNode])
+                continue;
+
+            if (curNode == goal)
+                break;
+
+            for ( auto it : mAdjList[curNode])
+            {
+                int nextNode = it.to;
+                int weight = it.weight;
+
+                if (accDist[curNode]!=std::numeric_limits<int>::max() &&
+                    accDist[curNode] + weight < accDist[nextNode])
+                {
+                    accDist[nextNode] = accDist[curNode] + weight;
+                    prev[nextNode] = curNode;
+                    minHeap.push({accDist[nextNode], nextNode});
+                }
+            }
+        }
+
+        if (accDist[goal] == std::numeric_limits<int>::max())
+            return false;
+
+        for (int i = goal; i != -1; i = prev[i])    // prev가 역순이므로 push 또한 역순으로 삽입
+            route.push_back(i);
+        
+        std::reverse(route.begin(), route.end());
+
+        for(auto it : route)
+            std::cout<<it<<"->";
+        
+        return true;
+    }
 };
 
 int main(int argc, char* argv[])
@@ -331,4 +381,6 @@ void GraphTest()
     grp->Prim(0);
     std::cout << std::endl;
     grp->Kruskal();
+    std::cout << std::endl;
+    grp->Dijkstra(4, 0);
 }
