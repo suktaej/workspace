@@ -5,6 +5,7 @@
 #include <queue>
 #include <limits>
 #include <numeric>
+#include <algorithm>
 
 void GraphTest();
 
@@ -347,6 +348,116 @@ public:
         for(auto it : route)
             std::cout<<it<<"->";
         
+        return true;
+    }
+
+    void FloydWarshall()
+    {
+        const int INF = std::numeric_limits<int>::max() / 2;    // INF + INF 연산 시 Overflow 방지용
+        std::vector<std::vector<int>> dist(mVertexCount, std::vector<int>(mVertexCount, INF));
+
+        // 초기화 (자기 자신까지는 0)
+        for (int i = 0; i < mVertexCount; ++i)
+            dist[i][i] = 0;
+
+        // 인접 리스트 기반 초기 거리 설정
+        for (int i = 0; i < mVertexCount; ++i)
+            for (const auto& edge : mAdjList[i])
+                dist[i][edge.to] = edge.weight;
+
+        // 3중 루프
+        for (int k = 0; k < mVertexCount; ++k)
+        {
+            for (int i = 0; i < mVertexCount; ++i)
+            {
+                for (int j = 0; j < mVertexCount; ++j)
+                {
+                    if (dist[i][k] + dist[k][j] < dist[i][j])
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                }
+            }
+        }
+
+        // 결과 출력
+        for (int i = 0; i < mVertexCount; ++i)
+        {
+            for (int j = 0; j < mVertexCount; ++j)
+            {
+                if (dist[i][j] == INF)
+                    std::cout << "INF ";
+                else
+                    std::cout << dist[i][j] << " ";
+            }
+            std::cout << "\n";
+        }
+    }
+
+    bool BellmanFord(const int& start, const int& goal)
+    {
+        const int INF = std::numeric_limits<int>::max();
+        std::vector<int> dist(mVertexCount, INF);
+        std::vector<int> prev(mVertexCount, -1);
+        std::vector<std::pair<int,std::pair<int,int>>> edges;   // weight, {from, to}
+
+        dist[start] = 0;
+
+        // 모든 간선 수집
+        for(int i = 0; i < mVertexCount; ++i)
+        {
+            for(const auto& it : mAdjList[i])
+                edges.push_back({it.weight,{i, it.to}});
+        }
+
+        // 간선 완화
+        for(int i = 0; i < mVertexCount - 1; ++i)   // 간선의 수(정점의 수 - 1)
+        {
+            bool updated = false;
+        
+            for(const auto& it : edges)
+            {
+                int from = it.second.first;
+                int to = it.second.second;
+                int cost = it.first;
+
+                if(dist[from] != INF && dist[from] + cost < dist[to])
+                {
+                    dist[to] = dist[from] + cost;
+                    prev[to] = from;
+                    updated = true;
+                }
+            }
+            
+            // 갱신이 없다면 조기 종료
+            if(!updated)
+                break;
+        }
+
+        // 음수 사이클 검사
+        for(const auto& it : edges)
+        {
+            int from = it.second.first;
+            int to = it.second.second;
+            int cost = it.first;
+
+            if(dist[from] != INF && dist[from] + cost < dist[to])
+                return false;   // Negative weight cycle detected
+        }
+
+        // 경로 복원
+        if(dist[goal] == INF)
+            return false; // No path found
+
+        std::vector<int> route;
+        for (int i = goal; i != -1; i = prev[i])
+            route.push_back(i);
+
+        std::reverse(route.begin(), route.end());
+
+        // 출력
+        for (auto v : route)
+            std::cout << v << " -> ";
+
+        std::cout << "(cost: " << dist[goal] << ")\n";
         return true;
     }
 };
