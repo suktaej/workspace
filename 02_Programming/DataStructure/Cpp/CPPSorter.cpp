@@ -302,20 +302,59 @@ void Sorter::ShellSort2()
 
 void Sorter::ShellInsertionSort(int start, int end, int interval)
 {
-    int currentValue = 0;
+    int currentheapSize = 0;
     int compareIdx = 0;
 
     for (int i = start + interval; i <= end; i = i + interval)
     {
-        currentValue = vec[i];
+        currentheapSize = vec[i];
         compareIdx = i - interval;
 
-        while (compareIdx >= start && currentValue < vec[compareIdx])
+        while (compareIdx >= start && currentheapSize < vec[compareIdx])
         {
             vec[compareIdx + interval] = vec[compareIdx];
             compareIdx -= interval;
         }
-        
-        vec[compareIdx + interval] = currentValue;
+
+        vec[compareIdx + interval] = currentheapSize;
+    }
+}
+
+void Sorter::HeapSort()
+{
+    int size = vec.size();
+
+    // 전체 배열을 힙으로 변환
+    for (int i = size / 2 - 1; i >= 0; --i)
+        Heapify(size, i);
+
+    // 루트(최대값)를 끝으로 이동
+    // heap size 줄이기
+    for (int i = size - 1; i > 0; --i)
+    {
+        std::swap(vec[0], vec[i]);
+        Heapify(i, 0);  // 남은 구간만 힙 재정렬
+    }
+}
+
+void Sorter::Heapify(int heapSize, int rootIndex)
+{
+    int largest = rootIndex;
+    int left = 2 * rootIndex + 1;
+    int right = 2 * rootIndex + 2;
+
+    // 왼쪽 자식이 더 크면 largest 갱신
+    if (left < heapSize && vec[left] > vec[largest])
+        largest = left;
+
+    // 오른쪽 자식이 더 크면 largest 갱신
+    if (right < heapSize && vec[right] > vec[largest])
+        largest = right;
+      
+    // 루트가 가장 크지 않다면 swap 후 recursive
+    if (largest != rootIndex)
+    {
+        std::swap(vec[rootIndex], vec[largest]);
+        Heapify(heapSize, largest);
     }
 }
