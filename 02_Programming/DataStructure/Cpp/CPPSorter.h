@@ -77,4 +77,12 @@ public:
   void SelectionSort();
   void InsertionSort();
   void BubbleSort();
+
+  void QuickSort(int low, int high);
+  int Partition(int low, int high);
+
+  void MergeSort(int left, int right);
+  void Merge(int left, int mid, int right);
+
+
 };

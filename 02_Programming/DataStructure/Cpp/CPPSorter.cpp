@@ -187,3 +187,78 @@ void Sorter::BubbleSort() {
     }
   }
 }
+
+void Sorter::QuickSort(int low, int high)
+{
+    if (low < high)
+    {
+        int pivot = Partition(low, high);
+        QuickSort(low, pivot -1);   // left sorting
+        QuickSort(pivot + 1, high);  // right sorting
+    }
+}
+
+int Sorter::Partition(int low, int high)
+{
+    int pivot = vec[high];  // 마지막 원소를 pivot
+    int lowIdx = low - 1;       // 작은 원소의 idx(최종 pivot index)
+
+    for (int j = low; j < high; ++j)
+    {
+        if (vec[j] < pivot)
+        {
+            ++lowIdx;
+            std::swap(vec[j], vec[lowIdx]);
+        }
+    }
+    std::swap(vec[lowIdx+1], vec[high]);
+    
+    return lowIdx + 1;
+}
+
+void Sorter::MergeSort(int left, int right)
+{
+    if (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        MergeSort(left, mid);
+        MergeSort(mid + 1, right);
+        Merge(left, mid, right);
+    }
+}
+
+void Sorter::Merge(int left, int mid, int right)
+{
+    int leftSize = mid - left + 1;
+    int rightSize = right - mid;
+
+    std::vector<int> leftVec(leftSize), rightVec(rightSize);
+
+    // 배열 복사
+    for (int i =0;i<leftSize;++i)
+        leftVec[i] = vec[left+i];
+
+    for (int i =0;i<rightSize;++i)
+        rightVec[i] = vec[mid + 1 + i];
+
+    // 병합 인덱스
+    int rightSearch = 0;
+    int leftSearch = 0;
+    int vecIndex = left;
+
+    // 비교 후 병합
+    while (leftSearch < leftSize && rightSearch < rightSize)
+    {
+        if (leftVec[leftSearch] <= rightVec[rightSearch])
+            vec[vecIndex++] = leftVec[leftSearch++];
+        else
+            vec[vecIndex++] = rightVec[rightSearch++];
+    }
+
+    // 하나의 배열이 empty일 경우 나머지를 삽입
+    while (leftSearch < leftSize)
+        vec[vecIndex++] = leftVec[leftSearch++];
+
+    while (rightSearch < rightSize)
+        vec[vecIndex++] = rightVec[rightSearch++];
+}
