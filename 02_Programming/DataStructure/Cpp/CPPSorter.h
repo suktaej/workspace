@@ -76,6 +76,9 @@ public:
 
   void SelectionSort();
   void InsertionSort();
+  void ShellSort();
+  void ShellSort2();
+  void ShellInsertionSort(int start, int end, int interval);
   void BubbleSort();
 
   void QuickSort(int low, int high);
@@ -83,6 +86,5 @@ public:
 
   void MergeSort(int left, int right);
   void Merge(int left, int mid, int right);
-
 
 };

@@ -262,3 +262,60 @@ void Sorter::Merge(int left, int mid, int right)
     while (rightSearch < rightSize)
         vec[vecIndex++] = rightVec[rightSearch++];
 }
+
+void Sorter::ShellSort()
+{
+    int size = vec.size();
+  
+    // gap크기 설정
+    for(int gap = size/2; gap > 0; gap /= 2)
+    {
+        for(int i = gap; i<size; ++i)
+        {
+            int temp = vec[i];
+            int j = i;
+
+            while(j >= gap && vec[j-gap] > temp)
+            {
+                vec[j] = vec[j-gap];
+                j -= gap;
+            }
+
+            vec[j] = temp;
+        }
+    }
+}
+
+void Sorter::ShellSort2()
+{
+    int count = vec.size();
+    int interval = count / 2;
+
+    while (interval >= 1)
+    {
+        for (int i = 0; i < interval; ++i)
+            ShellInsertionSort(i, count - 1, interval);
+        
+        interval = interval / 2;
+    }
+}
+
+void Sorter::ShellInsertionSort(int start, int end, int interval)
+{
+    int currentValue = 0;
+    int compareIdx = 0;
+
+    for (int i = start + interval; i <= end; i = i + interval)
+    {
+        currentValue = vec[i];
+        compareIdx = i - interval;
+
+        while (compareIdx >= start && currentValue < vec[compareIdx])
+        {
+            vec[compareIdx + interval] = vec[compareIdx];
+            compareIdx -= interval;
+        }
+        
+        vec[compareIdx + interval] = currentValue;
+    }
+}
