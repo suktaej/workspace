@@ -7,7 +7,7 @@ CC = g++
 TARGET = exe 
 
 # 소스 파일 (헤더 파일은 제외)
-SRCS = main.cpp CPPGraph.cpp
+SRCS = main.cpp CPPSorter.cpp
 
 # 오브젝트 파일 (.cpp 파일을 .o로 변환)
 OBJS = $(SRCS:.cpp=.o)

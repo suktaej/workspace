@@ -4,6 +4,7 @@
 #include "CPPHashMap.h"
 #include "CPPMap.h"
 #include "CPPTrie.h"
+#include "CPPSorter.h"
 
 void VectorTest();
 void ListTest();
@@ -14,6 +15,7 @@ void AVLTreeTest();
 void MapTest();
 void HashTest();
 void TrieTest();
+void SortTest();
 
 int main()
 {

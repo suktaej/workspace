@@ -78,6 +78,7 @@ public:
 
   void SelectionSort();
   void InsertionSort();
+  void InsertionSort(int left, int right);
 
   void ShellSort();
   void ShellSort2();
@@ -95,8 +96,9 @@ public:
   void Heapify(int value, int root);
 
   void RadixSort();
+  void RadixSort(std::vector<int>& target);
   void RadixSortForNegative();
-
+  
   void CountingSort();
 
   void BucketSort();
@@ -107,15 +109,17 @@ public:
   void BitonicSort(bool ascending = true);
   void BitonicRecursive(int low, int cnt, bool ascending);
   void BitonicMerge(int low, int cnt, bool ascending);
-  /*
-  void OddEvenSort();
-  void StoogeSort();
-  void CocktailSort();
-  void CombSort();
-  */
+
   void ParallelBitonicRecursive(int low, int cnt, bool ascending);
   void ParallelBitonicMerge(int low, int cnt, bool ascending);
 
   void ParallelMergeSort(std::vector<int>& arr, int left, int right);
   void parallelQuickSort(std::vector<int>& arr, int left, int right, int depth = 0);
+
+    /*
+  void OddEvenSort();
+  void StoogeSort();
+  void CocktailSort();
+  void CombSort();
+  */
 };

@@ -179,6 +179,23 @@ void Sorter::InsertionSort() {
   }
 }
 
+void Sorter::InsertionSort(int left, int right) 
+{
+    for (int i = left + 1; i <= right; ++i) 
+    {
+        int key = vec[i];
+        int j = i - 1;
+
+        while (j >= left && vec[j] > key) 
+        {
+            vec[j + 1] = vec[j];
+            j--;
+        }
+
+        vec[j + 1] = key;
+    }
+}
+
 void Sorter::BubbleSort() {
   if (vec.empty() || vec.size() < 2)
     return;
@@ -404,6 +421,61 @@ void Sorter::RadixSort()
     }
 }
 
+void Sorter::RadixSort(std::vector<int>& targetVec)
+{
+    if (targetVec.empty()) 
+        return;
+
+    int maxValue = 0;
+
+    for(const auto& it : targetVec)
+        if(maxValue < it)
+            maxValue = it;
+    
+    // maxValue가 0일 경우 (모든 숫자가 0이거나 음수)
+    if (maxValue == 0 && !targetVec.empty()) 
+    {
+        // 모든 숫자가 0인 경우 이미 정렬된 것이므로 추가 작업 불필요
+        // 모든 숫자가 음수인 경우는 여기로 오지 않으므로 (절댓값으로 처리)
+        // maxValue가 0이면서 targetVec이 비어있지 않은 경우는 모든 숫자가 0일 때이다.
+        bool allZero = true;
+
+        for(int num : targetVec) 
+        {
+            if (num != 0) 
+            {
+                allZero = false;
+                break;
+            }
+        }
+
+        if (allZero)
+            return;
+    }
+
+    for(int exp = 1; maxValue / exp > 0 ; exp *= 10)
+    {
+        std::vector<std::queue<int>> buckets(10);
+        
+        for(const int& num : targetVec)
+        {
+            int digit = (num/exp) % 10;
+            buckets[digit].push(num);
+        }
+        
+        int idx = 0;
+        
+        for(int i = 0; i < 10; ++i)
+        {
+            while(false != buckets[i].empty())
+            {
+                targetVec[idx++] = buckets[i].front();
+                buckets[i].pop();
+            }
+        }
+    }
+}
+
 void Sorter::RadixSortForNegative()
 {
     if (vec.empty()) return;
@@ -421,8 +493,8 @@ void Sorter::RadixSortForNegative()
     }
 
     // 정렬
-    //RadixSort(negatives);
-    //RadixSort(positives);
+    RadixSort(negatives);
+    RadixSort(positives);
 
     // 음수 부호 복원 후 반전
     for(auto& it : negatives)
@@ -546,7 +618,7 @@ void Sorter::TimSort()
     for(int i = 0; i< arrSize; i+= RUN)
     {
         int right = std::min(i+RUN-1, arrSize-1);
-        //InsertionSort(i, right);
+        InsertionSort(i, right);
     }
 
     // 정렬된 run들을 병함
