@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <vector>
 #include <queue>
+#include <thread>
 
 int main(void) {
 
@@ -528,10 +529,176 @@ void Sorter::BucketSortForFloat()
 
     // 버킷 내부 정렬 후 병합
     vec.clear();
-    
+
     for (auto& bucket : buckets)
     {
         std::sort(bucket.begin(), bucket.end());
         vec.insert(vec.end(), bucket.begin(), bucket.end());
+    }
+}
+
+void Sorter::TimSort()
+{
+    static constexpr int RUN = 32;
+    int arrSize = vec.size();
+
+    // 작은 구간(RUN) 단위로 insertion Sort
+    for(int i = 0; i< arrSize; i+= RUN)
+    {
+        int right = std::min(i+RUN-1, arrSize-1);
+        //InsertionSort(i, right);
+    }
+
+    // 정렬된 run들을 병함
+    for (int size = RUN; size < arrSize; size *= 2) 
+    {
+        for (int left = 0; left < arrSize; left += 2 * size) 
+        {
+            int mid = std::min(left + size - 1, arrSize - 1);
+            int right = std::min(left + 2 * size - 1, arrSize - 1);
+
+            if (mid < right)
+                Merge(left, mid, right);
+        }
+    }
+}
+
+void Sorter::BitonicSort(bool ascending)
+{
+    BitonicRecursive(0,vec.size(),ascending);
+}
+
+void Sorter::BitonicRecursive(int low, int cnt, bool ascending)
+{
+    if (cnt <= 1)
+        return;
+
+    int k = cnt / 2;
+
+    // 반은 오름차순, 반은 내림차순으로 정렬
+    BitonicRecursive(low, k, true);
+    BitonicRecursive(low + k, k, false);
+
+    // 병합
+    BitonicMerge(low, cnt, ascending);
+}
+
+void Sorter::BitonicMerge(int low, int cnt, bool ascending)
+{
+    if (cnt <= 1)
+            return;
+
+    int k = cnt / 2;
+
+    for (int i = low; i < low + k; ++i)
+    {
+        if ((vec[i] > vec[i + k]) == ascending)
+            std::swap(vec[i], vec[i + k]);
+    }
+
+    BitonicMerge(low, k, ascending);
+    BitonicMerge(low + k, k, ascending);
+}
+
+void Sorter::ParallelBitonicRecursive(int low, int cnt, bool ascending)
+{
+    if (cnt <= 1)
+            return;
+
+        int k = cnt / 2;
+
+        if (cnt > PARALLEL_THRESHOLD)
+        {
+            std::thread t1(&Sorter::ParallelBitonicRecursive, this, low, k, true);
+            std::thread t2(&Sorter::ParallelBitonicRecursive, this, low + k, k, false);
+            t1.join();
+            t2.join();
+        }
+        else
+        {
+            ParallelBitonicRecursive(low, k, true);
+            ParallelBitonicRecursive(low + k, k, false);
+        }
+
+        ParallelBitonicMerge(low, cnt, ascending);
+}
+
+void Sorter::ParallelBitonicMerge(int low, int cnt, bool ascending)
+{
+    if (cnt <= 1)
+        return;
+
+    int k = cnt / 2;
+
+    // 병합 비교 (pairwise swap)
+    for (int i = low; i < low + k; ++i)
+    {
+        if ((vec[i] > vec[i + k]) == ascending)
+            std::swap(vec[i], vec[i + k]);
+    }
+
+    // 재귀 병합 (필요하다면 병렬화 가능)
+    if (cnt > PARALLEL_THRESHOLD)
+    {
+        std::thread t1(&Sorter::ParallelBitonicMerge, this, low, k, ascending);
+        std::thread t2(&Sorter::ParallelBitonicMerge, this, low + k, k, ascending);
+        t1.join();
+        t2.join();
+    }
+    else
+    {
+        ParallelBitonicMerge(low, k, ascending);
+        ParallelBitonicMerge(low + k, k, ascending);
+    }
+}
+
+void Sorter::ParallelMergeSort(std::vector<int>& arr, int left, int right)
+{
+    if (left >= right) 
+        return;
+
+    int mid = (left + right) / 2;
+
+    std::thread t1([&](){ ParallelMergeSort(arr, left, mid); });
+    std::thread t2([&](){ ParallelMergeSort(arr, mid + 1, right); });
+
+    t1.join();
+    t2.join();
+
+    std::inplace_merge(arr.begin() + left, arr.begin() + mid + 1, arr.begin() + right + 1); 
+}
+
+void Sorter::parallelQuickSort(std::vector<int>& arr, int left, int right, int depth)
+{
+    if (left >= right) 
+        return;
+
+    int pivot = arr[(left + right) / 2];
+    int i = left;
+    int j = right;
+
+    while (i <= j) 
+    {
+        while (arr[i] < pivot) 
+            i++;
+        while (arr[j] > pivot) 
+            j--;
+
+        if (i <= j) 
+            std::swap(arr[i++], arr[j--]);
+    }
+
+    // 너무 깊어지면 스레드 폭발 방지
+    if (depth < 3) 
+    {   // depth 제한 (보통 log2(thread count))
+        std::thread t1([&]() { parallelQuickSort(arr, left, j, depth + 1); });
+        std::thread t2([&]() { parallelQuickSort(arr, i, right, depth + 1); });
+        t1.join();
+        t2.join();
+    }
+    else 
+    {
+        parallelQuickSort(arr, left, j, depth + 1);
+        parallelQuickSort(arr, i, right, depth + 1);
     }
 }

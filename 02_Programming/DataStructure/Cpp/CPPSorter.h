@@ -68,6 +68,7 @@ private:
   int cnt = 0;
   int *arr = nullptr;
   std::vector<int> vec;
+  static constexpr int PARALLEL_THRESHOLD = 1 << 12;
 
 public:
   void InputRand();
@@ -102,11 +103,19 @@ public:
   void BucketSortForFloat();
 
   void TimSort();
+
+  void BitonicSort(bool ascending = true);
+  void BitonicRecursive(int low, int cnt, bool ascending);
+  void BitonicMerge(int low, int cnt, bool ascending);
   /*
-  void BitonicSort();
   void OddEvenSort();
   void StoogeSort();
   void CocktailSort();
   void CombSort();
   */
+  void ParallelBitonicRecursive(int low, int cnt, bool ascending);
+  void ParallelBitonicMerge(int low, int cnt, bool ascending);
+
+  void ParallelMergeSort(std::vector<int>& arr, int left, int right);
+  void parallelQuickSort(std::vector<int>& arr, int left, int right, int depth = 0);
 };
