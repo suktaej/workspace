@@ -19,8 +19,7 @@ void SortTest();
 
 int main()
 {
-	//HashTest();
-	TrieTest();
+	SortTest();
 	return 0;
 }
 
@@ -234,4 +233,14 @@ void TrieTest()
 	std::cout << "StartsWith 'ban': " << trie.StartsWith("ban") << std::endl; // true
 	std::cout << "\nAll words in trie:\n";
 	trie.PrintAll();
+}
+
+void SortTest()
+{
+	Sorter mySorter;
+
+	mySorter.InputRand();
+	mySorter.Selector();
+
+	//mySorter.PrintArray();
 }

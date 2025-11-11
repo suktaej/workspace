@@ -4,17 +4,8 @@
 #include <queue>
 #include <thread>
 
-int main(void) {
-
-  Sorter mySorter;
-
-  mySorter.InputRand();
-  mySorter.Selector();
-
-  return 0;
-}
-
-void Sorter::InputRand() {
+void Sorter::InputRand() 
+{
   std::cout << "Input Random Number:";
   std::cin >> cnt;
 
@@ -44,7 +35,8 @@ void Sorter::InputRand() {
   Shuffle();
 }
 
-void Sorter::Shuffle() {
+void Sorter::Shuffle() 
+{
 
   std::array<int, MAX_SIZE> pool;
 
@@ -68,17 +60,20 @@ void Sorter::Shuffle() {
   }
 }
 
-void Sorter::PrintArray() {
-  for (int i = 0; i < cnt; ++i)
-    std::cout << *(arr + i) << " ";
-  std::cout << std::endl;
+void Sorter::PrintArray() 
+{
+//   for (int i = 0; i < cnt; ++i)
+//     std::cout << *(arr + i) << " ";
+//   std::cout << std::endl;
 
   for (const int &val : vec)
     std::cout << val << " ";
+
   std::cout << std::endl;
 }
 
-void Sorter::Selector() {
+void Sorter::Selector() 
+{
   const char *SortTypeNames[] = {"Selection", "Insertion", "Bubble", "Quick",
                                  "Merge", "Heap", "Counting", "Radix", "Shell"};
 
@@ -98,6 +93,7 @@ void Sorter::Selector() {
     tp = ESortType::Selection;
 
   PrintArray();
+
   switch (tp) {
   case ESortType::Selection:
     SelectionSort();
@@ -118,6 +114,7 @@ void Sorter::Selector() {
     HeapSort();
     break;
   case ESortType::Counting:
+    CountingSort();
     break;
   case ESortType::Radix:
     RadixSort();
@@ -132,7 +129,8 @@ void Sorter::Selector() {
   PrintArray();
 }
 
-void Sorter::SelectionSort() {
+void Sorter::SelectionSort() 
+{
   /*
   // pointer array
   for (int i = 0; i < cnt - 1; ++i) {
@@ -163,7 +161,8 @@ void Sorter::SelectionSort() {
   }
 }
 
-void Sorter::InsertionSort() {
+void Sorter::InsertionSort() 
+{
   if (vec.empty() || vec.size() < 2)
     return;
 
@@ -196,24 +195,25 @@ void Sorter::InsertionSort(int left, int right)
     }
 }
 
-void Sorter::BubbleSort() {
-  if (vec.empty() || vec.size() < 2)
-    return;
+void Sorter::BubbleSort() 
+{
+    if (vec.empty() || vec.size() < 2)
+        return;
 
-  for (vec_it it_i = vec.begin(); it_i != vec.end() - 1; ++it_i) {
-    bool swapFlag = false;
-    // it_i - vec.begin() : 두 개의 Iterator사이의 거리(정수값)
-    for (vec_it it_j = vec.begin();
-         it_j != vec.end() - 1 - (it_i - vec.begin()); ++it_j) {
-      if (*it_j > *(it_j + 1)) {
-        std::swap(*it_j, *(it_j + 1));
-        swapFlag = true;
-      }
+    for (vec_it it_i = vec.begin(); it_i != vec.end() - 1; ++it_i) {
+        bool swapFlag = false;
+        // it_i - vec.begin() : 두 개의 Iterator사이의 거리(정수값)
+        for (vec_it it_j = vec.begin();
+            it_j != vec.end() - 1 - (it_i - vec.begin()); ++it_j) {
+        if (*it_j > *(it_j + 1)) {
+            std::swap(*it_j, *(it_j + 1));
+            swapFlag = true;
+        }
 
-      if (!swapFlag)
-        break;
+        if (!swapFlag)
+            break;
+        }
     }
-  }
 }
 
 void Sorter::QuickSort(int low, int high)
