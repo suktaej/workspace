@@ -1,4 +1,7 @@
 #include "CPPSorter.h"
+#include <algorithm>
+#include <vector>
+#include <queue>
 
 int main(void) {
 
@@ -75,8 +78,8 @@ void Sorter::PrintArray() {
 }
 
 void Sorter::Selector() {
-  const char *SortTypeNames[] = {"Selection", "Insertion", "Bubble",   "Quick",
-                                 "Merge",     "Heap",      "Counting", "Radix"};
+  const char *SortTypeNames[] = {"Selection", "Insertion", "Bubble", "Quick",
+                                 "Merge", "Heap", "Counting", "Radix", "Shell"};
 
   ESortType tp;
   std::cout << "Select Sort Alg" << std::endl;
@@ -105,14 +108,21 @@ void Sorter::Selector() {
     BubbleSort();
     break;
   case ESortType::Quick:
+    QuickSort(0,cnt-1);
     break;
   case ESortType::Merge:
+    MergeSort(0, cnt-1);
     break;
   case ESortType::Heap:
+    HeapSort();
     break;
   case ESortType::Counting:
     break;
   case ESortType::Radix:
+    RadixSort();
+    break;
+  case ESortType::Shell:
+    ShellSort2();
     break;
   default:
     break;
@@ -280,7 +290,6 @@ void Sorter::ShellSort()
                 vec[j] = vec[j-gap];
                 j -= gap;
             }
-
             vec[j] = temp;
         }
     }
@@ -356,5 +365,173 @@ void Sorter::Heapify(int heapSize, int rootIndex)
     {
         std::swap(vec[rootIndex], vec[largest]);
         Heapify(heapSize, largest);
+    }
+}
+
+void Sorter::RadixSort()
+{
+    // 자릿수를 기준별 정렬
+    int maxValue = 0;
+
+    for(const auto& it : vec)
+        if(maxValue < it)
+            maxValue = it;
+
+    // 자릿수만큼 반복
+    for(int exp = 1; maxValue / exp > 0 ; exp *= 10)
+    {
+        // 0-9 까지의 buckets
+        std::vector<std::queue<int>> buckets(10);
+
+        // 현재 자릿수를 기준 분류
+        for(const int& num : vec)
+        {
+            int digit = (num/exp) % 10;
+            buckets[digit].push(num);
+        }
+
+        // bucket에서 꺼내 배열에 갱신
+        int idx = 0;
+        for(int i = 0; i < 10; ++i)
+        {
+            while(false != buckets[i].empty())
+            {
+                vec[idx++] = buckets[i].front();
+                buckets[i].pop();
+            }
+        }
+    }
+}
+
+void Sorter::RadixSortForNegative()
+{
+    if (vec.empty()) return;
+
+    std::vector<int> negatives;
+    std::vector<int> positives;
+
+    // 음수,양수 분리
+    for (int num : vec)
+    {
+        if (num < 0) 
+            negatives.push_back(-num); // 부호 반전
+        else 
+            positives.push_back(num);
+    }
+
+    // 정렬
+    //RadixSort(negatives);
+    //RadixSort(positives);
+
+    // 음수 부호 복원 후 반전
+    for(auto& it : negatives)
+        it *= -1;
+    
+    std::reverse(negatives.begin(), negatives.end());
+
+    // 병합
+    vec.clear();
+    vec.insert(vec.end(), negatives.begin(), negatives.end());
+    vec.insert(vec.end(), positives.begin(), positives.end());
+}
+
+void Sorter::CountingSort()
+{
+    if (vec.empty()) return;
+
+    int minVal = *std::min_element(vec.begin(), vec.end());
+    int maxVal = *std::max_element(vec.begin(), vec.end());
+    int range = maxVal - minVal + 1;
+
+    std::vector<int> count(range, 0);
+    std::vector<int> output(vec.size(), 0);
+
+    // 등장 횟수 세기
+    for (int num : vec)
+        count[num - minVal]++;
+
+    // 누적합 만들기
+    for (int i = 1; i < range; ++i)
+        count[i] += count[i - 1];
+
+    // 역순으로 원소 배치
+    for (int i = vec.size() - 1; i >= 0; --i)
+    {
+        output[count[vec[i] - minVal] - 1] = vec[i];
+        count[vec[i] - minVal]--;
+    }
+
+    // 결과를 복사
+    vec = std::move(output);
+}
+
+void Sorter::BucketSort()
+{
+    if (vec.empty()) 
+        return;
+
+    int minVal = *std::min_element(vec.begin(), vec.end());
+    int maxVal = *std::max_element(vec.begin(), vec.end());
+
+    // heuristic, 성능 최적화를 위한 시간복잡도 근사값 
+    int bucketCount = std::max(1, (int)std::sqrt(vec.size()));
+    double range = (double)(maxVal - minVal + 1) / bucketCount;
+
+    std::vector<std::vector<int>> buckets(bucketCount);
+
+    // bucket 분배
+    for (int num : vec)
+    {
+        int idx = (int)((num - minVal) / range);
+
+        if (idx >= bucketCount) // overflow 방지
+            idx = bucketCount - 1;
+
+        buckets[idx].push_back(num);
+    }
+
+    vec.clear();
+
+    for (auto& bucket : buckets)
+    {
+        std::sort(bucket.begin(), bucket.end()); // bucket 내부정렬
+        vec.insert(vec.end(), bucket.begin(), bucket.end()); // 병합
+    }
+}
+
+void Sorter::BucketSortForFloat()
+{
+    if (vec.empty())
+        return;
+
+    int bucketCount = std::max(1, (int)std::sqrt(vec.size()));
+    std::vector<std::vector<double>> buckets(bucketCount);
+
+    // 실수 데이터를 [0, 1)로 정규화되어 있다고 가정
+    // (그 외의 경우엔 min, max를 구해 normalize 필요)
+    double minVal = *std::min_element(vec.begin(), vec.end());
+    double maxVal = *std::max_element(vec.begin(), vec.end());
+    double range = maxVal - minVal;
+
+    if (range == 0.0)
+        return;
+
+    // 값 → 버킷 분배
+    for (double num : vec)
+    {
+        int idx = static_cast<int>(((num - minVal) / range) * bucketCount);
+        if (idx >= bucketCount)
+            idx = bucketCount - 1;
+
+        buckets[idx].push_back(num);
+    }
+
+    // 버킷 내부 정렬 후 병합
+    vec.clear();
+    
+    for (auto& bucket : buckets)
+    {
+        std::sort(bucket.begin(), bucket.end());
+        vec.insert(vec.end(), bucket.begin(), bucket.end());
     }
 }

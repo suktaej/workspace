@@ -93,4 +93,20 @@ public:
   void HeapSort();
   void Heapify(int value, int root);
 
+  void RadixSort();
+  void RadixSortForNegative();
+
+  void CountingSort();
+
+  void BucketSort();
+  void BucketSortForFloat();
+
+  void TimSort();
+  /*
+  void BitonicSort();
+  void OddEvenSort();
+  void StoogeSort();
+  void CocktailSort();
+  void CombSort();
+  */
 };
