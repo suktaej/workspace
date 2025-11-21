@@ -1,3 +1,8 @@
 *.out
+*.obj
 *.o
+*.pdb
+*.exe
+*.ilk
+tasks.json
 memo.txt
