@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define MAXIDX 3
+
 void StringToken(char* str)
 {
     // strtok(token) 활용
@@ -79,14 +81,41 @@ void StringSeprate(const char* str)
     free(temp);
 }
 */
+void TypeConversion(char* str)
+{
+    char* temp = strdup(str);
+
+    int val[MAXIDX];
+    int indexCount = 0;
+
+    char* token;
+    char* context;
+
+    // 첫 번째 토큰 추출
+    token = strtok_s(temp," ",&context);
+
+    // 토큰이 존재하고 배열의 공간이 남아있을 때
+    while(token!=NULL && indexCount < MAXIDX)
+    {
+        // 현재의 토큰을 전환
+        val[indexCount++] = atoi(token);
+        // 다음 토큰 추출
+        token = strtok_s(NULL, " ", &context);
+    }
+
+    for(int i=0;i<indexCount;++i)
+        printf("%d ",val[i]);
+
+    free(temp);
+}
 
 int main()
 {
     char str[100] = "apple banana orange";
-    // StringCopy(str);
+    char val[100] = "10 20 5";
+    
     StringTokenS(str);
-    // StringSeprate(str);
-    // StringToken(str);
+    TypeConversion(val);
     
     return 0;
 }

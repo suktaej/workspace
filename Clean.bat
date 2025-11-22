@@ -1,5 +1,5 @@
 @echo off
-echo Cleaning all build artifacts recursively...
+echo Cleaning all build artifacts recursively
 
 REM 삭제할 파일 확장자 목록
 set EXT_LIST=*.exe *.obj *.o *.pdb *.ilk *.out
