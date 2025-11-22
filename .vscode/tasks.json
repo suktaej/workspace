@@ -29,6 +29,34 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "C build",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.vscode\\vcvars.bat",
+            "args": [
+                "&&",
+                "cl",
+                "/Zi",
+                "/std:c17",
+                "/Fe:${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${file}"
+            ],
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": [
+                        "/c"
+                    ]
+                }
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
         }
     ]
 }
