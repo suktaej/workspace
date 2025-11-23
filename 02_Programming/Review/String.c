@@ -34,13 +34,21 @@ void StringTokenS(char* str)
     
     char* token;
     char* context;
-
-    token = strtok_s(temp, " ", &context); // msvc 지원함수, linux에서는 strtok_r
+#if defined (__MSC_VER)
+    token = strtok_s(temp, " ", &context);
+#elif defined (__GNUC__)
+    token = strtok_r(temp," ",&context);
+#endif
+    
     printf("after truncate first str: %s\n",temp);
     printf("context: %s\n",context);
     printf("token: %s\n",token);
     
+#if defined (__MSC_VER)
     token = strtok_s(NULL, " ", &context);
+#elif defined (__GNUC__)
+    token = strtok_r(NULL," ",&context);
+#endif
     printf("after truncate second str: %s\n",temp);
     printf("context: %s\n",context);
     printf("token: %s\n",token);
@@ -93,9 +101,12 @@ void TypeConversion(char* str)
 
     char* token;
     char* context;
-
+#if defined (_MSC_VER)
     // 첫 번째 토큰 추출
     token = strtok_s(temp," ",&context);
+#elif defined (__GNUC__)
+    token = strtok_r(temp," ",&context);
+#endif
 
     // 토큰이 존재하고 배열의 공간이 남아있을 때
     while(token!=NULL && indexCount < MAXIDX)
@@ -103,7 +114,11 @@ void TypeConversion(char* str)
         // 현재의 토큰을 전환
         val[indexCount++] = atoi(token);
         // 다음 토큰 추출
+#if defined (_MSC_VER)
         token = strtok_s(NULL, " ", &context);
+#elif defined (__GNUC__)
+        token = strtok_r(NULL," ",&context);
+#endif
     }
 
     for(int i=0;i<indexCount;++i)
