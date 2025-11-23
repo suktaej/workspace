@@ -49,7 +49,7 @@ void SwapChar(const char* str)
     // loop(string)
     vec1.clear();
     vec1.shrink_to_fit();   
-    // == std::vector<char>(vec1).swap(vec1);
+    // std::vector<char>(vec1).swap(vec1);
     // copy constructor 방식
     // Temporary vector를 생성하여 원본과 swap
     // 문장종료(;)시 임시벡터 소멸
@@ -139,6 +139,10 @@ int main()
     // char용 (공백포함, Enter까지 입력)
     std::cin.getline(ch2,sizeof(ch2));
     std::cout<<ch2<<"\n";
+
+    const char* ch2 = "10 20";
+    int num1, num2;
+    sscanf(ch2,"%d %d",&num1, &num2);
 
     return 0;
 }
