@@ -34,7 +34,7 @@ void StringTokenS(char* str)
     
     char* token;
     char* context;
-#if defined (__MSC_VER)
+#if defined (_MSC_VER)
     token = strtok_s(temp, " ", &context);
 #elif defined (__GNUC__)
     token = strtok_r(temp," ",&context);
@@ -44,7 +44,7 @@ void StringTokenS(char* str)
     printf("context: %s\n",context);
     printf("token: %s\n",token);
     
-#if defined (__MSC_VER)
+#if defined (_MSC_VER)
     token = strtok_s(NULL, " ", &context);
 #elif defined (__GNUC__)
     token = strtok_r(NULL," ",&context);
@@ -134,6 +134,18 @@ int main()
     
     StringTokenS(str);
     TypeConversion(val);
+
+    // string출력 및 자동 줄바꿈(\n)
+    puts("GetChar");
+    // character 1개만 입력받음
+    char ch = getchar();
+    // character 1개만 출력
+    putchar(ch);
+
+    puts("GetChar");
+    // gets는 C11 표준에서 제거
+    // 공백 포함 문장입력 가능
+    fgets(str,sizeof(str),stdin);
     
     return 0;
 }
