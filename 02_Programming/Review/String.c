@@ -63,7 +63,11 @@ void StringCopy(const char* str)
     strcpy(temp1,str);
     free(temp1);
 
-    char* temp2 = strdup(str); // Dynamic (malloc+copy)
+#if defined(_MSC_VER)
+    char* temp2 = _strdup(str); // Dynamic (malloc+copy)
+#elif defined(__GNUC__)
+    char* temp2 = strdup(str); 
+#endif
     free(temp2);
 
     char temp3[100];  
@@ -94,7 +98,11 @@ void StringSeprate(const char* str)
 
 void TypeConversion(char* str)
 {
-    char* temp = strdup(str);
+#if defined(_MSC_VER)
+    char* temp = _strdup(str); // Dynamic (malloc+copy)
+#elif defined(__GNUC__)
+    char* temp = strdup(str); 
+#endif
 
     int val[MAXIDX];
     int indexCount = 0;

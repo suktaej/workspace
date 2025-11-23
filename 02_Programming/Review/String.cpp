@@ -120,6 +120,22 @@ void StringStream(std::string str)
     std::cout<<std::endl;
 }
 
+void SwapInt()
+{
+    char buf[20];
+    int num;
+
+    // 1
+    sprintf(buf,"%d",num);
+    // 2
+    snprintf(buf,sizeof(buf),"%d",num);
+#if defined(_MSC_VER)
+    // MVSC 전용 (int, char*, radix)
+    _itoa(num, buf, 10);
+#endif
+    num = std::stoi(buf);
+}
+
 int main()
 {
     const char* ch1 = "apple banana orange";
