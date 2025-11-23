@@ -62,7 +62,6 @@ void StringCopy(const char* str)
     strcpy(temp3, str); // Static
 }
 
-/*
 void StringSeprate(const char* str)
 {
     char *temp = (char *)malloc(sizeof(char) * (strlen(str) + 1));
@@ -71,16 +70,20 @@ void StringSeprate(const char* str)
     printf("original str: %s\n",temp);
     
     char* token;
+
+#if defined(_MSC_VER)
     char* context;
-    
+    token = strtok_s(temp," ",&context);
+#elif defined(__GNUC__)
     // POSIX(Linux) 지원 함수, MSVC library 미지원
-    token = strsep(&temp," ");  
+    token = strsep(&temp," ");
+#endif
     printf("after truncate first str: %s\n",temp);
     printf("token: %s\n",token);
 
     free(temp);
 }
-*/
+
 void TypeConversion(char* str)
 {
     char* temp = strdup(str);

@@ -1,0 +1,68 @@
+ {
+    // vi settings
+
+    "vim.leader": " ",
+    "vim.useSystemClipboard": true,
+
+    "vim.easymotion": true,
+    "vim.surround": true,
+
+    "vim.normalModeKeyBindingsNonRecursive": [
+        { "before": ["<leader>", "d"], "after": ["\"", "_", "d"] }
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        { "before": ["<leader>", "d"], "after": ["\"", "_", "d"] },
+        { "before": ["<leader>", "p"], "after": ["\"", "_", "d", "P"] }
+    ],
+    "vim.insertModeKeyBindings": [
+        { "before": [",", ","], "after": ["<Esc>"] },
+        { "before": ["<C-v>"], "commands": ["editor.action.clipboardPasteAction"] },
+        { "before": ["<C-h>"], "after": ["<Left>"] },
+        { "before": ["<C-j>"], "after": ["<Down>"] },
+        { "before": ["<C-k>"], "after": ["<Up>"] },
+        { "before": ["<C-l>"], "after": ["<Right>"] },
+        { "before": ["<C-w>"], "after": ["<BS>"] }
+    ],
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-x>": false,
+        "<C-f>": false,
+        "<C-s>": false,
+        "<C-z>": false,
+        "<C-c>": false,
+    } 
+
+    // Intellisense Off   
+
+    "explorer.compactFolders": false,
+    "explorer.confirmDragAndDrop": false,
+    "editor.suggest.showConstants": false,
+    "editor.suggest.showConstructors": false,
+    "editor.suggest.showCustomcolors": false,
+    "editor.suggest.showDeprecated": false,
+    "editor.suggest.showEnumMembers": false,
+    "editor.suggest.showEnums": false,
+    "editor.suggest.showEvents": false,
+    "editor.suggest.showFields": false,
+    "editor.suggest.showFiles": false,
+    "editor.suggest.showFolders": false,
+    "editor.suggest.showFunctions": false,
+    "editor.suggest.showInterfaces": false,
+    "editor.suggest.showIssues": false,
+    "editor.suggest.showKeywords": false,
+    "editor.suggest.showMethods": false,
+    "editor.suggest.showModules": false,
+    "editor.suggest.showOperators": false,
+    "editor.suggest.showProperties": false,
+    "editor.suggest.showReferences": false,
+    "editor.suggest.showSnippets": false,
+    "editor.suggest.showStructs": false,
+    "editor.suggest.showTypeParameters": false,
+    "editor.suggest.showUnits": false,
+    "editor.suggest.showUsers": false,
+    "editor.suggest.showValues": false,
+    "editor.suggest.showVariables": false,
+    "editor.suggest.showWords": false,
+    "editor.suggest.showClasses": false,
+    "editor.suggest.showColors": false
+}
