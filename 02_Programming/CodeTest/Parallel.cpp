@@ -2,6 +2,7 @@
 #include <vector>
 #include <numeric>
 #include <algorithm>
+#include <cstdlib>
 
 std::pair<int, int> MakeVector(std::vector<int> lhs, std::vector<int> rhs);
 bool ParallelCheck(std::pair<int, int> lhs, std::pair<int, int> rhs);
