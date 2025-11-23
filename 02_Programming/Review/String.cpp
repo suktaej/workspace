@@ -140,9 +140,9 @@ int main()
     std::cin.getline(ch2,sizeof(ch2));
     std::cout<<ch2<<"\n";
 
-    const char* ch2 = "10 20";
+    const char* ch3 = "10 20";
     int num1, num2;
-    sscanf(ch2,"%d %d",&num1, &num2);
+    sscanf(ch3,"%d %d",&num1, &num2);
 
     return 0;
 }
