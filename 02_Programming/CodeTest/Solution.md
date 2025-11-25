@@ -32,46 +32,34 @@
 1. 1항이 a, n(마지막) 번째 항이 l이라면
 
 $$
-\frac{n}{2}(a+l) = totalsum
+\frac{n}{2} \cdot (a+l) = totalsum
 $$
 
 2. 1항이 a, n개의 항이 있을 때, 공차(common difference)가 d라면
 
 $$
-l = a+(a+(n-1)d)
+l = a+(a+(n-1) \cdot d)
 $$
 
 $$
-\frac{n}{2}(a+(a+(n-1)*d) = totalsum
+\frac{n}{2} \cdot (a+(a+(n-1) \cdot d) = totalsum
 $$
 
-연속된 num개의 정수의 합이 totalsum이면:
+3. 수식변경으로 int계산
 
 $$
-x + (x+1) + (x+2) + ... + (x+num-1) = totalsum
+S_n = \frac{n}{2} \cdot (2a + (n-1)d)
 $$
 
-합 공식:
+* (n)이 짝수이면 `n/2`가 정수 → `int` 연산 가능
+* (n)이 홀수이면 `n/2`가 소수 → float 사용 필요
+
+곱셈 순서를 바꾸면 항상 정수 연산 가능
 
 $$
-\sum_{i=0}^{num-1} (x + i) = num * x + \frac{num*(num-1)}{2} = totalsum
+S_n = a \cdot n + \frac{n(n-1)}{2} \cdot d
 $$
 
-$$
-x = \frac{totalsum - \frac{num*(num-1)}{2}}{num}
-$$
-
-```cpp
-#include <vector>
-
-std::vector<int> ArithmeticProgression(int num, int total) 
-{
-    std::vector<int> answer;
-    int start = (total - num*(num-1)/2) / num;
-
-    for(int i = 0; i < num; ++i)
-        answer.push_back(start + i);
-
-    return answer;
-}
-```
+* `a*n` → 정수
+* `n(n-1)/2` → 항상 정수 (n*(n-1)은 짝수)
+* 따라서 `d`가 정수라면 전체 합도 정수 → `int`로 계산 가능
