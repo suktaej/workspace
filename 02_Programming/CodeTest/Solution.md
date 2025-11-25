@@ -31,19 +31,19 @@
 ### 4. 등차수열의 합
 연속된 `num`개의 정수의 합이 `total`이면:
 
-[
+$$
 x + (x+1) + (x+2) + ... + (x+num-1) = total
-]
+$$
 
 합 공식:
 
-[
+$$
 \sum_{i=0}^{num-1} (x + i) = num * x + \frac{num*(num-1)}{2} = total
-]
+$$
 
-[
+$$
 x = \frac{total - \frac{num*(num-1)}{2}}{num}
-]
+$$
 
 ```cpp
 #include <vector>
