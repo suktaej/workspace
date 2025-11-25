@@ -30,33 +30,35 @@
 
 ### 4. 등차수열의 합
 1. 1항이 a, n(마지막) 번째 항이 l이라면
+
 $$
-\frac{n}{2}*(a+l) = totalsum
+\frac{n}{2}(a+l) = totalsum
 $$
 
 2. 1항이 a, n개의 항이 있을 때, 공차(common difference)가 d라면
+
 $$
-l = a+(a+(n-1)*d)
+l = a+(a+(n-1)d)
 $$
 
 $$
-\frac{n}{2}*(a+(a+(n-1)*d) = totalsum
+\frac{n}{2}(a+(a+(n-1)*d) = totalsum
 $$
 
-연속된 `num`개의 정수의 합이 `total`이면:
+연속된 num개의 정수의 합이 totalsum이면:
 
 $$
-x + (x+1) + (x+2) + ... + (x+num-1) = total
+x + (x+1) + (x+2) + ... + (x+num-1) = totalsum
 $$
 
 합 공식:
 
 $$
-\sum_{i=0}^{num-1} (x + i) = num * x + \frac{num*(num-1)}{2} = total
+\sum_{i=0}^{num-1} (x + i) = num * x + \frac{num*(num-1)}{2} = totalsum
 $$
 
 $$
-x = \frac{total - \frac{num*(num-1)}{2}}{num}
+x = \frac{totalsum - \frac{num*(num-1)}{2}}{num}
 $$
 
 ```cpp
