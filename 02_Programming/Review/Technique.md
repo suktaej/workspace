@@ -46,9 +46,9 @@
 
 ```
 
-3. 방향탐색
+2. 방향탐색
 - 순회할 방향을 지정 후 반복
-```
+```cpp
     constexpr int dx[dirSize] = {-1, 0, 1, -1, 1, -1, 0, 1};
     constexpr int dy[dirSize] = {-1, -1, -1, 0, 0, 1, 1, 1};
 
@@ -58,3 +58,19 @@
         int nextY = y + dy[dir];
     }
 ``` 
+
+3. GCD, LCM
+```cpp
+    int gcd(int a, int b)
+    {
+        if (0 == b)
+            return a;
+
+        return gcd(b, a%b);
+    }
+
+    int lcm(int a, int b)
+    {
+        return (a*b)/gcd(a,b);
+    }
+```
