@@ -45,3 +45,16 @@
     }
 
 ```
+
+3. 방향탐색
+- 순회할 방향을 지정 후 반복
+```
+    constexpr int dx[dirSize] = {-1, 0, 1, -1, 1, -1, 0, 1};
+    constexpr int dy[dirSize] = {-1, -1, -1, 0, 0, 1, 1, 1};
+
+    for(int dir = 0; dir < dirSize; ++dir)
+    {
+        int nextX = x + dx[dir];
+        int nextY = y + dy[dir];
+    }
+``` 

@@ -4,7 +4,7 @@
 static constexpr int mazeSize = 5;
 static constexpr int dirSize = 8;
 
-bool HasWord(const char (*maze)[mazeSize], int x, int y, const std::string& word);
+bool HasWord(const char (*maze)[mazeSize], const std::string &word, int x, int y);
 
 void BoggleWord()
 {
