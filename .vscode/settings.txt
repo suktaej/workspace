@@ -1,12 +1,19 @@
  {
-    // vi settings
-
+    // Vim
     "vim.leader": " ",
     "vim.useSystemClipboard": true,
+    "editor.lineNumbers": "relative",
+   
+    // FoldLevel
+    "vim.foldfix": true,
+    "editor.foldingStrategy": "auto",
+    "editor.folding": true,
 
+    // PlugIn
     "vim.easymotion": true,
     "vim.surround": true,
 
+    // KeyBind
     "vim.normalModeKeyBindingsNonRecursive": [
         { "before": ["<leader>", "d"], "after": ["\"", "_", "d"] }
     ],
@@ -32,10 +39,11 @@
         "<C-c>": false,
     } 
 
-    // Intellisense Off   
+    // intellisence
 
     "explorer.compactFolders": false,
     "explorer.confirmDragAndDrop": false,
+    "editor.parameterHints.enabled": false,
     "editor.suggest.showConstants": false,
     "editor.suggest.showConstructors": false,
     "editor.suggest.showCustomcolors": false,
@@ -62,7 +70,8 @@
     "editor.suggest.showUsers": false,
     "editor.suggest.showValues": false,
     "editor.suggest.showVariables": false,
-    "editor.suggest.showWords": false,
+    "editor.suggest.showWords": false,   
     "editor.suggest.showClasses": false,
-    "editor.suggest.showColors": false
+    "editor.suggest.showColors": false,
+    "git.enableSmartCommit": true
 }

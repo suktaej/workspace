@@ -120,10 +120,26 @@ void StringStream(std::string str)
     std::cout<<std::endl;
 }
 
+void StringSplit()
+{
+    std::string str = "AAA-CCC-BBB";
+    std::istringstream iss(str);
+
+    std::string token;
+    std::vector<std::string> result;
+
+    //getline(입력, 저장, 구분자)
+    while(std::getline(iss,token,'-'))
+        result.push_back(token);
+
+    for(auto s : result)
+        std::cout<<s<<"\n";
+}
+
 void SwapInt()
 {
     char buf[20];
-    int num;
+    int num = 0;
 
     // 1
     sprintf(buf,"%d",num);
@@ -136,17 +152,11 @@ void SwapInt()
     num = std::stoi(buf);
 }
 
-int main()
+void InputFunc()
 {
-    const char* ch1 = "apple banana orange";
-    std::string str1 = ch1;
-
-    SwapChar(ch1);
-    StringStream(str1);
-    
     std::cout<<"Input for str2:";
     std::string str2;
-    // string용 (공백 포함, Enter까지 입력)
+    // string용 
     std::getline(std::cin, str2);
     std::cout<<str2<<"\n";
 
@@ -159,6 +169,21 @@ int main()
     const char* ch3 = "10 20";
     int num1, num2;
     sscanf(ch3,"%d %d",&num1, &num2);
+}
+
+int main()
+{
+    const char* ch1 = "apple banana orange";
+    std::string str1 = ch1;
+    
+    // std::cout<<"SubString: "<<str1.substr(3)<<"\n";
+    // std::cout<<"SubString: "<<str1.substr(6,6)<<"\n";
+
+    // SwapChar(ch1);
+    // StringStream(str1);
+    // InputFunc();
+    // SwapInt();
+    StringSplit();
 
     return 0;
 }

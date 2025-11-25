@@ -153,7 +153,18 @@ int main()
     puts("GetChar");
     // gets는 C11 표준에서 제거
     // 공백 포함 문장입력 가능
+    // 키보드 입력의 개행문자(\n)까지 저장
+    // ...'\n','\0'
     fgets(str,sizeof(str),stdin);
+
+    // 개행제거1
+    // strcspn: 문자집합에 속한 첫 문자의 위치탐색
+    str[strcspn(str,'\n')] = '\0';
+    
+    // 개행제거2
+    size_t len = strlen(str);
+    if(len > 0 && str[len - 1] == '\n')
+        str[len-1] = '\0';
     
     return 0;
 }
