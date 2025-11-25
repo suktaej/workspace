@@ -27,3 +27,35 @@
 - k-1회 큐에서 수를 꺼낸 다음 곧바로 다시 삽입한다.
 - 큐에서 수를 하나 꺼낸다. 이 수가 다음으로 제거되는 수이며, 다시 삽입하지 않는다.
 - 큐에 남아있는 수가 마지막에 남는 수이다.
+
+### 4. 등차수열의 합
+연속된 `num`개의 정수의 합이 `total`이면:
+
+[
+x + (x+1) + (x+2) + ... + (x+num-1) = total
+]
+
+합 공식:
+
+[
+\sum_{i=0}^{num-1} (x + i) = num * x + \frac{num*(num-1)}{2} = total
+]
+
+[
+x = \frac{total - \frac{num*(num-1)}{2}}{num}
+]
+
+```cpp
+#include <vector>
+
+std::vector<int> ArithmeticProgression(int num, int total) 
+{
+    std::vector<int> answer;
+    int start = (total - num*(num-1)/2) / num;
+
+    for(int i = 0; i < num; ++i)
+        answer.push_back(start + i);
+
+    return answer;
+}
+```
