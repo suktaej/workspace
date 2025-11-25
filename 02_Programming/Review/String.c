@@ -159,7 +159,7 @@ int main()
 
     // 개행제거1
     // strcspn: 문자집합에 속한 첫 문자의 위치탐색
-    str[strcspn(str,'\n')] = '\0';
+    str[strcspn(str,"\n")] = '\0';
     
     // 개행제거2
     size_t len = strlen(str);
