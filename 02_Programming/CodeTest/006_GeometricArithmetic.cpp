@@ -19,8 +19,3 @@ void CheckProgression(std::vector<int> vec)
         res = vec.back() * ratio;
     }
 }
-
-int main(void)
-{
-    return 0;
-}

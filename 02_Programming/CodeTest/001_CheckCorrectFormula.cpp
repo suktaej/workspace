@@ -2,10 +2,6 @@
 #include <string>
 #include <sstream>
 
-bool Calc(std::vector<std::string>& formula)
-{
-}
-
 std::vector<std::string> solution(std::vector<std::string> quiz) {
 
     std::vector<std::string> answer;
