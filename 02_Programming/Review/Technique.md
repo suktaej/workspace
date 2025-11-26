@@ -97,6 +97,7 @@ vector[1] * vector[1] == vector[0] * vector[2];  // 등비수열 확인
 ```
 
 ### 5. Random for C++
+- C++ style
 ```cpp
 #include <random>
 
@@ -106,6 +107,7 @@ vector[1] * vector[1] == vector[0] * vector[2];  // 등비수열 확인
 
     int randomNum = dis(gen);
 ```
+- C style
 ```cpp
 #include <cstdlib>
 #include <ctime>
@@ -115,3 +117,41 @@ vector[1] * vector[1] == vector[0] * vector[2];  // 등비수열 확인
     std::srand(std::time(0));   // seed value
     int randomNum = std::rand() % range;
 ```
+
+### 6. std::map
+- std::map 에서 `operator[]` 를 통해 key를 접근할 때, key가 존재하지 않으면 자동으로 생성되며 value는 기본 생성자로 초기화
+
+| 타입            | 기본 생성 시 값     |
+| ------------- | ------------- |
+| `int`         | **0**         |
+| `float`       | **0.0f**      |
+| `double`      | **0.0**       |
+| `bool`        | **false**     |
+| `char`        | **'\0'**      |
+| `std::string` | **빈 문자열 ""**  |
+| 사용자 정의 클래스    | **기본 생성자 호출** |
+
+입력:
+```cpp
+std::map<int, int> freq;
+std::cout << freq[10] << "\n";  
+```
+
+출력:
+```
+0
+```
+
+이 경우 freq에는 실제로 항목이 생성됨:
+
+```cpp
+// freq = { {10, 0} }
+```
+`operator[]` 를 쓰면 key가 **강제로 생성**:
+
+```cpp
+auto it = freq.find(10); // key 없으면 생성 X
+int& v = freq[10];       // key 없으면 생성 O
+```
+
+그래서 key 존재 여부만 체크하려면 `find()` 가 맞고, 자동 생성되도록 빠르게 ++ 하고 싶으면 `operator[]`
