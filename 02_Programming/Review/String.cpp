@@ -3,6 +3,7 @@
 #include <cstring>  // str function
 #include <sstream>  // for string stream
 #include <iomanip>  // setprecision, setw
+#include <cctype>   // isdigit
 #include <vector>
 
 void StringToken(char* str)
@@ -150,6 +151,15 @@ void SwapInt()
     _itoa(num, buf, 10);
 #endif
     num = std::stoi(buf);
+}
+
+void CheckDigit()
+{
+    char ch[100] = "a100bc";
+
+    for(int i = 0; i< 6;++i)
+        if (isdigit(ch[i]))
+            std::cout << i <<": digit";
 }
 
 void InputFunc()

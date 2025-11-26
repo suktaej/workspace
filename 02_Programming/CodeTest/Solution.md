@@ -32,7 +32,7 @@
 1. 1항이 a, n(마지막) 번째 항이 l이라면
 
 $$
-\frac{n}{2} \cdot (a+l) = totalsum
+S_n = \frac{n}{2} \cdot (a+l)
 $$
 
 2. 1항이 a, n개의 항이 있을 때, 공차(common difference)가 d라면
@@ -42,7 +42,7 @@ l = a+(a+(n-1) \cdot d)
 $$
 
 $$
-\frac{n}{2} \cdot (a+(a+(n-1) \cdot d) = totalsum
+S_n = \frac{n}{2} \cdot (a+(a+(n-1) \cdot d)
 $$
 
 3. 수식변경으로 int계산
@@ -62,3 +62,18 @@ $$
 - `a*n` → 정수
 - `n*(n-1)`은 짝수이므로 `n*(n-1)/2` → 항상 정수연산 가능 
 - 따라서 `d`가 정수라면 전체 합도 정수 → `int`로 계산 가능
+
+### 5. 등비수열의 합
+
+- 공비 (r = 1)일 때
+$$ S_n = an $$
+
+- 공비 (r ≠ 1)일 때
+1. 일반수식
+$$ S_n = a + ar + ar^2 + \cdots + ar^{n-1} $$
+2. 양 변에 r을 곱
+$$ rS_n = ar + ar^2 + ar^3 + \cdots + ar^{\,n} $$
+3. 두 식의 뺄셈
+$$ S_n = a \cdot \frac{1 - r^n}{1 - r} $$
+$$ S_n = a \cdot \frac{r^n - 1}{r - 1} $$
+- r > 1일 경우 전자를, r < 1 일 경우 후자로 연산하는 것이 편리

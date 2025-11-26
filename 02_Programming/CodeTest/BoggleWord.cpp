@@ -4,22 +4,6 @@
 static constexpr int mazeSize = 5;
 static constexpr int dirSize = 8;
 
-bool HasWord(const char (*maze)[mazeSize], const std::string &word, int x, int y);
-
-void BoggleWord()
-{
-    const char maze[mazeSize][mazeSize] = {
-        {'U','R','L','P','M'},
-        {'X','P','R','E','T'},
-        {'G','I','A','E','T'},
-        {'X','T','N','Z','Y'},
-        {'X','O','Q','R','S'}};
-    
-    const std::string findWord = "PREETY";
-
-    std::cout << (HasWord(maze, findWord, 1, 1) ? "true" : "false") << "\n";
-}
-
 bool HasWord(const char (*maze)[mazeSize], const std::string &word, int x, int y)
 {
     constexpr int dx[dirSize] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -51,6 +35,16 @@ bool HasWord(const char (*maze)[mazeSize], const std::string &word, int x, int y
 
 int main(void)
 {
-    BoggleWord();
+    const char maze[mazeSize][mazeSize] = {
+        {'U','R','L','P','M'},
+        {'X','P','R','E','T'},
+        {'G','I','A','E','T'},
+        {'X','T','N','Z','Y'},
+        {'X','O','Q','R','S'}};
+    
+    const std::string findWord = "PREETY";
+
+    std::cout << (HasWord(maze, findWord, 1, 1) ? "true" : "false") << "\n";
+
     return 0;
 }

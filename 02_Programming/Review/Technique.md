@@ -1,4 +1,4 @@
-1. 원형 큐, 원형 링크드리스트
+### 1. 원형 큐, 원형 링크드리스트
 
 - 정식으로 구현 시 포인터를 활용하여 시작과 끝을 연결해줘야 함
 - 실제 구현 시 list의 경우 iterator 사용
@@ -46,7 +46,7 @@
 
 ```
 
-2. 방향탐색
+### 2. 방향탐색
 - 순회할 방향을 지정 후 반복
 ```cpp
     constexpr int dx[dirSize] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -59,7 +59,7 @@
     }
 ``` 
 
-3. GCD, LCM
+### 3. GCD, LCM
 ```cpp
     int gcd(int a, int b)
     {
@@ -73,4 +73,25 @@
     {
         return (a*b)/gcd(a,b);
     }
+```
+
+### 4. 수열 확인
+- 등비수열 확인 시 정수의 나눗셈 연산이 있을 경우 오류발생 여부 존재
+```cpp
+vector[2] - vector[1] == vector[1] - vector[0];  // 등차수열 확인
+vector[1] * vector[1] == vector[0] * vector[2];  // 등비수열 확인
+```
+```cpp
+    const std::vector<int> common;
+
+    int a = common[0];
+    int b = common[1];
+    int c = common[2];
+
+    // 등차수열 체크
+    if (b - a == c - b) 
+        int d = b - a;
+    // 등비수열 체크 
+    else if(b * b == a * c)
+        int r = b / a;
 ```
