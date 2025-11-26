@@ -95,3 +95,23 @@ vector[1] * vector[1] == vector[0] * vector[2];  // 등비수열 확인
     else if(b * b == a * c)
         int r = b / a;
 ```
+
+### 5. Random for C++
+```cpp
+#include <random>
+
+    std::random_device rd;  // seed value
+    std::mt19937 gen(rd()); // Mersenne Twister
+    std::uniform_int_distribution<> dis(1,1000);    //1~1000
+
+    int randomNum = dis(gen);
+```
+```cpp
+#include <cstdlib>
+#include <ctime>
+
+    int range = 1000;
+    
+    std::srand(std::time(0));   // seed value
+    int randomNum = std::rand() % range;
+```
