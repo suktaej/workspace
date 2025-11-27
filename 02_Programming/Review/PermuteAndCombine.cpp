@@ -121,9 +121,7 @@ void PerfectMatching(int count,
                 used[x] = true;
             
             current.push_back(temp);
-
             PerfectMatching(count, pairSize, current, used, result);
-           
             current.pop_back();
 
             for(int x : temp)
@@ -149,47 +147,6 @@ void PerfectMatching(int count,
     combine(first + 1, 0);
     // Combine이 종료되면 first를 used에서 제거
     used[first] = false;
-}
-
-void combine(int count,
-             int pair,
-             std::vector<int> &temp,
-             std::vector<bool> &used,
-             int start,
-             int depth,
-             std::vector<std::vector<int>> &current,
-             std::vector<std::vector<std::vector<int>>> &result,
-             void (*generateGroupsPtr)(int,
-                                       int,
-                                       std::vector<std::vector<int>> &,
-                                       std::vector<std::vector<std::vector<int>>> &,
-                                       std::vector<bool> &))
-{
-    if(depth == pair-1) 
-    {
-        // 선택된 k개 묶음 추가
-        for(int x : temp) used[x] = true;
-        current.push_back(temp);
-
-        // generateGroups 호출
-        generateGroupsPtr(count, pair, current, result, used);
-
-        current.pop_back();
-        for(int x : temp) used[x] = false;
-
-        return;
-    }
-
-    for(int i = start; i < count; ++i) 
-    {
-        if(!used[i]) {
-            temp.push_back(i);
-
-            combine(count, pair, temp, used, i+1, depth+1, current, result, generateGroupsPtr);
-
-            temp.pop_back();
-        }
-    }
 }
 
 void ShowResult(std::vector<std::vector<int>> result, int count)
