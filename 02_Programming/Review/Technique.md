@@ -202,3 +202,21 @@ int Sort()
     // (iter.start, iter.end) : 해당 iterator 범위를 삭제
     str.erase(str.begin());
 ```
+- rotation 함수
+```cpp
+    // (first, n_first, last)
+    // 회전할 범위 시작, 새롭게 범위의 시작이 될 원소, 회전할 범위의 끝
+    // first ~ n_first까지를 잘라 last 뒤에 부착(n_first가 맨 앞의 인자로 변경)
+    std::rotation(str.rbegin(), str.rbegin()+1, str.rend());
+```
+
+### 9. int 자리연산
+- 정수 자리수에 특정 값이 존재하는지 탐색방법
+```cpp
+    while(num > 0)
+    {
+        if(num % 10 == matchNum)
+            return true;
+        num /= 10;
+    }
+```
