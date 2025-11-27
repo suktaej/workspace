@@ -34,10 +34,10 @@ void LoopFunc()
     /*
     for (int i = 0; i < n; ++i)
     {
+        ++answer;
+
         if (CheckThree(answer))
             --i;
-
-        ++answer;
     }
     */
 
