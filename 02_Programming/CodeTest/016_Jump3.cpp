@@ -27,7 +27,7 @@ bool CheckThree(int num)
 void LoopFunc()
 {
     int n = 10;
-    int answer = 1;
+    int answer = 0;
     int count = 0;
 
     // 반복회수를 조정하므로 불필요 연산 증가(--i)
@@ -43,10 +43,9 @@ void LoopFunc()
 
     while(count < n)
     {
+        ++answer;
+        
         if(!CheckThree(answer))
             ++count;
-        ++answer;
     }
-
-    --answer;
 }
