@@ -54,6 +54,8 @@ void PerfectMatching(int count,
 {
     // base case
     // 모든 element가 사용되었다면 결과추가
+    /*
+    // count만큼 중복탐색하므로 순회를 1회로 최적화
     bool done = true;
 
     for (int i = 0; i < count; ++i)
@@ -82,6 +84,24 @@ void PerfectMatching(int count,
             used[i] = true;
             break;
         }
+    }
+    */
+
+    int first = -1;
+
+    for (int i = 0; i < count; ++i)
+    {
+        if(!used[i])
+            first = i;
+
+        used[i] = true;
+        break;
+    }
+
+    if(-1 == first)
+    {
+        result.push_back(current);
+        return;
     }
 
     // first와 나머지 k-1개를 묶는 combination 생성

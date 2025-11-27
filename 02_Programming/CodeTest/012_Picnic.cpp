@@ -1,62 +1,58 @@
 #include <iostream>
 #include <vector>
+#include <cstdlib>
 
-int n = 10;
-bool arePairs[10][10];
+static constexpr int gPersonCount = 10;
 
-
-int CountPairings(bool taken[10])
+int CountPairings(bool taken[gPersonCount], bool pairs[][gPersonCount])
 {
     // 가장 번호가 빠른 인원
-    int firstFree = -1;
+    int first = -1;
 
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < gPersonCount; ++i)
     {
         if(!taken[i])
         {
-            firstFree = i;
+            first = i;
             break;
         }
     }
     // Base case
     // 모두 짝을 찾았으니 종료
-    if(firstFree == -1)
+    if(first == -1)
         return 1;
 
     // 가장 번호가 빠른 인원이 생성되었다면 짝을 찾음
-    int ret = 0;
+    int result = 0;
 
-    for(int pairWith = firstFree+1; pairWith < n; ++pairWith)
+    for (int i = first + 1; i < gPersonCount; ++i)
     {
-        if(!taken[pairWith] && arePairs[firstFree][pairWith])
-        {
-            taken[firstFree] = true;
-            taken[pairWith] = true;
-      
-            ret += CountPairings(taken);
+        if(taken[i])
+            continue;
         
-            taken[firstFree] = false;
-            taken[pairWith] = false;
-        }
+        if(!pairs[first][i])
+            continue;
+        
+        taken[first] = taken[i] = true;
+        result += CountPairings(taken, pairs);
+        taken[first] = taken[i] = false;
     }
     
-    return ret;
+    return result;
 }
 
 int main(void)
 {
-    int person = 10;
-    int pair = 2;
-    std::vector<std::vector<int>> res;
-    std::vector<int> pick;
-    std::vector<bool> used(person,false);
+    bool arePairs[gPersonCount][gPersonCount] = {};
+    bool used[gPersonCount] = {};
 
-    for(auto vec : res)
-    {
-        for(int num : vec)
-            std::cout<<num<<" ";
-        std::cout<<"\n";
-    }
+    srand(100);
+
+    for(int i =0;i<gPersonCount;++i)
+        for (int j = 0; j < gPersonCount; ++j)
+            arePairs[i][j] = rand() % 2;
+
+    std::cout<<CountPairings(used,arePairs);
 
     return 0;
 }
