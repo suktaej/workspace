@@ -155,3 +155,34 @@ int& v = freq[10];       // key 없으면 생성 O
 ```
 
 그래서 key 존재 여부만 체크하려면 `find()` 가 맞고, 자동 생성되도록 빠르게 ++ 하고 싶으면 `operator[]`
+
+### 7. std::sort
+- 인자 값으로 iterator를 사용
+```cpp
+std::sort(it.begin(),it.end());
+```
+- 3번 째 인자값으로 범위를 지정
+```cpp
+// 기본 내림차순
+std::sort(it.begin(),it.end(),std::less<>);
+// 오름차순
+std::sort(it.begin(),it.end(),std::greater<>);
+// 사용자 정의
+std::sort(it.begin(),it.end(),
+          [](int a, int b)->bool
+          {
+            return a > b; // 내림차순
+          });
+```
+- 외부 함수를 직접 호출 가능
+```cpp
+bool Compare(int a, int b)
+{
+    return a < b;
+}
+
+int Sort()
+{
+    std::sort(it.begin(),it.end(),Compare);
+}
+

@@ -73,7 +73,8 @@ void PerfectMatching(int count,
 
     // 사용되지 않은 element 선택
     int first = -1;
-    for(int i=0;i < count; ++i)
+
+    for (int i = 0; i < count; ++i)
     {
         if(!used[i])
         {
@@ -84,13 +85,16 @@ void PerfectMatching(int count,
     }
 
     // first와 나머지 k-1개를 묶는 combination 생성
+    // pairSize가 4일 경우, temp는 ( , , , )를 채워야 함
+    // 우선 가장 낮은 수인 first 삽입 (first, , , )
     std::vector<int> temp;
     temp.push_back(first);
 
     // recursion : 나머지 k-1개 선택
-    std::function<void(int,int)> combine = [&](int start, int depth)
+    std::function<void(int, int)> combine = [&](int start, int depth)
     {
-        if(depth == pairSize -1)
+        // 조합이 완성되었을 경우
+        if (depth == pairSize - 1)
         {
             // 선택 된 k개 묶음 추가
             for(int x : temp)
@@ -107,19 +111,23 @@ void PerfectMatching(int count,
             
             return;
         }
-
-        for(int i = start;i<count;++i)
+        
+        // 조합을 생성
+        for (int i = start; i < count; ++i)
         {
             if(!used[i])
             {
                 temp.push_back(i);
-                combine(i+1, depth+1);
+                combine(i + 1, depth + 1);
                 temp.pop_back();
             }
         }
     };
 
-    combine(first+1,0);
+    // lambda 함수에 first 다음 수를 삽입 (first, first+1, , )
+    // 내부에서 recursion
+    combine(first + 1, 0);
+    // Combine이 종료되면 first를 used에서 제거
     used[first] = false;
 }
 
