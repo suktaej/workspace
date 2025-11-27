@@ -185,4 +185,20 @@ int Sort()
 {
     std::sort(it.begin(),it.end(),Compare);
 }
+```
 
+### 8. std::string
+- 기본적으로 vector와 유사하게 동작가능
+- push_front, pop_front와 같은 deque 기능을 지원하지 않음
+```cpp
+    std::string str = "bc";
+
+    // push_front 대신 insert
+    // (index, string) : index 앞에 string을 추가
+    str.insert(str.begin(),'a');
+
+    // pop_front 대신 erase
+    // (index, count) : index 부터 count개 삭제
+    // (iter.start, iter.end) : 해당 iterator 범위를 삭제
+    str.erase(str.begin());
+```
