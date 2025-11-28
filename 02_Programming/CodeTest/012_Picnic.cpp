@@ -17,6 +17,7 @@ int CountPairings(bool taken[gPersonCount], bool pairs[][gPersonCount])
             break;
         }
     }
+
     // Base case
     // 모두 짝을 찾았으니 종료
     if(first == -1)

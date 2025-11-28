@@ -66,14 +66,24 @@ $$
 ### 5. 등비수열의 합
 
 - 공비 (r = 1)일 때
-$$ S_n = an $$
+$$ 
+S_n = an 
+$$
 
 - 공비 (r ≠ 1)일 때
 1. 일반수식
-$$ S_n = a + ar + ar^2 + \cdots + ar^{n-1} $$
+$$ 
+S_n = a + ar + ar^2 + \cdots + ar^{n-1} 
+$$
 2. 양 변에 r을 곱
-$$ rS_n = ar + ar^2 + ar^3 + \cdots + ar^{\,n} $$
+$$ 
+rS_n = ar + ar^2 + ar^3 + \cdots + ar^{\,n} 
+$$
 3. 두 식의 뺄셈
-$$ S_n = a \cdot \frac{1 - r^n}{1 - r} $$
-$$ S_n = a \cdot \frac{r^n - 1}{r - 1} $$
+$$
+S_n = a \cdot \frac{1 - r^n}{1 - r}
+$$
+$$
+S_n = a \cdot \frac{r^n - 1}{r - 1} 
+$$
 - r > 1일 경우 전자를, r < 1 일 경우 후자로 연산하는 것이 편리
