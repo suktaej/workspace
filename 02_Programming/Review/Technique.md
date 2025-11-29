@@ -220,3 +220,16 @@ int Sort()
         num /= 10;
     }
 ```
+
+### 10. Array 범위비교
+- i == i+1 비교 시 for문으로 진행할 경우 out of bound 발생
+- i의 범위를 조절하여 비교 가능 (i == i-1 활용)
+```cpp
+    for(int i=0;i<arr.size();++i)
+    {
+        if(i>0 && arr[i] == arr[i-1])
+            answer[arr[i]] = answer[arr[i-1]];
+        else
+            answer[arr[i]] = i+1;
+    }
+```
