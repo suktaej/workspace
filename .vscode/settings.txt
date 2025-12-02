@@ -18,7 +18,7 @@
     // KeyBind
     "vim.normalModeKeyBindingsNonRecursive": [
         { "before": ["<leader>", "d"], "after": ["\"", "_", "d"] },
-        { "before": ["<leader>", "c"], "commands": ["extension.toggleBool"] }   // Need toggle boolean extension 
+        { "before": ["<leader>", "c"], "commands": ["extension.toggleBool"] },   // Need toggle boolean extension 
         { "before": ["m", "m"], "commands": ["bookmarks.toggle"] },     // Need Bookmarks extension
         { "before": ["m", "n"], "commands": ["bookmarks.jumpToNext"] },
         { "before": ["m", "p"], "commands": ["bookmarks.jumpToPrevious"] }
