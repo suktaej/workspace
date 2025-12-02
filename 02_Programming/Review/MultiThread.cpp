@@ -34,12 +34,16 @@ void func3()
 
 void threadTest1()
 {
-    std::thread t1(func1);
+    std::thread t1(func1);  // thread object가 생성되는 순간 thread가 실행
     std::thread t2(func2);
     std::thread t3(func3);
 
-    t1.join();  // 쓰레드 종료 시 호출되는 함수
+    t1.join();  // 쓰레드가 종료될 때 까지 대기
+                // join을 호출하지 않고 쓰레드 객체가 소멸되면 std::terminate() 발생
     t2.detach();// 쓰레드 실행 후 자동으로 백그라운드에서 실행하도록 지정(잊어버림)
+                // main thread와 별개로 실행
+                // detach 이후 thread 객체는 해당 thread를 제어할 수 없음
+                // 종료 시 자동으로 자원관리
     t3.join();
 
     std::cout<<"End";
