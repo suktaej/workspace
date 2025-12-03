@@ -4,6 +4,7 @@
 #include <array>
 #include <string_view>
 #include <unordered_map>
+#include <algorithm>
 
 std::vector<int> solution(std::vector<std::string> keyinput, std::vector<int> board) {
 
@@ -69,7 +70,7 @@ void UsingArray(std::vector<std::string> keyinput, std::vector<int> board)
         auto it = std::find_if(table.begin(), table.end(),
                                [&](auto &p)
                                {
-                                   return p.first == s;
+                                   return p.first == dir;
                                });
 
         if (it != table.end())
