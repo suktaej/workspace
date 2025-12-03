@@ -5,3 +5,6 @@
 *.exe
 *.ilk
 memo.txt
+c_cpp_properties.json
+launch.json
+tasks.json
