@@ -170,6 +170,29 @@ int Permutation(int n, int r)
     return result;
 }
 
+int PermutationWithArray(int n, int r)
+{
+    std::vector<int> result;
+    result.emplace_back(1);
+
+    for(int i = n; i > n-r; --i)
+    {
+        int carry = 0;
+        for(int j =0;j<result.size();++j)
+        {
+            int val = result[j]*i +carry;
+            result[j] = val % 10;
+            carry = val / 10;
+        }
+
+        while(carry > 0)
+        {
+            result.push_back(carry % 10);
+            carry /= 10;
+        }
+    }
+}
+
 int Combination(int n, int r)
 {
     int p = Permutation(n,r);
@@ -179,6 +202,19 @@ int Combination(int n, int r)
         rFact *= i;
 
     return p / rFact;
+}
+
+int CombinationWithLoop(int n, int r)
+{
+    unsigned long long answer = 1;
+    // 조합의 성질 : nCr = nC(n-r)
+    if(r > n/2)
+        r = n - r;
+
+    for (int i = 0; i < r; ++i)
+        answer = answer * (n-i) / (i+1);
+    
+    return static_cast<int>(answer);
 }
 
 int main(void)
