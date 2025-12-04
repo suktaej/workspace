@@ -51,6 +51,21 @@ void STLFunction()
     stdFunc2(stdFunc());
 }
 
+int MUL(int a, int b){return a*b;}
+int ADD(int a, int b){return a+b;}
+
+void Cal(bool plusOper)
+{
+    int(*callback)(int,int);
+
+    if(plusOper)
+        callback = &ADD;
+    else
+        callback = &MUL;
+    
+    std::cout<<callback(10,20);
+}
+
 int main(void)
 {
     STLFunction();

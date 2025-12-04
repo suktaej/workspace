@@ -14,6 +14,8 @@ void worker()
 {
     std::unique_lock<std::mutex> lock(mtx);
     cv.wait(lock, [](){return ready;}); // ready가 true가 될 때 까지 대기
+    // cv.wait_for();
+    // cv.wait_until();
     std::cout<<"Worker thread is running\n";
 }
 
@@ -27,6 +29,7 @@ int main(void)
     }
 
     cv.notify_one();    // Thread를 깨움
+    // cv.notify_all();
     t.join();
 
     return 0;

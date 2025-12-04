@@ -233,3 +233,18 @@ int Sort()
             answer[arr[i]] = i+1;
     }
 ```
+
+### 11. 순회
+```cpp
+    int cnt = 0;
+    int size = 10;
+
+    // 카운트 증가 후 최대 인자수의 나머지를 계산
+    cnt = (++cnt) % 10;
+
+    // 조건문 탐색
+    ++cnt;
+
+    if(cnt == size)
+        cnt = 0;
+```
