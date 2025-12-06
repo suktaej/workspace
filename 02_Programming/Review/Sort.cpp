@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include <thread>
+#include <functional>
 
 namespace Sort
 {
@@ -12,6 +14,7 @@ namespace Sort
 
     void Quick(std::vector<int>& arr);
     void QuickRecursion(int low, int high,std::vector<int>& arr);
+    void QuickUsingThread(int low, int high, std::vector<int>& arr);
     int PartitionLomuto(int low, int high,std::vector<int>& arr);
     int PartitionHoare(int low, int high,std::vector<int>& arr);
     void Merge(std::vector<int>& arr);
@@ -108,6 +111,21 @@ void Sort::QuickRecursion(int low, int high, std::vector<int> &arr)
         // int p = PartitionHoare(low, high, arr);
         // QuickRecursion(low, p, arr);
         // QuickRecursion(p + 1, high, arr);
+    }
+}
+
+// 권장하지 않음
+void Sort::QuickUsingThread(int low, int high, std::vector<int> &arr)
+{
+    if (low < high)
+    {
+        int p = PartitionHoare(low, high, arr);
+
+        std::thread left(QuickUsingThread,low, p, std::ref(arr));
+        std::thread right(QuickUsingThread, p + 1, high, std::ref(arr));
+
+        left.join();
+        right.join();
     }
 }
 
