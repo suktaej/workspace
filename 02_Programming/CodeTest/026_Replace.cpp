@@ -38,8 +38,8 @@ int MapReplace(const std::string& numbers) {
         buffer.push_back(c);
 
         // Map function
-        // count(inp) : key를 탐색(존재하면 true 반환) - 존재여부만 확인
-        // find(inp) : key를 탐색(존재하면 iterator반환) - 존재하는 값을 사용
+        // count(inp) : key를 탐색(bool 반환) - 존재여부만 확인
+        // find(inp) : key를 탐색(iterator반환) - 존재하는 값을 사용
         if (dict.count(buffer)) 
         {
             // result.push_back(dict[buffer]);
