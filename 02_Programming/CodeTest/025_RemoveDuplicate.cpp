@@ -20,10 +20,10 @@ int MakeTriangleUsingVector(std::vector<int> sides)
     for(int i=0;i<vecLength.size();++i)
     {
         ++count;
-        
-        for(int j=i+1;j<vecLength.size();++j)
+
+        for (int j = i + 1; j < vecLength.size(); ++j)
         {
-            if(vecLength[i]==vecLength[j])
+            if (vecLength[i] == vecLength[j])
             {
                 --count;
                 break;

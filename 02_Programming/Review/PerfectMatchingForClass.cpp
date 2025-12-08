@@ -23,7 +23,6 @@ public:
 
 private:
     void onComplete(std::vector<int>& temp) {
-        // 조합 완성 시 수행할 작업
         for(int x : temp)
             used[x] = true;
 
