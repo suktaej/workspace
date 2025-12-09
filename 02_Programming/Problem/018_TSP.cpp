@@ -2,7 +2,7 @@
 #include <limits>
 #include <iostream>
 
-static constexpr int city = 10;
+constexpr int city = 10;
 const int dist[city][city] = {
     {0, 29, 20, 21, 16, 31, 100, 12, 4, 31},
     {29, 0, 15, 29, 28, 40, 72, 21, 29, 41},
@@ -18,6 +18,7 @@ const int dist[city][city] = {
 
 int ShortestPath(std::vector<int> &path, std::vector<bool> &visited, int current)
 {
+    // base case
     if (path.size() == city)
         return current + dist[path.back()][path[0]];
 
@@ -40,12 +41,43 @@ int ShortestPath(std::vector<int> &path, std::vector<bool> &visited, int current
     return result;
 }
 
+int best = std::numeric_limits<int>::max();
+
+int ShortestPathUsingBacktracking(std::vector<int> &path, std::vector<bool> &visited, int current)
+{   
+    // pruning
+    if(current >= best)
+        return best;
+    
+    // base case
+    if (path.size() == city)
+        return current + dist[path.back()][path[0]];
+
+    int here = path.back();
+
+    for (int next = 0; next < city; ++next)
+    {
+        if (visited[next]) 
+            continue;
+
+        visited[next] = true;
+        path.push_back(next);
+
+        int cand = ShortestPath(path, visited, current + dist[here][next]);
+        best = std::min(best, cand);
+
+        path.pop_back();
+        visited[next] = false;
+    }
+
+    return best;
+}
+
 int main()
 {
     std::vector<int> path = {0};
     std::vector<bool> visited(city, false);
 
     visited[0] = true;
-
-    std::cout << ShortestPath(path, visited, 0);
+    std::cout << ShortestPathUsingBacktracking(path, visited, 0);
 }

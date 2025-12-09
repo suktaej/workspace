@@ -34,6 +34,7 @@ public:
             std::cout<<val<<" ";
     }
 
+private:
     void HoareRecursion(int low, int high)
     {
         if(low < high)
@@ -120,6 +121,7 @@ public:
             std::cout << val << " ";
     }
 
+private:
     void Recursion(int left, int right)
     {
         if(left < right)
@@ -365,9 +367,9 @@ int main()
     // QuickSort q(inp); q.Sort();
     // MergeSort m(inp); m.Sort();
 
-    NumberOfCase n(inp,3);
+    // NumberOfCase n(inp,3);
     // n.Per();
-    n.Com();
+    // n.Com();
 
     return 0;
 }

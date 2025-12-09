@@ -10,7 +10,7 @@ enum class ESHAPE : uint8_t
     SIZE
 };
 
-static constexpr int blockSize = 3;
+constexpr int blockSize = 3;
 
 const int coverType[static_cast<int>(ESHAPE::SIZE)][blockSize][2] = {
     {{0, 0}, {1, 0}, {0, 1}},
