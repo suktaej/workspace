@@ -170,7 +170,7 @@ int Permutation(int n, int r)
     return result;
 }
 
-int PermutationWithArray(int n, int r)
+std::vector<int> PermutationWithArray(int n, int r)
 {
     std::vector<int> result;
     result.emplace_back(1);
@@ -191,6 +191,8 @@ int PermutationWithArray(int n, int r)
             carry /= 10;
         }
     }
+
+    return result;
 }
 
 int Combination(int n, int r)

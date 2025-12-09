@@ -1,5 +1,4 @@
 #include <string>
-#include <vector>
 #include <sstream>
 
 int solution(std::string my_string) {

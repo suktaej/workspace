@@ -1,6 +1,5 @@
 #include <string>
 #include <vector>
-#include <algorithm> // fill
 
 int solution(std::vector<std::string> spell, std::vector<std::string> dic) {
 
@@ -72,8 +71,6 @@ int Optimize(const std::vector<std::string>& spell, const std::vector<std::strin
     return 2;
 }
 
-#include <string>
-#include <vector>
 #include <sstream>
 
 // "10 20 Z 30

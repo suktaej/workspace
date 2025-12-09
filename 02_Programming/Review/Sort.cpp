@@ -1,8 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <limits>
-#include <thread>
-#include <functional>
 #include <iterator>
 #include <algorithm>
 
@@ -280,19 +277,19 @@ void Sort::QuickSort(std::vector<int>& arr)
         QuickRecursion(arr.begin(),arr.end());
 }
 
-void QuickRecursion(std::vector<int>::iterator begin, std::vector<int>::iterator end)
+void Sort::QuickRecursion(std::vector<int>::iterator begin, std::vector<int>::iterator end)
 {
     std::ptrdiff_t size = std::distance(begin,end);
 
     if(size < 2)
         return;
 
-    std::vector<int>::iterator pivot = Partition(begin,end);
+    std::vector<int>::iterator pivot = Sort::Partition(begin,end);
     QuickRecursion(begin,pivot);
     QuickRecursion(std::next(pivot),end);
 }
 
-std::vector<int>::iterator Partition(std::vector<int>::iterator begin, std::vector<int>::iterator end)
+std::vector<int>::iterator Sort::Partition(std::vector<int>::iterator begin, std::vector<int>::iterator end)
 {
     int pivot = *begin;
     std::vector<int>::iterator store = std::next(begin);

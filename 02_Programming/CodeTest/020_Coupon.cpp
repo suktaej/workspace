@@ -1,6 +1,3 @@
-#include <string>
-#include <vector>
-
 int solution(int chicken) 
 {
     int answer = 0;
