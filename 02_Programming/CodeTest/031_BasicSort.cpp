@@ -8,8 +8,8 @@ std::vector<int> solution(std::vector<int> emergency)
     std::vector<std::pair<int,int>> seq;
 
     seq.reserve(size);
-    
-    for(int i =0;i<size;++i)
+
+    for (int i = 0; i < size; ++i)
         seq.emplace_back(emergency[i], i);
 
     std::sort(seq.begin(), seq.end(),

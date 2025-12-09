@@ -181,7 +181,7 @@ public:
         {
             if(temp[lIdx] <= temp[rIdx])
                 arr[iter++] = temp[lIdx++];
-                else
+            else
                 arr[iter++] = temp[rIdx++];
         }
 
