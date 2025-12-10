@@ -21,11 +21,13 @@
         { "before": ["<leader>", "c"], "commands": ["extension.toggleBool"] },   // Need toggle boolean extension 
         { "before": ["m", "m"], "commands": ["bookmarks.toggle"] },     // Need Bookmarks extension
         { "before": ["m", "n"], "commands": ["bookmarks.jumpToNext"] },
-        { "before": ["m", "p"], "commands": ["bookmarks.jumpToPrevious"] }
+        { "before": ["m", "p"], "commands": ["bookmarks.jumpToPrevious"] },
+        { "before": ["<C-n>"], "commands": ["editor.action.addSelectionToNextFindMatch"] }
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         { "before": ["<leader>", "d"], "after": ["\"", "_", "d"] },
-        { "before": ["<leader>", "p"], "after": ["\"", "_", "d", "P"] }
+        { "before": ["<leader>", "p"], "after": ["\"", "_", "d", "P"] },
+        { "before": ["<C-n>"], "commands": ["editor.action.addSelectionToNextFindMatch"] }
     ],
     "vim.insertModeKeyBindings": [
         { "before": ["<C-h>"], "after": ["<Left>"] },
@@ -33,7 +35,9 @@
         { "before": ["<C-k>"], "after": ["<Up>"] },
         { "before": ["<C-l>"], "after": ["<Right>"] },
         { "before": ["<C-d>"], "after": ["<BS>"] },
-        { "before": ["<C-;>"], "after": ["<Esc>"] }
+        { "before": ["<C-;>"], "after": ["<Esc>"] },
+        { "before": ["<C-t>"], "after": ["<C-o>", "^"] },
+        { "before": ["<C-b>"], "after": ["<C-o>", "$"] }
     ],
     "vim.handleKeys": {
         "<C-a>": false, // increment
@@ -43,8 +47,10 @@
         "<C-c>": false, // Cancel
         "<C-v>": false, // vertical visual block
         "<C-f>": false, // scroll up
+        "<C-b>": true,  // scroll down(N) -> Don't work : Edit keybindings.json
+        "<C-t>": true,  // tags(N), decrease indent(I)
         "<C-d>": true,  // scroll down(N), increase indent(I)
-        "<C-r>": true   // register
+        "<C-r>": true,   // register
     },
 
     // Intellisence
