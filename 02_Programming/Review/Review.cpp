@@ -1,7 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <limits>
 
+#pragma region SORT
 using intIter = std::vector<int>::iterator;
 
 namespace Sort
@@ -185,13 +187,14 @@ private:
     }
 };
 
+template <typename T>
 class NumberOfCase
 {
 private:
-    std::vector<int> vec;
+    std::vector<T> vec;
     std::vector<int> bundle;
     std::vector<bool> dup;
-    std::vector<std::vector<int>> res;
+    std::vector<std::vector<T>> res;
     int n;
     int p;
 
@@ -203,26 +206,26 @@ public:
         }
 
 public:
-    void Per()
+    void Permutation()
     {
         res.clear();
         bundle.clear();
         std::fill(dup.begin(),dup.end(),false);
 
-        Permutation(p,bundle,dup);
+        Permute(p,bundle,dup);
         Print();
     }
 
-    void Com()
+    void Combination()
     {
         res.clear();
 
-        Combination(0,p,bundle);
+        Combine(0,p,bundle);
         Print();
     }
     
 private:
-    void Permutation(int toPick, std::vector<int>& picked, std::vector<bool>& used)
+    void Permute(int toPick, std::vector<T>& picked, std::vector<bool>& used)
     {
         // Base Case
         if(0==toPick)
@@ -238,13 +241,13 @@ private:
             
             picked.push_back(vec[i]);
             used[i] = true;
-            Permutation(toPick-1,picked,used);
+            Permute(toPick-1,picked,used);
             picked.pop_back();
             used[i] = false;
         }
     }
 
-    void Combination(int start, int toPick, std::vector<int>& picked)
+    void Combine(int start, int toPick, std::vector<T>& picked)
     {
         // Base Case
         if (0 == toPick)
@@ -256,13 +259,15 @@ private:
         for (int i = start; i < n; ++i)
         {
             picked.push_back(vec[i]);
-            Combination(i + 1, toPick - 1, picked);
+            Combine(i + 1, toPick - 1, picked);
             picked.pop_back();
         }
     }
 
     void Print() const
     {
+        std::cout<<"Result: ";
+
         for (const auto &vecItem : res)
         {
             std::cout << "(";
@@ -274,6 +279,8 @@ private:
             }
             std::cout << ") ";
         }
+
+        std::cout<<std::endl;
     }
 };
 
@@ -354,6 +361,180 @@ intIter Sort::Partition(intIter low, intIter high)
     return pivotPos;
 }
 
+#pragma endregion SORT
+
+#pragma region PROBLEM
+
+constexpr int CLOCKS = 16;
+constexpr int SWITCHES = 10;
+constexpr int INF = std::numeric_limits<int>::max();
+
+const std::vector<std::vector<int>> connectedClocks = {
+    {0, 1, 2},              // Switch 0
+    {3, 7, 9, 11},          // Switch 1
+    {4, 10, 14, 15},        // Switch 2
+    {0, 4, 5, 6, 7},        // Switch 3
+    {6, 7, 8, 10, 12},      // Switch 4
+    {0, 2, 14, 15},         // Switch 5
+    {3, 14, 15},            // Switch 6
+    {4, 5, 7, 14, 15},      // Switch 7
+    {1, 2, 3, 4, 5},        // Switch 8
+    {3, 4, 5, 9, 13}        // Switch 9
+};
+
+bool CheckClock(std::vector<int> clocks)
+{
+    for(const int& c : clocks)
+        if(12 != c) 
+            return false;
+
+    return true;
+}
+
+void Push(std::vector<int>& clocks, int switcher)
+{
+    for(int clockIdx : connectedClocks[switcher])
+    {
+        clocks[clockIdx] += 3;
+
+        if(clocks[clockIdx] == 15)
+            clocks[clockIdx] = 3;
+    }
+}
+
+int Solve(std::vector<int> clocks, int switcher)
+{
+    // Base case
+    if(switcher == SWITCHES)
+        return CheckClock(clocks) ? 0 : INF;
+    
+    // Accumulate
+    int res = INF;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        int temp = Solve(clocks, switcher+1);
+
+        if(temp != INF)
+            res = std::min(res, i + temp);
+
+        Push(clocks,switcher);
+    }
+}
+
+void ClockProblem()
+{
+    std::vector<int> clocks = {12, 12, 12, 3, 3, 3, 12, 12, 12, 3, 12, 12, 12, 3, 12, 12};
+    std::cout << Solve(clocks, 0);
+}
+
+constexpr int BLOCKSIZE = 3;
+constexpr int BLOCKSHAPE = 4;
+const int coverType[BLOCKSHAPE][BLOCKSIZE][2] = {
+    {{0, 0}, {1, 0}, {0, 1}},
+    {{0, 0}, {0, 1}, {1, 1}},
+    {{0, 0}, {1, 0}, {1, 1}},
+    {{0, 0}, {1, 0}, {1, -1}}};
+
+bool SetBlock(std::vector<std::vector<int>>& board, int y, int x, int shape, int delta)
+{
+    bool bPlaced = true;
+
+    for (int i = 0; i < BLOCKSIZE; ++i)
+    {
+        const int ny = y + coverType[shape][i][0];
+        const int nx = x + coverType[shape][i][1];
+
+        if (ny < 0 || nx < 0 || ny >= board.size() || nx >= board[0].size())
+            bPlaced = false;
+        else if ((board[ny][nx] += delta) > 1)
+            bPlaced = false;
+    }
+
+    return bPlaced;
+}
+
+int Cover(std::vector<std::vector<int>>& board)
+{
+    int x = -1;
+    int y = -1;
+
+    for (int i = 0; i < board.size(); ++i)
+    {
+        for (int j = 0; j < board[i].size(); ++j)
+        {
+            if (0 == board[i][j])
+            {
+                x = j;
+                y = i;
+                break;
+            }
+        }
+        
+        if (y != -1)
+            break;
+    }
+
+    // Base case
+    if (y == -1)
+        return 1;
+    
+    // board에 block 삽입
+    int res = 0;
+
+    for (int i = 0; i < BLOCKSHAPE; ++i)
+    {
+        if(SetBlock(board,y,x,i,1))
+            res += Cover(board);
+        
+        SetBlock(board,y,x,i,-1);
+    }
+
+    return res;
+}
+
+void BlockProblem()
+{
+    std::vector<std::vector<int>> board = {
+        {0, 0, 0, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}};
+    
+    std::cout<<Cover(board)<<std::endl;
+}
+
+constexpr int DISKCOUNT = 5;
+int gMoveCount = 0;
+
+void Hanoi(int disk, char from, char temp, char to)
+{
+    if(disk == 0)
+        return;
+
+    Hanoi(disk-1,from,to,temp);
+    std::cout<<"Move disk "<<disk<<" from "<<from<<" to "<<to<<std::endl;
+    ++gMoveCount;
+    Hanoi(disk-1,temp,from,to);
+}
+
+void HanoiProblem()
+{
+    Hanoi(DISKCOUNT,'A','B','C');
+    std::cout<<"Count: "<<gMoveCount<<std::endl;
+}
+
+int Fibonacci(int n, int a = 0, int b = 1)
+{
+    if(n == 0)
+        return a;
+    if(n == 1)
+        return b;
+
+    return Fibonacci(n - 1, b, a + b);
+}
+
+#pragma endregion PROBLEM
+
 int main()
 {
     std::vector<int> inp = {10, 30, 25, 60, 40, 20, 50};
@@ -367,9 +548,12 @@ int main()
     // QuickSort q(inp); q.Sort();
     // MergeSort m(inp); m.Sort();
 
-    // NumberOfCase n(inp,3);
-    // n.Per();
-    // n.Com();
+    // NumberOfCase<int> n(inp,3);
+    // n.Permutation();
+    // n.Combination();
 
+    // HanoiProblem();
+
+    Fibonacci(4);
     return 0;
 }

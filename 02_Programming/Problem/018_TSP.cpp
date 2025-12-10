@@ -45,13 +45,13 @@ int best = std::numeric_limits<int>::max();
 
 int ShortestPathUsingBacktracking(std::vector<int> &path, std::vector<bool> &visited, int current)
 {   
-    // pruning
-    if(current >= best)
-        return best;
-    
     // base case
     if (path.size() == city)
         return current + dist[path.back()][path[0]];
+    
+    // pruning
+    if(current >= best)
+        return best;
 
     int here = path.back();
 
@@ -80,4 +80,5 @@ int main()
 
     visited[0] = true;
     std::cout << ShortestPathUsingBacktracking(path, visited, 0);
+    std::cout << ShortestPath(path, visited, 0);
 }

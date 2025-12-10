@@ -36,7 +36,7 @@ void Hanoi(int n, char from, char to, char temp)
 
 int main(void)
 {
-    std::cout<<Recursion_fib(10)<<std::endl;
-    std::cout<<TailRecursion_fib(10)<<std::endl;
+    // std::cout<<Recursion_fib(10)<<std::endl;
+    // std::cout<<TailRecursion_fib(10)<<std::endl;
     Hanoi(10, 'A', 'B', 'C');
 }

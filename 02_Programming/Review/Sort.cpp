@@ -18,6 +18,9 @@ namespace Sort
     void MergeSort(std::vector<int>& arr);
     void Divide(std::vector<int>::iterator begin, std::vector<int>::iterator end);
     void Merge(std::vector<int>::iterator begin, std::vector<int>::iterator mid, std::vector<int>::iterator end);
+
+    void HeapSort(std::vector<int>& arr);
+    void Heapify(std::vector<int> &arr, int heapSize, int rootIdx);
 };
 
 class QuickSort
@@ -355,6 +358,39 @@ void Sort::Merge(std::vector<int>::iterator begin, std::vector<int>::iterator mi
     // std::copy(lIdx,mid,std::back_inserter(temp));
     // std::copy(rIdx,end,std::back_inserter(temp));
     std::copy(temp.begin(), temp.end(), begin);
+}
+
+void Sort::HeapSort(std::vector<int>& arr)
+{
+    int size = arr.size();
+
+    for (int i = size / 2 - 1; i >= 0; --i)
+        Sort::Heapify(arr, size, i);
+
+    for (int i = size - 1; i > 0; --i)
+    {
+        std::swap(arr[0],arr[i]);
+        Sort::Heapify(arr, i, 0);
+    }
+}
+
+void Sort::Heapify(std::vector<int> &arr, int heapSize, int rootIdx)
+{
+    int maxIdx = rootIdx;
+    int left = 2 * rootIdx +1;
+    int right = 2 * rootIdx + 2;
+
+    if(left < heapSize && arr[left] > arr[maxIdx])
+        maxIdx = left;
+
+    if (right < heapSize && arr[right] > arr[maxIdx])
+        maxIdx = right;
+
+    if(maxIdx != rootIdx)
+    {
+        std::swap(arr[rootIdx],arr[maxIdx]);
+        Heapify(arr, heapSize, maxIdx);
+    }
 }
 
 int main()

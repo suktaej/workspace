@@ -63,7 +63,6 @@ int Solve(std::vector<int>& clocks,int switcher)
 
 int main()
 {
-    // std::vector<int> clocks = {3, 9, 12, 6, 12, 9, 6, 12, 12, 12, 3, 12, 9, 12, 9, 6};
     std::vector<int> clocks = {12, 12, 12, 3, 3, 3, 12, 12, 12, 3, 12, 12, 12, 3, 12, 12};
     std::cout << Solve(clocks, 0);
 
