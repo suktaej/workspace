@@ -1,11 +1,50 @@
-*.out
-*.obj
-*.o
-*.pdb
-*.exe
-*.ilk
-memo.txt
+# Settings
 c_cpp_properties.json
 launch.json
 tasks.json
 settings.json
+
+# Visual Studio default build folders
+Debug/
+Release/
+x64/
+.vs/
+ipch/
+
+# Compiled binaries and intermediate files
+*.exe
+*.dll
+*.obj
+*.pch
+*.pdb
+*.idb
+*.ilk
+*.lib
+*.exp
+*.log
+*.tlog
+*.cache
+*.lastbuildstate
+*.manifest
+*.res
+*.tmp
+*.iobj
+*.ipdb
+
+*.out
+*.o
+
+# Visual Studio generated database/settings
+*.sdf
+*.opensdf
+*.opendb
+*.VC.db
+*.VC.opendb
+*.suo
+*.user
+
+# Other temporary/auto files
+*.wrn
+*.err
+
+memo.txt
