@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <unordered_set>
 #include <sstream>
 
 int Count7(std::vector<int> array) {
@@ -146,6 +147,62 @@ std::string Morse(std::string letter) {
     
     while(iss>>token)
         answer.append(morse[token]);
+
+    return answer;
+}
+
+std::string EraseAndRemove(std::string my_string) {
+
+    std::string temp = my_string;
+    std::string answer = "";
+
+    std::sort(temp.begin(),temp.end());
+    temp.erase(std::unique(temp.begin(),temp.end()),temp.end());
+
+    for(const char& c : my_string)
+    {
+        for(const char& ic : temp)
+        {
+            if(c == ic)
+            {
+                answer += c;
+                temp.erase(std::remove(temp.begin(), temp.end(), ic), temp.end());
+                break;
+            }
+        }
+    }
+
+    return answer;
+}
+
+std::string CountChar(std::string my_string) {
+        
+    std::string answer = "";
+    std::unordered_map<char,int> cnt;
+
+    for(char c : my_string)
+        cnt[c]++;
+
+    for(char c: my_string)
+    {
+        if (cnt[c] > 0)
+        {
+            answer += c;
+            cnt[c] = 0;
+        }
+    }
+
+    return answer;
+}
+
+
+std::string CountChar(std::string my_string) {
+
+    std::string answer = "";
+
+    for(char i : my_string)
+        if(answer.find(i) == std::string::npos)
+            answer+=i;
 
     return answer;
 }
