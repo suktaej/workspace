@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <limits>
+#include <string>
 
 #pragma region SORT
 using intIter = std::vector<int>::iterator;
@@ -362,6 +363,45 @@ intIter Sort::Partition(intIter low, intIter high)
 }
 
 #pragma endregion SORT
+
+#pragma region Algor
+int GCD(int largerVal, int modVal)
+{
+    return (modVal == 0) ? largerVal : GCD(modVal, largerVal % modVal);
+}
+
+int Prime(int n)
+{
+    int maxVal = std::sqrt(n);
+
+    for(int i= 2;i <= maxVal; ++i)
+    {
+        if (n % i == 0)
+            return false;
+    }
+
+    return true;
+}
+
+std::vector<int> Factors(int n)
+{
+    std::vector<int> res;
+    int maxVal = std::sqrt(n);
+
+    for(int i=1;i<=maxVal;++i)
+    {
+        if (n % i == 0)
+        {
+            res.push_back(i);
+            if (i != n / i)
+                res.push_back(n / i);
+        }
+    }
+
+    return res;
+}
+
+#pragma endregion Algor
 
 #pragma region PROBLEM
 
