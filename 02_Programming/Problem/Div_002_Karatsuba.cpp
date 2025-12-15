@@ -1,4 +1,5 @@
 #include <vector>
+#include <cstdlib>
 
 void Normalize(std::vector<int>& num)
 {
