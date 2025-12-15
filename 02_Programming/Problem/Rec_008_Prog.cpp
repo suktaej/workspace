@@ -92,7 +92,7 @@ int DP(const std::vector<int>& footHold, int range)
             if (i - j < 0)
                 break;
 
-            int cost = dp[i-j] += std::abs(footHold[i]-footHold[i-j]);
+            int cost = dp[i-j] + std::abs(footHold[i]-footHold[i-j]);
             dp[i] = std::min(dp[i], cost);
         }
     }
