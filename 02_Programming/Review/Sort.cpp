@@ -10,6 +10,7 @@ namespace Sort
     void InsertionWithFor(std::vector<int>& arr);
     void BubbleSort(std::vector<int>& arr);
     void BubbleWithWhile(std::vector<int>& arr);
+    void ShellSort(std::vector<int>& arr);
 
     void QuickSort(std::vector<int>& arr);
     void QuickRecursion(std::vector<int>::iterator begin,std::vector<int>::iterator end);
@@ -274,6 +275,27 @@ void Sort::BubbleWithWhile(std::vector<int> &arr)
     }
 }
 
+void Sort::ShellSort(std::vector<int> &arr)
+{
+    int count = arr.size();
+
+    for (int gap = count / 2; gap > 0; gap /= 2)
+    {
+        for (int i = gap; i < count; ++i)
+        {
+            int key = arr[i];
+            int j = i;
+
+            while(j >= gap && arr[j-gap] > key)
+            {
+                arr[j] = arr[j-gap];
+                j -= gap;
+            }
+            arr[j] = key;
+        }
+    }
+}
+
 void Sort::QuickSort(std::vector<int>& arr)
 {
     if (!arr.empty())
@@ -400,7 +422,7 @@ int main()
     // Sort::BubbleSort(inp);
     // Sort::BubbleWithWhile(inp);
     // Sort::InsertionSort(inp);
-    // Sort::QuickSort(inp);
+    // Sort::QuickSort(inp)
     Sort::MergeSort(inp);
     
     for (const auto &it : inp)
