@@ -17,9 +17,13 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
-int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-                     _In_opt_ HINSTANCE hPrevInstance,
-                     _In_ LPWSTR    lpCmdLine,
+// SAL(Standard Annotation Language) : Source code 주석
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance, // 실행된 프로세스의 주소
+// window는 가상메모리를 사용
+// 동일한 프로세스를 실행시키더라도 동일한 주소를 반환함
+
+                     _In_opt_ HINSTANCE hPrevInstance,  // 이전 실행된 프로세스의 주소(미사용)
+                     _In_ LPWSTR    lpCmdLine,          // 문자열 주소 (미사용)
                      _In_ int       nCmdShow)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
@@ -28,12 +32,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // TODO: Place code here.
 
     // Initialize global strings
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);     // StringTable(Resource)의 IDS_APP_TITLE에 
+                                                                        // 해당하는 값을 읽어와 szTitle에 삽입
     LoadStringW(hInstance, IDC_WINAPI, szWindowClass, MAX_LOADSTRING);
-    MyRegisterClass(hInstance);
+    MyRegisterClass(hInstance); // 윈도우 정보 등록
 
     // Perform application initialization:
-    if (!InitInstance (hInstance, nCmdShow))
+    if (!InitInstance (hInstance, nCmdShow)) // 윈도우 생성
     {
         return FALSE;
     }
@@ -63,8 +68,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 //  PURPOSE: Registers the window class.
 //
 ATOM MyRegisterClass(HINSTANCE hInstance)
-{
-    WNDCLASSEXW wcex;
+{   // 구조체 멤버초기화
+    WNDCLASSEXW wcex;   
 
     wcex.cbSize = sizeof(WNDCLASSEX);
 
@@ -77,10 +82,10 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_WINAPI);
-    wcex.lpszClassName  = szWindowClass;
+    wcex.lpszClassName  = szWindowClass;    // Register에 등록되는 이름
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
-    return RegisterClassExW(&wcex);
+    return RegisterClassExW(&wcex); // Window 제공 (선언 되어있고 실행가능, 수정불가)
 }
 
 //
@@ -97,6 +102,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
 
+   // CreateWindowW(L"KeyName, ...) 첫 인자로 레지스터 이름을 탐색하고 해당 레지스터를 가지고 창을 생성
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
