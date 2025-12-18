@@ -13,11 +13,13 @@ public:
     PerfectMatcher(int totalPersons, int groupSize)
         : n(totalPersons), pairSize(groupSize), used(totalPersons, false) {}
 
-    void run() {
+    void run() 
+    {
         perfectMatching();
     }
 
-    const std::vector<std::vector<std::vector<int>>>& getResult() const {
+    const std::vector<std::vector<std::vector<int>>>& getResult() const 
+    {
         return result;
     }
 
