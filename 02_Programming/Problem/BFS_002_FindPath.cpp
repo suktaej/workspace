@@ -77,6 +77,29 @@ int ShortestLength()
     return dist[size-1];
 }
 
+void RestorePaths(
+    int cur,
+    const std::vector<std::vector<int>>& parents,
+    std::vector<int>& pathStack,
+    std::vector<std::vector<int>>& allPaths)
+{
+    pathStack.push_back(cur);
+
+    if (cur == 0)
+    {
+        std::vector<int> path = pathStack;
+        std::reverse(path.begin(), path.end());
+        allPaths.push_back(path);
+    }
+    else
+    {
+        for (int p : parents[cur])
+            RestorePaths(p, parents, pathStack, allPaths);
+    }
+
+    pathStack.pop_back();
+}
+
 void ShortestPath()
 {
     int size = path.size();
@@ -136,9 +159,22 @@ void ShortestPath()
     }
     */
 
-    std::cout << "Number of shortest path: " << cnt[size - 1] <<"\n";
-    std::cout << "Minimum number of move: " << dist[size - 1]<<"\n";
+   std::vector<std::vector<int>> allPaths;
+   std::vector<int> pathStack;
+   RestorePaths(size - 1, parents, pathStack, allPaths);
+
+   std::cout << "All shortest paths:\n";
+    for (const auto& p : allPaths)
+    {
+        for (int v : p)
+            std::cout << v << " ";
+        std::cout << "\n";
+    }
+
+   std::cout << "Number of shortest path: " << cnt[size - 1] << "\n";
+   std::cout << "Minimum number of move: " << dist[size - 1] << "\n";
 }
+
 
 int main()
 {
