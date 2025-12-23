@@ -1,8 +1,9 @@
 #include <vector>
+#include <iostream>
 #include <cmath>
 
 // num[]의 자릿수 올림
-void normalize(std::vector<int>& num)
+void Normalize(std::vector<int>& num)
 {
     num.push_back(0);
     // 자릿수 올림 처리
@@ -32,8 +33,19 @@ std::vector<int> multiply(const std::vector<int>& a, const std::vector<int>& b)
     std::vector<int> c(a.size() + b.size() + 1, 0);
     for(int i = 0; i< a.size(); ++i)
         for(int j =0; j<b.size();++j)
-            c[i+j] += a[i] + b[j];
+            c[i+j] += a[i] * b[j];
 
-    normalize(c);
+    Normalize(c);
+
+    // for (auto &it = c.rbegin(); it != c.rend(); ++it)
+    //     std::cout<<(*it);
+
     return c;
+}
+
+int main()
+{
+
+    multiply({3,2,1},{6,5,4});
+    return 0;
 }

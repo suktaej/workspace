@@ -582,7 +582,6 @@ int main()
     // Sort::BubbleSort(inp);
     // Sort::InsertionSort(inp);
     // Sort::QuickSort(inp.begin(), inp.end());
-    
     // for (const auto &it : inp) std::cout << it << " ";
 
     // QuickSort q(inp); q.Sort();
@@ -594,6 +593,7 @@ int main()
 
     // HanoiProblem();
 
-    Fibonacci(4);
+    // Fibonacci(4);
+
     return 0;
 }

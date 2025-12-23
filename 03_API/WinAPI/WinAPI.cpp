@@ -43,14 +43,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, // 실행된 프로세스의 주
         return FALSE;
     }
 
+    // 단축키
+    // Resource view -> Accelerator Table에서 매칭 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINAPI));
 
+    // 메세지 생성
     MSG msg;
 
     // Main message loop:
+    // GetMessage : message queue가 비어있을 경우 다른 message가 들어올 때 까지 대기
+    // msg.message == WM_QUIT 인 경우 false를 반환 -> 프로그램 종료
     while (GetMessage(&msg, nullptr, 0, 0))
     {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) // 메세지 핸들, 단축키 실행 확인
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -74,7 +79,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbSize = sizeof(WNDCLASSEX);
 
     wcex.style          = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = WndProc;
+    wcex.lpfnWndProc    = WndProc;  // function pointer : msg의 내용을 처리할 함수
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = hInstance;
@@ -152,6 +157,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
+            // 윈도우 핸들
+            // HDC
+            
             // TODO: Add any drawing code that uses hdc here...
             EndPaint(hWnd, &ps);
         }
@@ -160,7 +168,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(0);
         break;
     default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
+        return DefWindowProc(hWnd, message, wParam, lParam);    // 특정 프로시저 실행
     }
     return 0;
 }
