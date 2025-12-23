@@ -460,6 +460,8 @@ int Solve(std::vector<int> clocks, int switcher)
 
         Push(clocks,switcher);
     }
+
+    return res;
 }
 
 void ClockProblem()

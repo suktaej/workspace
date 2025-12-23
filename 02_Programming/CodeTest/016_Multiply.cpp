@@ -28,7 +28,7 @@ void Normalize(std::vector<int>& num)
 
 // 두 긴 자연수 간의 곱을 반환
 // 각 배열에는 각 수의 자릿수가 1의 자리에서부터 시작해 저장되어 있음
-std::vector<int> multiply(const std::vector<int>& a, const std::vector<int>& b)
+std::vector<int> Multiply(const std::vector<int>& a, const std::vector<int>& b)
 {
     std::vector<int> c(a.size() + b.size() + 1, 0);
     for(int i = 0; i< a.size(); ++i)
@@ -46,6 +46,6 @@ std::vector<int> multiply(const std::vector<int>& a, const std::vector<int>& b)
 int main()
 {
 
-    multiply({3,2,1},{6,5,4});
+    Multiply({3,2,1},{6,5,4});
     return 0;
 }
