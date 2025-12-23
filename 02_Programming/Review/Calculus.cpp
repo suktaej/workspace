@@ -18,8 +18,8 @@ double Derivative(T&& func, double x)
     return (func(x + h) - func(x - h)) / (2.0 * h);
 }
 
-template <typename T>
-double Integrate(T&& func, double a, double b, int n)
+template <typename F>
+double IntegrateTrapezoid(F&& func, double a, double b, int n)
 {
     double h = (b - a) / n;
     // 한 구간은 h/2(f(x)+f(x+1))
@@ -34,10 +34,29 @@ double Integrate(T&& func, double a, double b, int n)
     return sum * h;
 }
 
+template <typename F>
+double IntegrateMidpoint(F&& f,double a, double b, int n)
+{
+    double h = (b - a) / n;
+    double sum = 0.0;
+
+    for (int i = 0; i < n; ++i)
+    {
+        double x = a + (i + 0.5) * h;
+        sum += f(x);
+    }
+
+    return sum * h;
+}
+
 int main()
 {
-    auto f = [](double x) { return x * x + std::sin(x); };
-    double d = Derivative(f, 1.f);
-    std::cout<<d;
+    auto f1 = [](double x) { return x * x + std::sin(x); };
+    double d = Derivative(f1, 1.f);
+    // std::cout<<d;
+
+    auto f2 = [](double x) { return pow(2, x * x); };
+    double I = IntegrateTrapezoid(f2, 0, 1, 1000);
+    std::cout<<I;
     return 0;
 }
