@@ -132,7 +132,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY  - post a quit message and return
 //
 //
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+
+POINT gPos = { 200,200 };
+POINT gScale = { 100,100 };
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) // message의 부가인자 (wParam : 키보드 입력 , lParam : 마우스 입력)
 {
     switch (message)
     {
@@ -153,17 +157,87 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
-    case WM_PAINT:
+    case WM_PAINT:  // 윈도우의 무효화 영역(Invalidate Region)이 발생한 경우
         {
             PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // 윈도우 핸들
-            // HDC
+            HDC hdc = BeginPaint(hWnd, &ps); // Device Context(kernel)
+            // Device Context : 화면에 그리기를 위해 필요한 데이터의 집합(brush, pen)
+            // DC의 목적지는 hWnd
+            // 기본 pen은 black, brush는 white
+
+            // DECLARE_HANDLE(HDC);
+            // struct __HDC { int unused; }typedef HDC;
+            // struct __HWND { int unused; }typedef HWND;
+            // 전처리기에 의해 구조체 생성
+            // 커널에서 특정 객체의 ID를 받아올 때 중복이 되지 않도록 할 필요가 있음 
+
+            // Pen 생성
+			HPEN hRedPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
+            // SelectObject의 반환형은 HGDIOBJ = void*
+            // 범용적 함수이므로 반드시 형변환 필요
+            HPEN hDefaultPen = (HPEN)SelectObject(hdc, hRedPen);
+
+            // Brush 생성
+            HBRUSH hBlueBrush = CreateSolidBrush(RGB(0,0,255));
+            HBRUSH hHatchBrush = CreateHatchBrush(HS_BDIAGONAL,RGB(0,255,0));
+
+            // GetStockObject : 저장된 오브젝트를 불러오는 함수
+            HBRUSH hStockBrush = (HBRUSH)GetStockObject(BLACK_BRUSH);
+            
+            HBRUSH hDefaultBrush = (HBRUSH)SelectObject(hdc, hHatchBrush);
+            
+            Rectangle(hdc, 10, 10, 100, 100);
+            
+            // 복원
+            SelectObject(hdc, hDefaultPen);
+            SelectObject(hdc, hDefaultBrush);
+
+            // 사용이 끝난 오브젝트는 제거
+            DeleteObject(hRedPen);
+            DeleteObject(hBlueBrush);
+            DeleteObject(hBlueBrush);
+
+            Rectangle(hdc, 
+                gPos.x - gScale.x / 2, 
+                gPos.y - gScale.y / 2,
+                gPos.x + gScale.x / 2,
+                gPos.y + gScale.y / 2);
             
             // TODO: Add any drawing code that uses hdc here...
             EndPaint(hWnd, &ps);
         }
         break;
+    case WM_KEYDOWN:    // 키 입력 시 동작
+    {
+        switch (wParam)
+        {
+		case VK_UP:
+            gPos.y -= 10;
+            InvalidateRect(hWnd, nullptr, true);   // 무효화 영역을 직접 설정(윈도우, 범위, 초기화)
+            break;
+		case VK_DOWN:
+            gPos.y += 10;
+            InvalidateRect(hWnd, nullptr, true);   
+            break;
+        case VK_LEFT:
+            gPos.x -= 10;
+            InvalidateRect(hWnd, nullptr, true);   
+            break;
+        case VK_RIGHT:
+            gPos.x += 10;
+            InvalidateRect(hWnd, nullptr, true);   
+            break;
+        }
+    }
+    case WM_KEYUP:     // 키 입력 해제 시 동작
+    case WM_LBUTTONDOWN:    // 마우스 좌측버튼 입력 시 동작
+    {
+        POINT p = {};
+        // lParam : 마우스 좌표 long type. 2byte, 2byte로 구분
+		p.x = LOWORD(lParam); // x좌표
+        p.y = HIWORD(lParam); // y좌표
+        break;
+    }
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
