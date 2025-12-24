@@ -58,28 +58,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, // 실행된 프로세스의 주
     // GetMessage : message queue가 비어있을 경우 다른 message가 들어올 때 까지 대기
     // msg.message == WM_QUIT 인 경우 false를 반환 -> 프로그램 종료
     
-    // 매 초마다 1000만큼 카운트
-    // DWORD dwCurCount = GetTickCount();
-
-    while (true) 
+    // PeekMessage : message queue에 무관하게 반환되는 함수
+    while (GetMessage(&msg, nullptr, 0, 0))
     {
-		// PeekMessage : message에 무관하게 반환되는 함수
-		// message queue에서 message를 확인했을 경우 true를 반환
-        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))    // 마지막 옵션 : 확인한 message가 있을 경우 message queue에서 제거 여부
+        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) // 메세지 핸들, 단축키 실행 확인
         {
-            if (WM_QUIT == msg.message)
-                break;
-
-            if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) // 메세지 핸들, 단축키 실행 확인
-            {
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
-            }
-        }
-        // message가 없더라도 동작
-        else
-        {
-
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
     }
     
@@ -256,12 +241,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         switch (wParam)
         {
 		case VK_UP:
+            //gPos.y -= 10;
+            InvalidateRect(hWnd, nullptr, true);   // 무효화 영역을 직접 설정(윈도우, 범위, 초기화)
             break;
 		case VK_DOWN:
+            //gPos.y += 10;
+            InvalidateRect(hWnd, nullptr, true);   
             break;
         case VK_LEFT:
+            //gPos.x -= 10;
+            InvalidateRect(hWnd, nullptr, true);   
             break;
         case VK_RIGHT:
+            //gPos.x += 10;
+            InvalidateRect(hWnd, nullptr, true);   
             break;
         }
     }
@@ -278,6 +271,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     {
 		gPtRB.x = LOWORD(lParam); // x좌표
         gPtRB.y = HIWORD(lParam); // y좌표
+        InvalidateRect(hWnd, nullptr, true);
         break;
     }
     case WM_LBUTTONUP:
@@ -291,6 +285,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 
         gVecInfo.push_back(info);
         bLbtnDown = false;
+        InvalidateRect(hWnd, nullptr, true);
         break;
     }
     case WM_TIMER:
