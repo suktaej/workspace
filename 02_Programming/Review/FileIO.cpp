@@ -41,7 +41,7 @@ std::string ReadLine()
     return fullText;
 }
 
-std::string ReadyWord()
+std::string ReadWord()
 {
     std::ifstream readFile("input.txt");
     std::string fullText = "";
