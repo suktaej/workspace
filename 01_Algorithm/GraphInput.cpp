@@ -4,7 +4,9 @@
 #include <utility>
 #include <algorithm>
 #include <queue>
+#include <limits>
 
+constexpr int INTMAX = std::numeric_limits<int>::max();
 int gVertexCount;
 int gEdgeCount;
 
