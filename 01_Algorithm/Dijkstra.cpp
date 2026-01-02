@@ -58,6 +58,7 @@ bool Dijkstra(const int& start, const int& goal)
 
 int main()
 {
+    FileInput();
     Dijkstra(1,5);
 
     return 0;
