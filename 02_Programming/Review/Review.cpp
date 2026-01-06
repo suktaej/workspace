@@ -1,8 +1,15 @@
 #include <iostream>
+#include <limits>
+#include <fstream>
 #include <vector>
 #include <algorithm>
 #include <limits>
 #include <string>
+#include <queue>
+#include <stack>
+
+// using INT_MAX = std::numeric_limits<int>::max();
+#include <climits>
 
 #pragma region SORT
 using intIter = std::vector<int>::iterator;
@@ -399,6 +406,201 @@ std::vector<int> Factors(int n)
     }
 
     return res;
+}
+
+struct FEdge
+{
+    int src;
+    int dest;
+    int weight;
+
+    bool operator<(const FEdge &other) const
+    {
+        return weight < other.weight;
+    }
+
+    bool operator>(const FEdge &other) const
+    {
+        return weight > other.weight;
+    }
+};
+
+std::vector<FEdge> gEdges;
+
+struct FDisjointSet
+{
+    std::vector<int> parents;
+    std::vector<int> rank;
+
+    FDisjointSet(int nodes)
+        : parents(nodes + 1), rank(nodes + 1, 0)
+    {
+        for (int i = 0; i <= nodes; ++i)
+            parents[i] = i;
+    }
+
+    int find(int child)
+    {
+        if(parents[child] == child)
+            return child;
+
+        return parents[child] = find(parents[child]);
+    }
+
+    bool unite(int i, int j)
+    {
+        int rooti = find(i);
+        int rootj = find(j);
+
+        if(rooti == rootj)
+            return false;
+
+        if (rank[rooti] < rank[rootj])
+            std::swap(rooti, rootj);
+
+        parents[rootj] = rooti;
+
+        if (rank[rooti] == rank[rootj])
+            ++rank[rooti];
+
+        return true;
+    }
+};
+
+int gEdgeCount, gVertexCount;
+std::vector<std::vector<std::pair<int,int>>> gAdj; // {weight, dest}
+
+void GraphInput(bool dir = false)
+{
+    std::fstream in;
+
+    in.open("input.txt");
+
+    if(in.is_open())
+    {
+        int w,u,v;
+        in >> gEdgeCount >> gVertexCount;
+
+        for (int i = 0; i < gEdgeCount; ++i)
+        {
+            in >> u >> v >> w;
+
+            gEdges.push_back({u,v,w});
+            gAdj[u].push_back({w,v});
+            
+            if(!dir)
+                gAdj[v].push_back({w, v});
+        }
+    }
+
+    in.close();
+}
+
+void Prim(int start)
+{
+    std::priority_queue<std::pair<int,int>, std::vector<std::pair<int,int>>, std::greater<std::pair<int,int>>> que;
+    std::vector<bool> visited(gVertexCount + 1, false);
+
+    que.push({0,start});
+    visited[start] = true;
+
+    for(const auto& edge : gAdj[start])
+        que.push(edge);   
+
+    while(!que.empty())
+    {
+        const auto& [curWeight, curDest] = que.top();
+        std::cout << curDest << " (weight: " << curWeight << ")\n";
+        que.pop();
+
+        if(visited[curDest])
+            continue;
+
+        for(const auto& next : gAdj[curDest])
+        {
+            const auto& [nextWeight, nextDest] = next;
+
+            if(visited[nextDest])
+                continue;
+            
+            que.push(next);
+        }
+    }
+}
+
+bool Dijkstra(int start, int goal)
+{
+    std::priority_queue<std::pair<int,int>, std::vector<std::pair<int,int>>, std::greater<std::pair<int,int>>> que;
+    std::vector<int> accDist(gVertexCount + 1, INT_MAX);
+    std::vector<int> parent(gVertexCount + 1, -1);
+
+    que.push({0, start});
+    accDist[start] = 0;
+
+    while(!que.empty())
+    {
+        const auto [curWeight, curDest] = que.top();
+        que.pop();
+
+        if(curDest == goal)
+            break;
+
+        if(curWeight > accDist[curDest])
+            continue;
+
+        for(const auto& next : gAdj[curDest])
+        {
+            const auto& [nextWeight, nextDest] = next;
+
+            if (accDist[curDest]!= INT_MAX &&
+                accDist[curDest] + nextWeight < accDist[nextDest])
+                {
+                    accDist[nextDest] = accDist[curDest] + nextWeight;
+                    parent[nextDest] = curDest;
+                    que.push({accDist[nextDest],nextDest});
+                }
+        }
+    }
+
+    if (INT_MAX == accDist[goal])
+        return false;
+
+    std::stack<int> path;
+    for(int trace = goal;trace != -1; trace = parent[trace])
+        path.push(trace);
+
+    while(!path.empty())
+    {
+        std::cout<<path.top()<<(path.size() > 1 ? "->" : "");
+        path.pop();
+    }
+
+    return true;
+}
+
+void Kruskal()
+{
+    std::sort(gEdges.begin(), gEdges.end(), [](const FEdge &a, const FEdge &b)
+              { return a.weight < b.weight; });
+
+    FDisjointSet ds(gVertexCount);
+
+    int edgeCount = 0;
+    int totalWeight = 0;
+
+    for(const FEdge& edge : gEdges)
+    {
+        if(ds.unite(edge.src, edge.dest))
+        {
+            std::cout<<edge.src<<"-"<<edge.dest<<"\n";
+            
+            totalWeight += edge.weight;
+            ++edgeCount;
+
+            if (edgeCount == gVertexCount - 1)
+                break;
+        }
+    }
 }
 
 #pragma endregion Algor
