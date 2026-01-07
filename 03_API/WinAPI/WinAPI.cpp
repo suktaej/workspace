@@ -1,8 +1,10 @@
 ﻿// WinAPI.cpp : Defines the entry point for the application.
 //
 
+#include "pch.h"
 #include "framework.h"
 #include "WinAPI.h"
+#include "CCore.h"
 
 #define MAX_LOADSTRING 100
 
@@ -16,6 +18,9 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+// 글로벌 핸들
+HWND g_hWnd;
 
 // SAL(Standard Annotation Language) : Source code 주석
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, // 실행된 프로세스의 주소
@@ -40,6 +45,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, // 실행된 프로세스의 주
     // Perform application initialization:
     if (!InitInstance (hInstance, nCmdShow)) // 윈도우 생성
     {
+        return FALSE;
+    }
+
+    // Core 초기화
+    // FAILED : Macro (값이 0보다 작다면 true 반환)
+    if(FAILED(CCore::GetInstance()->init(g_hWnd, POINT{1280,768})))
+    {
+        MessageBox(nullptr, L"Core Init failure", L"ERROR", MB_OK);
         return FALSE;
     }
 
@@ -79,7 +92,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, // 실행된 프로세스의 주
         // message가 없더라도 동작
         else
         {
-
+            CCore::GetInstance()->progress();
         }
     }
     

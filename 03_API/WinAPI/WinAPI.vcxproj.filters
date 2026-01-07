@@ -1,49 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Default">
+      <UniqueIdentifier>{1cec6dba-e810-4e39-ad3f-f9ee993104d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="Default\Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{4e448d77-36dd-4525-9fc8-85723b99f6b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{0d10aa47-867d-4eb7-a226-6ea30fe71d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header">
+      <UniqueIdentifier>{6d9e74ba-110d-4b2a-9e21-f8688f35e13e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manger">
+      <UniqueIdentifier>{eb3b2e04-34d0-4cca-b0ec-5d39419683b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manger\KeyManager">
+      <UniqueIdentifier>{ef85c99f-f136-4629-b993-5c4e525bb172}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="CCore.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="WinAPI.h">
-      <Filter>Header Files</Filter>
+      <Filter>Default\Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Default\Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Default\Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Default\Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>Engine\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyMgr.h">
+      <Filter>Engine\Manger\KeyManager</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CCore.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
     <ClCompile Include="WinAPI.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyMgr.cpp">
+      <Filter>Engine\Manger\KeyManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinAPI.rc">
-      <Filter>Resource Files</Filter>
+      <Filter>Default\Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Default\Resource Files</Filter>
     </Image>
     <Image Include="WinAPI.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Default\Resource Files</Filter>
     </Image>
   </ItemGroup>
 </Project>
