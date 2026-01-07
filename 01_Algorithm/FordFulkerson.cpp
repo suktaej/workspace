@@ -4,6 +4,8 @@
 #include <iostream>
 #include <climits>
 
+// Edmonds-Karp : BFS 방식 fordFulkerson
+// adjacent matrix
 constexpr int NODE = 6;
 std::array<std::array<int, NODE>, NODE> gGraph =
     {{{0, 16, 13, 0, 0, 0},
@@ -82,6 +84,108 @@ int FordFulkerson(int start, int goal)
     }
 
     return maxFlow;
+}
+
+// ajdacent list 사용 시
+struct FEdge
+{
+    int to;         // 목적지
+    int capacity;   // 잔여용량
+    int rev;        // 상대방 node list에서 역방향 edge index
+};
+
+class MaxFlow
+{
+private:
+    int nodeCount;
+    std::vector<std::vector<FEdge>> adj;
+    std::vector<int> level;     // BFS경로 확인용 (부모노드와 간선 인덱스 저장용)
+
+    struct Parent
+    {
+        int node;
+        int edgeIdx;
+    };
+
+public:
+    MaxFlow(int n) : nodeCount(n) { adj.resize(n); }
+    
+public:
+    void AddEdge(int u, int v, int cap);
+    int GetFlow(int s, int t);
+};
+
+inline void MaxFlow::AddEdge(int u, int v, int cap)
+{
+    // 순방향 간선: u -> v, 용량 cap, 역방향은 adj[v]의 마지막 원소
+    FEdge a = {v, cap, (int)adj[v].size()};
+    // 역방향 간선: v -> u, 용량 0, 역방향은 adj[u]의 마지막 원소
+    FEdge b = {u, 0, (int)adj[u].size()};
+
+    adj[u].push_back(a);
+    adj[v].push_back(b);
+}
+
+inline int MaxFlow::GetFlow(int s, int t)
+{
+    int totalFlow = 0;
+
+    while(true)
+    {
+        // parent[v] = {u, idx} -> v의 부모는 u이고, u의 리스트에서 idx번째 간선을 타고 옴
+        std::vector<Parent> parent(nodeCount, {-1, -1});
+        std::queue<int> que;
+        
+        que.push(s);
+
+        while (!que.empty() &&
+               parent[t].node == -1)
+        {
+            int cur = que.front();
+            que.pop();
+
+            for (int i = 0; i < adj[cur].size(); ++i)
+            {
+                FEdge &edge = adj[cur][i];
+
+                if (parent[edge.to].node == -1 &&
+                    edge.to != s &&
+                    edge.capacity > 0)
+                {
+                    parent[edge.to] = {cur, i};
+                    que.push(edge.to);
+                }
+            }
+        }
+        
+        // 더 이상 경로가 없다면 종료
+        if (parent[t].node == -1)
+            break;
+
+        // 경로 상 최소유량 탐색
+        int pathFlow = INT_MAX;
+        for(int v = t; v != s; v = parent[v].node)
+        {
+            int u = parent[v].node;
+            int idx = parent[v].edgeIdx;
+            pathFlow = std::min(pathFlow, adj[u][idx].capacity);
+        }
+
+        // 잔여용량 갱신
+        for(int v = t; v != s; v = parent[v].node)
+        {
+            int u = parent[v].node;
+            int idx = parent[v].edgeIdx;
+            int revIdx = adj[u][idx].rev;
+
+            adj[u][idx].capacity -= pathFlow;
+            adj[v][revIdx].capacity += pathFlow;
+        }
+
+        totalFlow += pathFlow;
+    }
+
+    return totalFlow;
 }
 
 int main()
