@@ -19,7 +19,7 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
-// 글로벌 메인 윈도우 핸들
+// 글로벌 핸들
 HWND g_hWnd;
 
 // SAL(Standard Annotation Language) : Source code 주석
@@ -50,7 +50,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, // 실행된 프로세스의 주
 
     // Core 초기화
     // FAILED : Macro (값이 0보다 작다면 true 반환)
-	if (FAILED(CCore::GetInst()->init(g_hWnd, POINT{ 1280,768 })))
+    if(FAILED(CCore::GetInstance()->init(g_hWnd, POINT{1280,768})))
     {
         MessageBox(nullptr, L"Core Init failure", L"ERROR", MB_OK);
         return FALSE;
@@ -92,7 +92,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, // 실행된 프로세스의 주
         // message가 없더라도 동작
         else
         {
-            CCore::GetInst()->progress();
+            CCore::GetInstance()->progress();
         }
     }
     
@@ -144,20 +144,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // Store instance handle in our global variable
 
    // CreateWindowW(L"KeyName, ...) 첫 인자로 레지스터 이름을 탐색하고 해당 레지스터를 가지고 창을 생성
-   // 지역변수 hWnd를 글로벌변수 g_hWnd로 교체(임의)
-   // HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-   //   CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
-   
-   g_hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
-   if (!g_hWnd)
+   if (!hWnd)
    {
       return FALSE;
    }
 
-   ShowWindow(g_hWnd, nCmdShow);
-   UpdateWindow(g_hWnd);
+   ShowWindow(hWnd, nCmdShow);
+   UpdateWindow(hWnd);
 
    return TRUE;
 }
@@ -172,6 +168,20 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY  - post a quit message and return
 //
 //
+
+#include <vector>
+
+struct FObjectInfo
+{
+    POINT pos; 
+    POINT scale;
+};
+
+std::vector<FObjectInfo> gVecInfo;
+POINT gPtLT;    // 좌상단 좌표
+POINT gPtRB;    // 우하단 좌표
+bool bLbtnDown = false;
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) // message의 부가인자 (wParam : 키보드 입력 , lParam : 마우스 입력)
 {
@@ -194,27 +204,112 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             }
         }
         break;
-    case WM_PAINT:
+    case WM_PAINT:  // 윈도우의 무효화 영역(Invalidate Region)이 발생한 경우
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps); // Device Context(kernel)
+            // Device Context : 화면에 그리기를 위해 필요한 데이터의 집합(brush, pen)
+            // DC의 목적지는 hWnd
+            // 기본 pen은 black, brush는 white
+
+            // DECLARE_HANDLE(HDC);
+            // struct __HDC { int unused; }typedef HDC;
+            // struct __HWND { int unused; }typedef HWND;
+            // 전처리기에 의해 구조체 생성
+            // 커널에서 특정 객체의 ID를 받아올 때 중복이 되지 않도록 할 필요가 있음 
+
+            // Pen 생성
+			HPEN hRedPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
+            // SelectObject의 반환형은 HGDIOBJ = void*
+            // 범용적 함수이므로 반드시 형변환 필요
+            HPEN hDefaultPen = (HPEN)SelectObject(hdc, hRedPen);
+
+            // Brush 생성
+            HBRUSH hBlueBrush = CreateSolidBrush(RGB(0,0,255));
+            HBRUSH hHatchBrush = CreateHatchBrush(HS_BDIAGONAL,RGB(0,255,0));
+
+            // GetStockObject : 저장된 오브젝트를 불러오는 함수
+            HBRUSH hStockBrush = (HBRUSH)GetStockObject(BLACK_BRUSH);
+            
+            HBRUSH hDefaultBrush = (HBRUSH)SelectObject(hdc, hHatchBrush);
+            
+            Rectangle(hdc, 10, 10, 100, 100);
+            
+            SelectObject(hdc, hStockBrush);
+           
+            if(bLbtnDown)
+				Rectangle(hdc, gPtLT.x, gPtLT.y, gPtRB.x, gPtRB.y);
+                //gPos.x - gScale.x / 2, 
+                //gPos.y - gScale.y / 2,
+                //gPos.x + gScale.x / 2,
+                //gPos.y + gScale.y / 2);
+
+            for (size_t i = 0; i < gVecInfo.size(); ++i)
+                Rectangle(hdc,
+                    gVecInfo[i].pos.x - gVecInfo[i].scale.x / 2,
+                    gVecInfo[i].pos.y - gVecInfo[i].scale.y / 2,
+                    gVecInfo[i].pos.x + gVecInfo[i].scale.x / 2,
+                    gVecInfo[i].pos.y + gVecInfo[i].scale.y / 2);
+            
+            // 복원
+            SelectObject(hdc, hDefaultPen);
+            SelectObject(hdc, hDefaultBrush);
+
+            // 사용이 끝난 오브젝트는 제거
+            DeleteObject(hRedPen);
+            DeleteObject(hBlueBrush);
+            DeleteObject(hBlueBrush);
             
             // TODO: Add any drawing code that uses hdc here...
             EndPaint(hWnd, &ps);
         }
         break;
     case WM_KEYDOWN:    // 키 입력 시 동작
-		break;
+    {
+        switch (wParam)
+        {
+		case VK_UP:
+            break;
+		case VK_DOWN:
+            break;
+        case VK_LEFT:
+            break;
+        case VK_RIGHT:
+            break;
+        }
+    }
     case WM_KEYUP:     // 키 입력 해제 시 동작
-        break;
     case WM_LBUTTONDOWN:    // 마우스 좌측버튼 입력 시 동작
+    {
+        // lParam : 마우스 좌표 long type. 2byte, 2byte로 구분
+		gPtLT.x = LOWORD(lParam); // x좌표
+        gPtLT.y = HIWORD(lParam); // y좌표
+        bLbtnDown = true;
         break;
+    }
     case WM_MOUSEMOVE:
+    {
+		gPtRB.x = LOWORD(lParam); // x좌표
+        gPtRB.y = HIWORD(lParam); // y좌표
         break;
+    }
     case WM_LBUTTONUP:
+    {
+        FObjectInfo info = {};
+
+        info.pos.x = (gPtLT.x + gPtRB.x) / 2;
+        info.pos.y = (gPtLT.y + gPtRB.y) / 2;
+        info.scale.x = std::abs(gPtLT.x - gPtRB.x);
+        info.scale.y = std::abs(gPtLT.y - gPtRB.y);
+
+        gVecInfo.push_back(info);
+        bLbtnDown = false;
         break;
+    }
     case WM_TIMER:
+    {
         break;
+    }
     case WM_DESTROY:
         PostQuitMessage(0);
         break;

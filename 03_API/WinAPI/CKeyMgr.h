@@ -2,6 +2,9 @@
 
 class CKeyMgr
 {
-	SINGLE(CKeyMgr);
+	DECLARE_SINGLE(CKeyMgr);
+
+public:
+	void init();
 };
 

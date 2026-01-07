@@ -1,35 +1,20 @@
 #pragma once
+#include "define.h"
 
 class CCore
 {
-private:
-	CCore();
-	~CCore();
+	DECLARE_SINGLE(CCore);
 
-private:
-	// static member variable
-	static CCore* inst;
-	HWND mhWnd;
-	POINT mPtResolution;
+	HWND m_hWnd;	// 메인 윈도우 핸들
+	POINT m_ptResolution;	// 메인 윈도우 해상도
+	HDC m_hDC;	// 메인 윈도우 Draw용 DC
 
 public:
 	int init(HWND _hwnd, POINT _ptResolution);
 	void progress();
-
-	// static member function
-	static CCore* GetInstance()
-	{
-		// 최초 호출
-		if (nullptr == inst)
-			inst = new CCore;
-
-		return inst;
-	}
 	
-	// static member function
-	static void Release()
-	{
-		delete inst;
-		inst = nullptr;
-	}
+private:
+	void Update();
+	void Render();
+
 };
