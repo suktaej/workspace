@@ -5,6 +5,7 @@
 
 /*
   Hungarian Algorithm (O(N^3))
+  가중치가 존재하는 이분 그래프에서 최소비용 완전매칭을 탐색
   n: 행의 개수 (Workers)
   m: 열의 개수 (Jobs)
   cost: n x m 비용 행렬 (1-based)
