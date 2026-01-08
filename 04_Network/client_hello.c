@@ -36,7 +36,7 @@ int main(int argc, char **argv)
         error_handling("connect() error");
 
     // 데이터 수신
-    std_len = read(sock, message, sizeof(message) - 1);
+    str_len = read(sock, message, sizeof(message) - 1);
     if(str_len==-1)
         error_handling("read() error");
     message[str_len];
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
 void error_handling(char *message)
 {
-    fput(message, stderr);
+    fputs(message, stderr);
     fputc('\n',stderr);
     exit(1);
 }
