@@ -47,9 +47,9 @@ inline bool Dinic::BFS()
 {
     std::queue<int> que;
     std::fill(level.begin(),level.end(),-1);
-    level[src] = 0;
 
     que.push(src);
+    level[src] = 0;
 
     while(!que.empty())
     {
@@ -114,7 +114,7 @@ inline int Dinic::MaxFlow()
     while(BFS())
     {
         // 각 레벨 그래프마다 포인터 초기화
-        std::fill(ptr.begin(),ptr.end(),0);
+        std::fill(ptr.begin(), ptr.end(), 0);
 
         while(int pushed = DFS(src, INT_MAX))
             flow += pushed;

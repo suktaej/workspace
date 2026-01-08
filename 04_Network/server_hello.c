@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 	}
 
 	// 서버 소켓생성
-	serv_sock = socket(PF_INET, SOCK_STREAM,0);
+	serv_sock = socket(PF_INET, SOCK_STREAM, 0);
 
 	if(serv_sock == -1)
 		error_handling("socket() error");
