@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
     // 서버 접속을 위한 소켓 생성
     sock=socket(PF_INET, SOCK_STREAM, 0);
-    if(sock= -1)
+    if (sock == -1)
         error_handling("socket() error");
     
     memset(&serv_addr, 0, sizeof(serv_addr));
