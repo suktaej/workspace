@@ -69,7 +69,8 @@ void tracePath(const std::vector<std::vector<Node>>& nodeDetails, Pair dest)
     std::cout << "Done" << std::endl;
 }
 
-void aStarSearch(const std::vector<std::vector<int>>& grid, Pair src, Pair dest) {
+void aStarSearch(const std::vector<std::vector<int>>& grid, Pair src, Pair dest) 
+{
     if (!isValid(src.x, src.y) || !isValid(dest.x, dest.y)) return;
     if (!isUnBlocked(grid, src.x, src.y) || !isUnBlocked(grid, dest.x, dest.y)) return;
     if (isDestination(src.x, src.y, dest)) return;

@@ -26,3 +26,6 @@ public:\
 public:\
 	void Set##name(type val) { name = val; }\
 	type Get##name() const { return name; }
+
+#define FDT CTimerMgr::GetInst()->GetFDT()
+#define DT CTimerMgr::GetInst()->GetDT()

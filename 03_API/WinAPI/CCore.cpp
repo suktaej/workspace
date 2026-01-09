@@ -55,6 +55,9 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 void CCore::progress()
 {
 	// Draw
+	// Manager Update
+	CTimeMgr::GetInst()->update();
+
 	// message의 경우 BeginPaint함수를 사용(message 전용)
 	// message와 무관하게 사용하기 위해 Device Context필요
 	Update();
@@ -71,12 +74,12 @@ void CCore::Update()
 	// bit 연산 (0x8000 : 눌려있는 상태로 1이면 down, 0이면 up)
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
-		vPos.x -= 1;
+		vPos.x -= 100.f * CTimeMgr::GetInst()->GetFDT();
 	}
 	
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 	{
-		vPos.x += 1;
+		vPos.x += 100.f * CTimeMgr::GetInst()->GetFDT();
 	}
 
 	g_obj.Setm_ptPos(vPos);
