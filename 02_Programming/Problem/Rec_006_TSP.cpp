@@ -27,7 +27,8 @@ int ShortestPath(std::vector<int> &path, std::vector<bool> &visited, int current
 
     for (int next = 0; next < city; ++next)
     {
-        if (visited[next]) continue;
+        if (visited[next]) 
+            continue;
 
         visited[next] = true;
         path.push_back(next);

@@ -66,6 +66,38 @@ void topology()
         std::cout << node << " ";
 }
 
+struct Node 
+{
+    std::vector<int> nextNodes;
+    int inDegree = 0;
+};
+
+std::vector<Node> graph;
+
+void topologySort() 
+{
+    std::vector<int> result;
+    std::queue<int> q;
+
+    for (int i = 1; i <= n; ++i) 
+        if (graph[i].inDegree == 0)
+            q.push(i);
+
+    while (!q.empty()) 
+    {
+        int cur = q.front();
+        q.pop();
+        result.push_back(cur);
+
+        for (int next : graph[cur].nextNodes)
+            if (--graph[next].inDegree == 0)
+                q.push(next);
+    }
+
+    if (result.size() != n)
+        throw std::runtime_error("Cycle detected");
+}
+
 int main()
 {
     fileInput();
