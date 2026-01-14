@@ -12,7 +12,7 @@ int main(void)
 
     for(int i=0;i<=2;++i)
     {
-        printf("%d file descripter: %d",i,fdes[i]);
+        printf("%d file descripter: %n",i+1,fdes[i]);
         close(fdes[i]);
     }
 
