@@ -1,5 +1,5 @@
-#ifndef _ERRORCHECK_
-#define _ERRORCHECK_
+#ifndef _COMMONS_ 
+#define _COMMONS_ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,4 +11,4 @@ void error_handling(char *message)
 	exit(1);
 }
 
-#endif  //ERRORCHECK
+#endif  //COMMONS

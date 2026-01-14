@@ -1,4 +1,4 @@
-#include "ErrorCheck.h"
+#include "Commons.h"
 
 #include <unistd.h>
 #include <sys/types.h>
