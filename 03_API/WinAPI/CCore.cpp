@@ -69,6 +69,7 @@ void CCore::progress()
 	// Draw
 	// Manager Update
 	CTimeMgr::GetInst()->update();
+	CKeyMgr::GetInst()->update();
 
 	// message의 경우 BeginPaint함수를 사용(message 전용)
 	// message와 무관하게 사용하기 위해 Device Context필요
@@ -80,16 +81,14 @@ void CCore::Update()
 {
 	// 변경사항을 모두 갱신 후 고정
 	Vec2 vPos = g_obj.Getm_ptPos();
-	constexpr float SPEED = 300.f;
+	constexpr float SPEED = 100.f;
 
-	// GetAsyncKeyState: 비동기 키 입출력(비 message기반)
-	// bit 연산 (0x8000 : 눌려있는 상태로 1이면 down, 0이면 up)
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	if (CKeyMgr::GetInst()->GetKeyState(EKEY_TYPE::LEFT) == EKEY_STATE::HOLD)
 	{
 		vPos.x -= SPEED * CTimeMgr::GetInst()->GetFDT();
 	}
 	
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	if (CKeyMgr::GetInst()->GetKeyState(EKEY_TYPE::RIGHT) == EKEY_STATE::HOLD)
 	{
 		vPos.x += SPEED * CTimeMgr::GetInst()->GetFDT();
 	}
