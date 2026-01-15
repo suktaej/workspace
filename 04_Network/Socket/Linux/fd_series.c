@@ -10,7 +10,7 @@ int main(void)
     fdes[1] = open("test.dat", O_CREAT, 0644);    // create file
     fdes[2] = socket(PF_INET, SOCK_DGRAM, 0);     // create socket
 
-    for(int i=0;i<=2;++i)
+    for (int i = 0; i <= 2; ++i)
     {
         printf("%d file descripter: %d\n",i+1,fdes[i]);
         close(fdes[i]);
