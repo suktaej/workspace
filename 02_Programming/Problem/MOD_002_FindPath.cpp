@@ -4,7 +4,7 @@
 
 constexpr int MOD = 1000000007;
 
-int dpFindPaths(int row, int col)
+int dpfindPaths(int row, int col)
 {
     std::vector<std::vector<int>> dp(row + 1, std::vector<int>(col + 1, 0));
 
@@ -149,7 +149,7 @@ bool isPrime(long long n)
 
 int main()
 {
-    if(isPrime(MOD))
+    if(isPrime(static_cast<int>(std::sqrt(MOD))))
         std::cout << combineMod(860, 120);
 
     return 0;
