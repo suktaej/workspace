@@ -185,3 +185,253 @@ bool isPrime(long long n) {
     return true;
 }
 ```
+
+### 12. 크라메르 공식
+크라메르 공식은 **선형 연립방정식의 해를 행렬식(det)**을 이용해 구하는 방법이다.
+단, **계수행렬의 행렬식이 0이 아닐 때만 적용 가능**하다.
+## 1. 2×2 연립방정식
+
+다음 연립방정식을 고려하자.
+
+$$
+\begin{cases}
+a_1 x + b_1 y = c_1 \\
+a_2 x + b_2 y = c_2
+\end{cases}
+$$
+이를 행렬 형태로 쓰면:
+
+$$
+A \mathbf{x} = \mathbf{b}
+$$
+
+$$
+A =
+\begin{pmatrix}
+a_1 & b_1 \\
+a_2 & b_2
+\end{pmatrix},
+\quad
+\mathbf{x} =
+\begin{pmatrix}
+x \\
+y
+\end{pmatrix},
+\quad
+\mathbf{b} =
+\begin{pmatrix}
+c_1 \\
+c_2
+\end{pmatrix}
+$$
+
+---
+
+### (1) 계수행렬의 행렬식
+
+$$
+\det(A) =
+\begin{vmatrix}
+a_1 & b_1 \\
+a_2 & b_2
+\end{vmatrix}
+= a_1 b_2 - a_2 b_1
+$$
+
+$$
+\det(A) \neq 0 \quad \Rightarrow \quad \text{해가 유일하게 존재}
+$$
+
+---
+
+### (2) 크라메르 공식
+
+$$
+x =
+\frac{
+\begin{vmatrix}
+c_1 & b_1 \\
+c_2 & b_2
+\end{vmatrix}
+}{
+\det(A)
+}
+=
+
+\frac{c_1 b_2 - c_2 b_1}{a_1 b_2 - a_2 b_1}
+$$
+
+$$
+y =
+\frac{
+\begin{vmatrix}
+a_1 & c_1 \\
+a_2 & c_2
+\end{vmatrix}
+}{
+\det(A)
+}
+=
+
+\frac{a_1 c_2 - a_2 c_1}{a_1 b_2 - a_2 b_1}
+$$
+
+---
+
+## 2. 3×3 연립방정식
+
+$$
+\begin{cases}
+a_1 x + b_1 y + c_1 z = d_1 \\
+a_2 x + b_2 y + c_2 z = d_2 \\
+a_3 x + b_3 y + c_3 z = d_3
+\end{cases}
+$$
+
+$$
+x = \frac{\det(A_x)}{\det(A)}, \quad
+y = \frac{\det(A_y)}{\det(A)}, \quad
+z = \frac{\det(A_z)}{\det(A)}
+$$
+
+* (A_x): x열을 상수항으로 치환
+* (A_y): y열을 상수항으로 치환
+* (A_z): z열을 상수항으로 치환
+
+---
+
+## 3. 크라메르 공식의 특징
+
+* 계산량이 큼 (행렬식 계산)
+* **이론적 증명, 수학적 분석에 적합**
+* 실제 수치 계산에는 비효율적
+* 행렬식이 0이면 사용 불가
+
+---
+
+# 역행렬을 이용한 해법
+
+연립방정식:
+
+$$
+A \mathbf{x} = \mathbf{b}
+$$
+
+에서 **행렬 (A)가 가역(invertible)** 이면:
+
+$$
+\mathbf{x} = A^{-1} \mathbf{b}
+$$
+
+---
+
+## 1. 2×2 행렬의 역행렬
+
+$$
+A =
+\begin{pmatrix}
+a & b \\
+c & d
+\end{pmatrix}
+$$
+
+### (1) 행렬식
+
+$$
+\det(A) = ad - bc
+$$
+
+$$
+\det(A) \neq 0 \Rightarrow A^{-1} \text{ 존재}
+$$
+
+---
+
+### (2) 역행렬 공식
+
+$$
+A^{-1} =
+\frac{1}{ad - bc}
+\begin{pmatrix}
+d & -b \\
+-c & a
+\end{pmatrix}
+$$
+
+---
+
+## 2. 역행렬을 이용한 해 구하기
+
+$$
+\mathbf{x} =
+A^{-1} \mathbf{b}
+=
+
+\frac{1}{\det(A)}
+\begin{pmatrix}
+d & -b \\
+-c & a
+\end{pmatrix}
+\begin{pmatrix}
+e \\
+f
+\end{pmatrix}
+$$
+
+---
+
+## 3. 여인수(cofactor) 기반 역행렬 (일반 n×n)
+
+$$
+A^{-1} = \frac{1}{\det(A)} \operatorname{adj}(A)
+$$
+
+여기서:
+
+* adj(A): **수반행렬 (adjugate)**
+* 각 원소는 여인수의 전치
+
+---
+
+## 4. 크라메르 공식과 역행렬의 관계
+
+크라메르 공식은 사실상:
+
+$$
+x_i = (A^{-1} \mathbf{b})_i
+$$
+
+를 **행렬식 형태로 전개한 것**이다.
+
+즉,
+
+* 크라메르 공식 → 이론적 표현
+* 역행렬 → 계산 및 구현 관점
+---
+“구하려는 쪽의 벡터를 Target으로 바꿔치기한다”
+
+- a를 구할 때
+
+    V1 대신 **Target**을 넣고 다시 `AD - BC`를 계산합니다.
+
+$$
+\begin{pmatrix}
+X & x_2 \\
+Y & y_2
+\end{pmatrix}
+\Rightarrow
+\text{molA} = (X \cdot y_2 - x_2 \cdot Y)
+$$
+
+- b를 구할 때
+
+    V2 대신 **Target**을 넣고 다시 `AD - BC`를 계산합니다.
+
+$$
+\begin{pmatrix}
+x_1 & X \\
+y_1 & Y
+\end{pmatrix}
+\Rightarrow
+\text{molB} = (x_1 \cdot Y - X \cdot y_1)
+$$

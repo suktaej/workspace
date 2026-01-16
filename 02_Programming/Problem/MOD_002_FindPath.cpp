@@ -30,7 +30,6 @@ int dpfindPaths(int row, int col)
 int dpMod(int row, int col)
 {
     std::vector<std::vector<long long>> dp(row + 1, std::vector<long long>(col + 1, 0));
-    long long mod = 1e9 + 7;
 
     dp[0][0] = 1;
 
@@ -44,7 +43,7 @@ int dpMod(int row, int col)
             long long left = (x > 0) ? dp[y][x-1] : 0;
             long long down = (y > 0) ? dp[y-1][x] : 0;
 
-            dp[y][x] = (left + down) % mod;
+            dp[y][x] = (left + down) % MOD;
         }
     }
 
@@ -149,8 +148,14 @@ bool isPrime(long long n)
 
 int main()
 {
-    if(isPrime(static_cast<int>(std::sqrt(MOD))))
-        std::cout << combineMod(860, 120);
+    int row = 860;
+    int col = 120;
+
+    std::cout<<dpMod(row, col);
+    std::cout<<'\n';
+
+    if(isPrime(MOD))
+        std::cout << combineMod(row + col, col);
 
     return 0;
 }
