@@ -2,7 +2,7 @@
 #include <vector>
 #include <array>
 
-constexpr int MOD = 1000000007;
+constexpr int MOD = 1e9 + 7;
 
 int dpfindPaths(int row, int col)
 {
