@@ -37,8 +37,6 @@ void CKeyMgr::init()
 {
 	for (int i = 0; i < (int)EKEY_TYPE::LAST; ++i)
 		m_vecKey.push_back(FKeyInfo{ EKEY_STATE::NONE, false });
-
-	m_vecKey[(int)EKEY_TYPE::LEFT];
 }
 
 void CKeyMgr::update()

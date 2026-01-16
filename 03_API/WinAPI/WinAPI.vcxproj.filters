@@ -20,14 +20,11 @@
     <Filter Include="Engine\Manger">
       <UniqueIdentifier>{eb3b2e04-34d0-4cca-b0ec-5d39419683b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Manger\KeyManager">
-      <UniqueIdentifier>{ef85c99f-f136-4629-b993-5c4e525bb172}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object">
       <UniqueIdentifier>{7ce00ebb-9775-4eca-baa2-8eae4073fb80}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Manger\TimeManager">
-      <UniqueIdentifier>{c06bef22-240c-4159-bb37-ab4e6846f1aa}</UniqueIdentifier>
+    <Filter Include="Engine\Scene">
+      <UniqueIdentifier>{1a908561-165b-4d89-a02e-b5905bae0023}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -49,9 +46,6 @@
     <ClInclude Include="define.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
-    <ClInclude Include="CKeyMgr.h">
-      <Filter>Engine\Manger\KeyManager</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="struct.h">
       <Filter>Engine\Header</Filter>
@@ -59,9 +53,19 @@
     <ClInclude Include="CObject.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="CTimeMgr.h">
-      <Filter>Engine\Manger\TimeManager</Filter>
+    <ClInclude Include="CScene.h">
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="CTimeMgr.h">
+      <Filter>Engine\Manger</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneMgr.h">
+      <Filter>Engine\Manger</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyMgr.h">
+      <Filter>Engine\Manger</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneStart.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCore.cpp">
@@ -70,15 +74,22 @@
     <ClCompile Include="WinAPI.cpp">
       <Filter>Default</Filter>
     </ClCompile>
-    <ClCompile Include="CKeyMgr.cpp">
-      <Filter>Engine\Manger\KeyManager</Filter>
-    </ClCompile>
     <ClCompile Include="CObject.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="CTimeMgr.cpp">
-      <Filter>Engine\Manger\TimeManager</Filter>
+    <ClCompile Include="CScene.cpp">
+      <Filter>Engine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="CTimeMgr.cpp">
+      <Filter>Engine\Manger</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneMgr.cpp">
+      <Filter>Engine\Manger</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyMgr.cpp">
+      <Filter>Engine\Manger</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneStart.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinAPI.rc">

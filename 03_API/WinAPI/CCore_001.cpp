@@ -7,6 +7,8 @@
 
 DEFINITION_SINGLE(CCore);
 
+CObject g_obj;
+
 CCore::CCore()
 	: m_hWnd(0), m_ptResolution{}, m_hDC(0), m_hBit(0), m_memDC(0)
 {
@@ -55,6 +57,9 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	CKeyMgr::GetInst()->init();
 	CSceneMgr::GetInst()->init();
 
+	g_obj.SetPos(Vec2((float)m_ptResolution.x / 2, (float)m_ptResolution.y / 2));
+	g_obj.SetScale(Vec2(100, 100));
+	
 	// Windows의 결과값에 사용하는 변수형(=long)
 	HRESULT hr = S_OK;
 
@@ -67,18 +72,48 @@ void CCore::progress()
 	// Manager Update
 	CTimeMgr::GetInst()->update();
 	CKeyMgr::GetInst()->update();
-	CSceneMgr::GetInst()->update();
 
-#pragma region Rendering
+	// message의 경우 BeginPaint함수를 사용(message 전용)
+	// message와 무관하게 사용하기 위해 Device Context필요
+	Update();
+	Render();
+}
+
+void CCore::Update()
+{
+	// 변경사항을 모두 갱신 후 고정
+	Vec2 vPos = g_obj.GetPos();
+	constexpr float SPEED = 100.f;
+
+	if (CKeyMgr::GetInst()->GetKeyState(EKEY_TYPE::LEFT) == EKEY_STATE::HOLD)
+	{
+		vPos.x -= SPEED * CTimeMgr::GetInst()->GetFDT();
+	}
+	
+	if (CKeyMgr::GetInst()->GetKeyState(EKEY_TYPE::RIGHT) == EKEY_STATE::HOLD)
+	{
+		vPos.x += SPEED * CTimeMgr::GetInst()->GetFDT();
+	}
+
+	g_obj.SetPos(vPos);
+}
+
+void CCore::Render()
+{
 	// 매 프레임마다 화면 Clear
 	Rectangle(m_memDC, -1, -1, m_ptResolution.x, m_ptResolution.y);
 
-	CSceneMgr::GetInst()->render(m_memDC);
+	// Update에서 변경된 내용을 다시 Draw
+	Vec2 vPos = g_obj.GetPos();
+	Vec2 vScale = g_obj.GetScale();
+
+	Rectangle(m_memDC,
+		(vPos.x - vScale.x) / 2.f,
+		(vPos.y - vScale.y) / 2.f,
+		(vPos.x + vScale.x) / 2.f,
+		(vPos.y + vScale.y) / 2.f);
 
 	// BitBlt : double buffering 사용 시 bit맵을 이전하는 함수
 	BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y, 
 			m_memDC, 0, 0, SRCCOPY);
-
-#pragma endregion Rendering
 }
-

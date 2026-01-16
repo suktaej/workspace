@@ -3,14 +3,19 @@
 class CObject
 {
 private:
-	Vec2 m_ptPos;
-	Vec2 m_ptScale;
+	Vec2 m_vPos;
+	Vec2 m_vScale;
+	float m_Speed;
+
+public:
+	void update();
+	void render(HDC _dc);
 
 public:
 	CObject();
-	~CObject();
+	virtual ~CObject();
 
 public:
-	GETSET(Vec2, m_ptPos);
-	GETSET(Vec2, m_ptScale);
+	GETSET(Pos, Vec2, m_vPos);
+	GETSET(Scale, Vec2, m_vScale);
 };

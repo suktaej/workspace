@@ -22,10 +22,29 @@ public:\
 #define	SAFE_DELETE(p)	if(p)	{ delete p; p = nullptr; }
 #define	SAFE_RELEASE(p)	if(p)	{ p->Release(); p = nullptr; }
 
-#define GETSET(type, name) \
+#define GETSET(name, type, val) \
 public:\
-	void Set##name(type val) { name = val; }\
-	type Get##name() const { return name; }
+	void Set##name(type mem) { val = mem; }\
+	const type& Get##name() const { return val; }
 
-#define FDT CTimerMgr::GetInst()->GetFDT()
-#define DT CTimerMgr::GetInst()->GetDT()
+#define FDT CTimeMgr::GetInst()->GetFDT()
+#define DT CTimeMgr::GetInst()->GetDT()
+
+// scene에서 관리할 object의 그룹
+enum class EGROUP_TYPE
+{
+	DEFAULT,
+	PLAYER,
+	MISSILE,
+	MONSTER,
+	END = 32
+};
+
+enum class ESCENE_TYPE
+{
+	TOOL,
+	START,
+	STAGE_01,
+	STAGE_02,
+	END
+};
