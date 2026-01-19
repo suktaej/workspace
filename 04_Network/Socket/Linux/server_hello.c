@@ -52,15 +52,19 @@ int main(int argc, char **argv)
 
 	clnt_addr_size = sizeof(clnt_addr);
 	// 연결요청 수락
-	clnt_sock = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size);
+	
+	for(;;)
+	{
+		clnt_sock = accept(serv_sock, (struct sockaddr *)&clnt_addr, &clnt_addr_size);
 
-	if(clnt_sock==-1)
-		error_handling("accpet() error");
+		if (clnt_sock == -1)
+			error_handling("accpet() error");
 
-	// 데이터 전송
-	write(clnt_sock, message, sizeof(message));
-	// 연결종료
-	close(clnt_sock);
+		// 데이터 전송
+		write(clnt_sock, message, sizeof(message));
+		// 연결종료
+		close(clnt_sock);
+	}
 
 	return 0;
 }
