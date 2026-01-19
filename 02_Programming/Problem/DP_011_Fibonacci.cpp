@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 
 int recFib(int n)
 {
@@ -24,4 +25,12 @@ int dpFib(int n)
     }
 
     return f[n];
+}
+
+int main()
+{
+    std::cout<<recFib(10)<<'\n';
+    std::cout<<dpFib(10)<<'\n';
+
+    return 0;
 }
