@@ -2,10 +2,18 @@
 
 #include <string.h>
 #include <sys/types.h>
-#ifdef defined (__GUNC__)
-    #include <arpa/inet.h>
-    #include <unistd.h>
-    #include <sys/socket.h>
+
+#if defined (_MSC_VER)
+    #define WIN32_LEAN_AND_MEAN
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+    // #include <windows.h>
+    #pragma comment(lib, "ws2_32.lib")
+#else if (__GNUC__)
+	#include <netinet/in.h>
+	#include <unistd.h>
+	#include <arpa/inet.h>
+	#include <sys/socket.h>
 #endif
 
 #define BUFFER_SIZE 1024
@@ -47,6 +55,7 @@ int main(int argc, char** argv)
     if(clnt_sock == -1)
         error_handling("accept() error");
 
+    // 데이터 수신 및 전송
     while((str_len = read(clnt_sock, message, BUFFER_SIZE)) != 0)
     {
         write(clnt_sock, message, str_len);
