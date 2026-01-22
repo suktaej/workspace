@@ -20,6 +20,8 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 // 글로벌 메인 윈도우 핸들
+// HWND는 struct pointer
+// 내부 int unused가 kernel 값을 가지는 것이 아니라 HWND 변수 자체가 값을 가짐
 HWND g_hWnd;
 
 // SAL(Standard Annotation Language) : Source code 주석
