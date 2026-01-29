@@ -5,7 +5,7 @@
 int main()
 {
     int l1, l2, p1, p2;
-    std::cin>>l1>>l2>>p1>>p2;
+    std::cin >> l1 >> l2 >> p1 >> p2;
 
     std::vector<std::vector<double>> dp(l1 + 1, std::vector<double>(l2 + 1, 0.));
 
