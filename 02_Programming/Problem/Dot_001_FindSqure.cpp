@@ -8,13 +8,12 @@ struct Point {
     long long x, y;
 };
 
-int main() {
-    // 입력을 빠르게 받기 위한 설정
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-
+int main() 
+{
     int N, K;
-    if (!(cin >> N >> K)) return 0;
+
+    if (!(cin >> N >> K)) 
+        return 0;
 
     vector<Point> points(N);
     vector<long long> x_coords;

@@ -1,28 +1,12 @@
 #include "Commons.h"
 
-#include <string.h>
-#include <sys/types.h>
-
-#if defined (_MSC_VER)
-    #define WIN32_LEAN_AND_MEAN
-    #include <winsock2.h>
-    #include <ws2tcpip.h>
-    // #include <windows.h>
-    #pragma comment(lib, "ws2_32.lib")
-#else if (__GNUC__)
-	#include <netinet/in.h>
-	#include <unistd.h>
-	#include <arpa/inet.h>
-	#include <sys/socket.h>
-#endif
-
 #define BUFFER_SIZE 1024
 
 int main(int argc, char** argv)
 {
     int sock;
     char message[BUFFER_SIZE];
-    int str_len;
+    int str_len, recv_len, recv_cnt;
     struct sockaddr_in serv_addr;
 
     if(argc != 3)
@@ -43,7 +27,7 @@ int main(int argc, char** argv)
     if(connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) == -1)
         error_handling("connect() error!");
 
-    for(;;)
+    while(1)
     {
         // 데이터 입력 및 전송
         fputs("Input message(q to quit): ", stdout);
@@ -52,14 +36,24 @@ int main(int argc, char** argv)
         if(!strcmp(message,"q\n"))
             break;
 
-        write(sock, message, strlen(message));
+        // 데이터 전송
+        str_len = write(sock, message, strlen(message));
 
-        // 데이터 수신 및 출력
-        str_len = read(sock, message, BUFFER_SIZE - 1);
-        message[str_len] = 0;
+        // 데이터 수신
+        for(recv_len = 0; recv_len < str_len; )
+        {
+            recv_cnt = read(sock, &message[recv_len], str_len - recv_len);
+        
+            if(recv_cnt == -1)
+                error_handling("read() error!");
+       
+            recv_len += recv_cnt;
+        }
+
+        message[recv_len] = 0;
         printf("Message from server: %s", message);
-
-        close(sock);
-        return 0;
     }
+    
+    close(sock);
+    return 0;
 }

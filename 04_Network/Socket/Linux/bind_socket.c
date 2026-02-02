@@ -1,11 +1,5 @@
 #include "Commons.h"
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <arpa/inet.h>
-
 int main(void)
 {
     int serv_sock;
