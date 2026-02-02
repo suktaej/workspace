@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 
     for(i = 0; i < 4; i++)
     {
-        str_len = read(sock, message, sieof(message) - 1);
+        str_len = read(sock, message, sizeof(message) - 1);
         message[str_len] = 0;
         printf("Message from server: %s \n", message);
     }
