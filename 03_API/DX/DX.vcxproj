@@ -123,13 +123,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CDevice.h" />
     <ClInclude Include="DX.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GameInfo.h" />
+    <ClInclude Include="include\Math\EngineMath.h" />
+    <ClInclude Include="include\Math\Matrix.h" />
+    <ClInclude Include="include\Math\Vector2D.h" />
+    <ClInclude Include="include\Math\Vector3D.h" />
+    <ClInclude Include="include\Math\Vector4D.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CDevice.cpp" />
     <ClCompile Include="DX.cpp" />
+    <ClCompile Include="include\Math\Vector3D.cpp" />
+    <ClCompile Include="include\Math\Vector4D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX.rc" />
