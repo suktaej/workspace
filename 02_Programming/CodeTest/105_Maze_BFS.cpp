@@ -10,8 +10,8 @@ struct FPos
     FPos operator+(const FPos& other) const
     {
         FPos res;
-        res.x = x+other.x;
-        res.y = y+other.y;
+        res.x = x + other.x;
+        res.y = y + other.y;
 
         return res;
     }

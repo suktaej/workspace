@@ -4,10 +4,9 @@
 #include <queue>
 #include <cstring>
 
-const int MAX = 101;
+constexpr int MAX = 101;
 int n, m;
 std::string maze[MAX];
-
 
 void bfs()
 {
@@ -55,8 +54,8 @@ int main()
 {
     std::cin>>n>>m;
 
-    for(int i=0;i<n;++i)
-        std::cin>>maze[i];
+    for (int i = 0; i < n; ++i)
+        std::cin >> maze[i];
 
     bfs();
 
