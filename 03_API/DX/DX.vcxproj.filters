@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{9651c019-39b6-467f-9d2b-170d4b104390}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Math">
+      <UniqueIdentifier>{c6adbcd3-9e7f-4eae-98f0-65fa54ce3218}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Device">
+      <UniqueIdentifier>{a99b39a6-3ac6-47b9-8819-e150cc50ea3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -27,9 +36,39 @@
     <ClInclude Include="DX.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Vector2D.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Vector3D.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Vector4D.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\EngineMath.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Matrix.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="CDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Math\Vector3D.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Math\Vector4D.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="CDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
