@@ -70,7 +70,6 @@ void bfs(std::vector<std::vector<int>>& maze, int& row, int& col, FPos pos)
             q.push(next);
         }
     }
-
 }
 
 int main()
