@@ -40,7 +40,7 @@ int main(int argc, char** argv)
         str_len = recvfrom(sock, message, BUFSIZE, 0, (struct sockaddr *)&from_addr, &addr_size);
         message[str_len] = 0;
 
-        printf("%d Message from server: %s",i, message);
+        printf("%d Message from server: %s\n",i, message);
     }
 
     close(sock);
