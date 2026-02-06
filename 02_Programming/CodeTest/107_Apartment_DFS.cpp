@@ -38,7 +38,7 @@ int main()
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < n; ++j)
             if (gMap[i][j] == '1')
-                estate.push_bacK(dfs(i,j));
+                estate.push_back(dfs(i,j));
 
     std::sort(estate.begin(), estate.end());
 
