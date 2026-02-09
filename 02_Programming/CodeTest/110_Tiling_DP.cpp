@@ -3,7 +3,7 @@
 
 int n;
 std::vector<int> map[2];
-std::vector<long long> dpMap;
+std::vector<int> dpMap;
 
 int dfs()
 {
@@ -55,12 +55,10 @@ int dfs()
     return res;
 }
 
-long long dp(int w)
+int topDown(int w)
 {
     // base case
-    if (w == 0)
-        return 1;
-    if (w == 1)
+    if (w <= 1)
         return 1;
 
     // memo
@@ -70,7 +68,18 @@ long long dp(int w)
     // init
 
     // loop
-    dpMap[w] = dp(w-1) + dp(w-2);
+    dpMap[w] = topDown(w-1) + topDown(w-2);
+
+    return dpMap[w];
+}
+
+int bottomUp(int w)
+{
+    dpMap[0] = 1;
+    dpMap[1] = 1;
+
+    for(int i=2; i<=w;++i)
+        dpMap[i] = dpMap[i-1]+dpMap[i-2];
 
     return dpMap[w];
 }
@@ -80,7 +89,7 @@ int main()
     std::cin >> n;
     dpMap.assign(n+1,-1);
 
-    std::cout<< dp(n);
+    std::cout<< topDown(n);
 
     return 0;
 }
