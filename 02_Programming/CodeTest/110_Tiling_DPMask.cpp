@@ -89,12 +89,16 @@ int solve()
 
     for(int i=0; i<states;++i)
         dfs(0,i,0);
+
+    Mat fillBlock = power(T, n);
+
+    return fillBlock.mat[0][0];
 }
 
 int main()
 {
     std::cin>>m>>n;
-    solve();
+    std::cout<<solve();
 
     return 0;
 }
