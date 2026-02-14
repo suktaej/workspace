@@ -75,7 +75,7 @@ bool prim(const int& src)
     std::vector<bool> visited(n,false);
     
     minHeap.push({0,src});
-    int vertexCnt = 0;
+    int vertexCount = 0;
     int totalWeight = 0;
 
     while(!minHeap.empty())
@@ -87,7 +87,7 @@ bool prim(const int& src)
             continue;
         
         visited[curNode] = true;
-        ++vertexCnt;
+        ++vertexCount;
         totalWeight += curWeight;
 
         for(const auto& [nextWeight, nextNode] : adj[curNode])
@@ -99,7 +99,7 @@ bool prim(const int& src)
         }
     }
 
-    return vertexCnt == n;
+    return vertexCount == n;
 }
 
 struct FDisjointSet
@@ -165,7 +165,7 @@ void kruskal()
                 edges.push_back({e.first, i, e.second});
 
     std::sort(edges.begin(), edges.end());
-    // std::sort(edges.begin(), edges.end(), [](FEdge a, FEdge b)
+    // std::sort(edges.begin(), edges.end(), [](const FEdge& a,const FEdge& b)
     // {
     //     return a.weight < b.weight;
     // });
@@ -187,8 +187,48 @@ void kruskal()
     }
 }
 
+std::vector<int> nodeColor;
+constexpr int colors = 3;
+
+void coloring()
+{
+    nodeColor.resize(n,0);
+    solve(0);
+}
+
+bool isPlace(int node, int color)
+{
+    for(auto [weight, nextNode]: adj[node])
+        if(color == nodeColor[nextNode])
+            return false;
+    
+    return true;
+}
+
+bool solve(int node)
+{
+    if(node == n)
+        return true;
+
+    for (int c = 1; c <= colors; ++c)
+    {
+        if(isPlace(node, c))
+        {
+            nodeColor[node] = c;
+
+            if(solve(node+1))
+                return true;
+
+            nodeColor[node] = 0;
+        }
+    }
+
+    return false;
+}
+
 int main()
 {
     input();
+    coloring();
     return 0;
 }
