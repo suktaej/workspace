@@ -127,6 +127,8 @@ void loopTest()
     {}
 }
 */
+
+/*
 class MyString1
 {
 private:
@@ -260,11 +262,88 @@ public:
 };
 // 성능적으로 어떤 문제가 있는가
 // 실제 문자열 클래스 설계에서는 어떻게 해결하는가
+*/
 
+/*
+int division(int a, int b)
+{
+    return a/b;
+}
 
+bool buy(int64 n, int64 p)
+{
+    int money = getmoney();
+    
+    if(money < n*p)
+        return false;
+
+    return true;
+}
+*/
+
+void foo(int* p, int* q)
+{
+    p = q;
+    *p = 3;
+}
+
+void Tfoo()
+{
+    int i =1, j = -1;
+    foo(&i, &j);
+    printf("%d,%d",i,j);
+}
+
+int sum(int n)
+{
+    return n + sum(n-1);
+}
+
+class P
+{
+public:
+    int* m_int;
+    std::string m_name;
+
+    P()
+    {
+        m_int = new int;
+        *m_int = 5;
+    }
+
+    ~P()
+    {
+        printf("%s destructor :",m_name);
+        printf("%d", *m_int * 2);
+        delete m_int;
+        m_int = 0;
+    }
+};
+
+int Pfunc()
+{
+    P val1;
+    P val2 = val1;
+
+    val1.m_name = "val1";
+    val2.m_name = "val2";
+    
+    return 0;
+}
+
+void timeC()
+{
+    int n,j;
+    
+    for (int i=0;i<n;++i)
+    {
+        j+=n;
+        i = i*2;
+    }
+}
 
 int main()
 {
-    stringTest();
+    Pfunc();
     return 0;
 }
