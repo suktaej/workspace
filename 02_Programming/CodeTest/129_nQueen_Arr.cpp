@@ -29,6 +29,37 @@ void solve(int row)
     }
 }
 
+unsigned int column = 0;
+unsigned int lDiag = 0;
+unsigned int rDiag = 0;
+
+void bitSolve(int row)
+{
+    if(row > size)
+    {
+        ++res;
+        return;
+    }
+
+    for (int col = 1; col <= size; ++col)
+    {
+        if (!(column & (1 << col)) &&
+            !(lDiag & (1 << (row + col))) &&
+            !(rDiag & (1 << (row - col + size))))
+        {
+            column |= (1 << col);
+            lDiag |= (1 << (row + col));
+            rDiag |= (1 << (row - col + size));
+            
+            solve(row+1);
+            
+            column &= ~(1 << col);
+            lDiag &= ~(1 << (row + col));
+            rDiag &= ~(1 << (row - col + size));
+        }
+    }
+}
+
 int main()
 {
     std::cin>>size;
