@@ -105,6 +105,7 @@ void ds()
     std::cout<<s.Components();
 }
 
+/*
 int main()
 {
     std::cin>>n>>m;
@@ -135,5 +136,26 @@ int main()
 
     // std::cout<<cnt;
 
+    return 0;
+}
+
+*/
+
+int main()
+{
+    int n;
+    int blocks[] = {1,2,2};
+    std::cin>>n;
+
+    std::vector<int> dp(n+1,0);
+    dp[0]=1;
+    
+    for(int i =1;i<=n;++i)
+        for(const int& block : blocks)
+            if(i-block >= 0)
+                dp[i] += dp[i-block];
+    
+    std::cout << dp[n];
+    
     return 0;
 }

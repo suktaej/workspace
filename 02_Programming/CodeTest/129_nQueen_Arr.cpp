@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 
 constexpr int maxSize = 15;
 int size;

@@ -281,6 +281,7 @@ bool buy(int64 n, int64 p)
 }
 */
 
+/*
 void foo(int* p, int* q)
 {
     p = q;
@@ -347,3 +348,124 @@ int main()
     Pfunc();
     return 0;
 }
+
+*/
+
+/*
+class Base
+{
+public:
+    Base()
+    {
+        std::cout<<"Create Base\n";
+    }
+
+    virtual ~Base()
+    {
+        std::cout<<"Destroy Base\n";
+    }
+
+    void funcA()
+    {
+        std::cout<<"Base funcA\n";
+    }
+
+    virtual void funcB()
+    {
+        std::cout<<"Base funcB\n";
+    }
+};
+
+class Derived : public Base
+{
+public:
+    Derived()
+    {
+        std::cout<<"Create Derived\n";
+    }
+
+    ~Derived()
+    {
+        std::cout<<"Destroy Derived\n";
+    }
+
+    void funcA()
+    {
+        std::cout<<"Derived funcA\n";
+    }
+
+    virtual void funcB()
+    {
+        std::cout<<"Derived funcB\n";
+    }
+};
+
+void main()
+{
+    Derived A;
+    Base* B = static_cast<Base*>(&A);
+
+    A.funcA();
+    B->funcA();
+
+    A.funcB();
+    B->funcB();
+}
+
+// Create Base
+// Create Derived
+// Derived funcA
+// Base funcA
+// Derived funcB
+// Derived funcB
+// Destroy Derived
+// Destroy Base
+*/
+
+/*
+class A
+{
+public:
+    A() {std::cout<<"A constructor\n";}
+    A(A& a) {std::cout<<"A copy constructor\n";}
+    A(A&& a) {std::cout<<"A move constructor\n";}
+    ~A() {std::cout<<"A destructor\n";}
+};
+
+A func1(A a)
+{
+    return a;
+}
+
+A func2(A &a)
+{
+    return a;
+}
+
+void main()
+{
+    A a;
+    A b = a;
+    A c = func1(b);
+    A d = func2(c);
+}
+*/
+
+class A
+{
+    char m_strName;
+    int m_iVal;
+    double m_dVal;
+
+    virtual void print();
+};
+
+class B
+{
+    int* m_iSize;
+
+    virtual void print();
+};
+
+// 32bit class B 크기
+// 64bit class B 크기
