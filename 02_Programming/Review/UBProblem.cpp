@@ -467,5 +467,5 @@ class B
     virtual void print();
 };
 
-// 32bit class B 크기
+// 32bit class A 크기
 // 64bit class B 크기
