@@ -20,13 +20,13 @@ struct Mat
         Mat res(size);
 
         for (int i = 0; i < size; ++i)
-            for (int j = 0; j < size; ++j)
+            for (int k = 0; k < size; ++k)
             {
-                if(dp[i][j] == 0)
+                if(dp[i][k] == 0)
                     continue;
 
-                for (int k = 0; k < size; ++k)
-                    res.dp[i][k] += (dp[i][j] * other.dp[j][k]);
+                for (int j = 0; j < size; ++j)
+                    res.dp[i][j] += (dp[i][k] * other.dp[k][j]);
             }
 
         return res;
