@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e80db9a7-51c6-4258-8771-a912cb4d7e81}</ProjectGuid>
+    <ProjectGuid>{7fba078d-1e27-42ed-978b-78f256b9c447}</ProjectGuid>
     <RootNamespace>DX</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -123,23 +123,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CDevice.h" />
     <ClInclude Include="DX.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="GameInfo.h" />
-    <ClInclude Include="include\Math\EngineMath.h" />
-    <ClInclude Include="include\Math\Matrix.h" />
-    <ClInclude Include="include\Math\Vector2D.h" />
-    <ClInclude Include="include\Math\Vector3D.h" />
-    <ClInclude Include="include\Math\Vector4D.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CDevice.cpp" />
     <ClCompile Include="DX.cpp" />
-    <ClCompile Include="include\Math\Vector3D.cpp" />
-    <ClCompile Include="include\Math\Vector4D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX.rc" />

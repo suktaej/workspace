@@ -1,120 +1,187 @@
-//#include "framework.h"
-//#include "DX.h"
+// DX.cpp : Defines the entry point for the application.
+//
 
-#include <windows.h>
+#include "framework.h"
+#include "DX.h"
 
-// main window의 handle
-// 생성된 창을 식별하는 용도
-HWND ghMainWnd = 0;
+#define MAX_LOADSTRING 100
 
-// window applcation program instance에 필요한 코드들의 wrapping function
-// initialize 성공 시 true 반환
-bool InitWindowsApp(HINSTANCE instanceHandle, int show);
+// Global Variables:
+HINSTANCE hInst;                                // current instance
+WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
+WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+BOOL gLoop = true;
 
-// message loop code function
-int Run();
+// Forward declarations of functions included in this code module:
+ATOM                MyRegisterClass(HINSTANCE hInstance);
+BOOL                InitInstance(HINSTANCE, int);
+LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
-// main windows가 받은 event를 처리하는 window procedure function
-LRESULT CALLBACK WndProc(HWND hWnd, UINT  msg, WPARAM wParam, LPARAM lParam);
-
-// Entry point 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstace, PSTR pCmdLine, int nShowCmd)
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPWSTR    lpCmdLine,
+                     _In_ int       nCmdShow)
 {
-	// main window 초기화 진행
-	if (!InitWindowsApp(hInstance, nShowCmd))
-		return 0;
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
 
-	// 초기화에 성공 시 message loop로 진행
-	// loop는 종료(WM_QUIT) message를 받을 때 까지 반복
-	return Run();
-}
+    // TODO: Place code here.
 
-bool InitWindowsApp(HINSTANCE instanceHandle, int show)
-{
-	// 창을 생성할 떄 가장먼저 창의 특성을 서술
-	WNDCLASS wc;
+    // Initialize global strings
+    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_DX, szWindowClass, MAX_LOADSTRING);
+    MyRegisterClass(hInstance);
 
-	wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = WndProc;  // function pointer : msg의 내용을 처리할 함수
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = instanceHandle;
-    wc.hIcon = LoadIcon(0, IDI_APPLICATION);
-	wc.hCursor = LoadCursor(0, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wc.lpszMenuName = 0;
-    wc.lpszClassName = L"BasicWndClass";
+    // Perform application initialization:
+    if (!InitInstance (hInstance, nCmdShow))
+    {
+        return FALSE;
+    }
 
-	// WNDCLASS instance를 windows에 등록
-	if (!RegisterClass(&wc))
-	{
-		MessageBox(0, L"RegisterClass FAILED", 0, 0);
-		return false;
-	}
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DX));
 
-	// Register에 등록했다면 CreateWindow로 창을 생성
-	// 해당 함수는 생성된 창의 handle을 반환 (생성 실패시 0)
+    MSG msg;
 
-	ghMainWnd = CreateWindowW(
-		L"BasicWndClass",	// 사용할 window class 이름
-		L"Win32Basic",		// 창의 제목
-		WS_OVERLAPPEDWINDOW,// style flags
-		CW_USEDEFAULT,		// x 좌표
-		CW_USEDEFAULT,		// y 좌표
-		CW_USEDEFAULT,		// 너비
-		CW_USEDEFAULT,		// 높이
-		0,					// 부모 창
-		0,					// 메뉴 핸들
-		instanceHandle,		// 응용 프로그램 인스턴스
-		0);					// 추가적인 생성 플래그
-
-	if (ghMainWnd == 0)
-	{
-		MessageBox(0, L"CreateWindow FAILED", 0, 0);
-		return false;
-	}
-
-	// window 생성 성공 시 이를 화면에 표시
-	ShowWindow(ghMainWnd, show);
-	UpdateWindow(ghMainWnd);
-
-	return true;
-}
-
-int Run()
-{
-	MSG msg = { 0 };
-	
-	BOOL bRet = 1;
-	// GetMessage()는 message recv에 오류가 있으면 -1을 반환
-	// 또한 호출 시, message가 도달할 때 까지 응용 프로세스의 thread가 sleep상태로 전환
-	while ((bRet = GetMessage(&msg, 0, 0, 0)) != 0)
-	{
-		if (bRet == -1)
-		{
-			MessageBox(0, L"GetMessage FAILED", L"Error", MB_OK);
-			break;
-		}
+    // Main message loop:
+    while (gLoop)
+    {
+        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+        {
+            if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+            {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
+        }
 		else
 		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
 		}
-	}
+    }
 
-	return (int)msg.wParam;
+    return (int) msg.wParam;
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT  msg, WPARAM wParam, LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-	}
 
-	// 명시적으로 처리하지 않은 다른 message들은 default window procedure에게 전달
-	// 현재 window procdeure는 반드시 DefWindowProc의 반환값을 돌려주어야함
-	return DefWindowProc(hWnd, msg, wParam, lParam);
+
+//
+//  FUNCTION: MyRegisterClass()
+//
+//  PURPOSE: Registers the window class.
+//
+ATOM MyRegisterClass(HINSTANCE hInstance)
+{
+    WNDCLASSEXW wcex;
+
+    wcex.cbSize = sizeof(WNDCLASSEX);
+
+    wcex.style          = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc    = WndProc;
+    wcex.cbClsExtra     = 0;
+    wcex.cbWndExtra     = 0;
+    wcex.hInstance      = hInstance;
+    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_DX));
+    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
+    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
+    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_DX);
+    wcex.lpszClassName  = szWindowClass;
+    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+
+    return RegisterClassExW(&wcex);
+}
+
+//
+//   FUNCTION: InitInstance(HINSTANCE, int)
+//
+//   PURPOSE: Saves instance handle and creates main window
+//
+//   COMMENTS:
+//
+//        In this function, we save the instance handle in a global variable and
+//        create and display the main program window.
+//
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+   hInst = hInstance; // Store instance handle in our global variable
+
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+   if (!hWnd)
+   {
+      return FALSE;
+   }
+
+   ShowWindow(hWnd, nCmdShow);
+   UpdateWindow(hWnd);
+
+   return TRUE;
+}
+
+//
+//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
+//
+//  PURPOSE: Processes messages for the main window.
+//
+//  WM_COMMAND  - process the application menu
+//  WM_PAINT    - Paint the main window
+//  WM_DESTROY  - post a quit message and return
+//
+//
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+    case WM_COMMAND:
+        {
+            int wmId = LOWORD(wParam);
+            // Parse the menu selections:
+            switch (wmId)
+            {
+            case IDM_ABOUT:
+                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+                break;
+            case IDM_EXIT:
+                DestroyWindow(hWnd);
+                break;
+            default:
+                return DefWindowProc(hWnd, message, wParam, lParam);
+            }
+        }
+        break;
+    case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hWnd, &ps);
+            // TODO: Add any drawing code that uses hdc here...
+            EndPaint(hWnd, &ps);
+        }
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
+}
+
+// Message handler for about box.
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(lParam);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        return (INT_PTR)TRUE;
+
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        break;
+    }
+    return (INT_PTR)FALSE;
 }
