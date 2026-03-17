@@ -292,7 +292,6 @@ bool diff(std::string a,std::string b)
 
     return false;
 }
-=====*/ 
 
 void func()
 {
@@ -301,6 +300,9 @@ void func()
     int r2 = a / c * b;
     std::cout<<r1<<' '<<r2;
 }
+=====*/ 
+
+// N크기인 정방형 배열이 0과 1로 이루어져 있을 때 (x,y)좌표로부터 연속된 0을 1로 바꾸는 함수를 생성하라
 
 int main()
 {
