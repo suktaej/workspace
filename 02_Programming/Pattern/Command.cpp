@@ -74,7 +74,6 @@ public:
     }
 };
 
-
 int main()
 {
     std::unique_ptr<Player> p1(new Player);
