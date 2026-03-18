@@ -300,7 +300,6 @@ void func()
     int r2 = a / c * b;
     std::cout<<r1<<' '<<r2;
 }
-=====*/ 
 
 // N크기인 정방형 배열이 0과 1로 이루어져 있을 때 (x,y)좌표로부터 연속된 0을 1로 바꾸는 함수를 생성하라
 
@@ -335,3 +334,80 @@ int main()
     
     return 0;
 }
+int Num[] = {1,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2,1};
+
+void rtnNum(int* arr, int startidx, int endidx, int targetnum)
+{
+
+}
+
+void func()
+{
+    int num[] = {1,2,3,4,5,6};
+    int MAXNUM = sizeof(num)/sizeof(int);
+
+    for (int i = 0; i < MAXNUM - 1; ++i)
+    {
+        for (int j = 0; j < MAXNUM - 1; ++j)
+        {
+            if(num[j] > num[j+1])
+            {
+                int temp = num[j+1];
+                num[j+1] = num[j];
+                num[j] = temp;
+            }
+        }
+    }
+
+    for(int i=0;i<MAXNUM-1;++i)
+        std::cout<<num[i]<<std::endl;
+}
+int main()
+{
+    func();
+    return 0;
+}
+
+class A
+{
+private:
+    int* a;
+
+public:
+    A()
+    {
+        a = new int(0);
+    }
+    ~A()
+    {
+        delete a;
+    }
+};
+
+class B : public A
+{
+private:
+    int *b;
+
+public:
+    B()
+    {
+        b = new int(0);
+    }
+    ~B()
+    {
+        delete b;
+    }
+};
+
+int main()
+{
+    A* a = new B;
+    B* b = new B;
+
+    delete a;
+    delete b;
+
+    return 0;
+}
+=====*/ 
