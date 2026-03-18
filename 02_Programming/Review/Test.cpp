@@ -304,8 +304,34 @@ void func()
 
 // N크기인 정방형 배열이 0과 1로 이루어져 있을 때 (x,y)좌표로부터 연속된 0을 1로 바꾸는 함수를 생성하라
 
+using namespace std;
+#include <map>
+class A
+{
+private:
+    int num;
+
+public:
+    A() {};
+    ~A() {};
+};
+
+class B
+{
+private:
+    int num;
+
+public:
+    B() {};
+    ~B() {};
+};
+
 int main()
 {
-    func();
+    A a;
+    B b;
+    map<A, B> m;
+    m.insert(map<A, B>::value_type(a, b));
+    
     return 0;
 }
