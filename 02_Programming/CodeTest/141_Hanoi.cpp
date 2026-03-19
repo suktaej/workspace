@@ -32,7 +32,6 @@ void solve()
     }
 }
 
-
 int main()
 {
     solve();

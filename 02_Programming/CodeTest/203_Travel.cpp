@@ -88,6 +88,85 @@ void preOrder(int i)
     preOrder(right(i));
 }
 
+#include <iostream>
+#include <string>
+#include <stack>
+#include <sstream>
+#include <map>
+
+struct Node 
+{
+    std::string data;
+    Node *left, *right;
+    Node(std::string s) : data(s), left(nullptr), right(nullptr) {}
+    Node(char c) : data(1, c), left(nullptr), right(nullptr) {}
+};
+
+int getPriority(char op) 
+{
+    if (op == '+' || op == '-') 
+        return 1;
+    if (op == '*' || op == '/' || op == '%') 
+        return 2;
+    if (op == '(') 
+        return 0;
+
+    return -1;
+}
+
+std::stack<char> opcodes;
+std::stack<Node*> operNodes;
+
+void buildSubTree() 
+{
+    if (operNodes.size() < 2) 
+        return;
+    
+    char op = opcodes.top(); opcodes.pop();
+    Node* val2 = operNodes.top(); operNodes.pop();
+    Node* val1 = operNodes.top(); operNodes.pop();
+    
+    Node* newNode = new Node(op);
+    newNode->left = val1;
+    newNode->right = val2;
+    operNodes.push(newNode);
+}
+
+void makeTree() 
+{
+    std::string s = "1 + 4 * 2";
+    std::stringstream iss(s);
+    std::string token;
+
+    while(iss >> token) 
+    {
+        if (token == "(") 
+            opcodes.push('(');
+        else if (token == ")") 
+        {
+            while (!opcodes.empty() && opcodes.top() != '(') 
+                buildSubTree();
+            
+            opcodes.pop(); 
+        }
+        else if (token == "+" || token == "-" || token == "*" || token == "/") 
+        {
+            char currentOp = token[0];
+
+            while (!opcodes.empty() &&
+                   getPriority(opcodes.top()) >= getPriority(currentOp))
+                buildSubTree();
+
+            opcodes.push(currentOp);
+        }
+        else
+            operNodes.push(new Node(token));
+    }
+
+    while(!opcodes.empty()) 
+        buildSubTree();
+}
+
 int main()
 {
     return 0;
