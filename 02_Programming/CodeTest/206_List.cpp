@@ -13,6 +13,20 @@ public:
         Node(int x, Node *next) : data(x), next(next) {}
     };
 
+public:
+    ~List() {
+        // head가 nullptr이 될 때까지 반복하며 소유권을 하나씩 해제
+        while (head) 
+            head = std::move(head->next);
+            // head가 가리키는 노드를 직접 파괴하는 대신,
+            // head를 다음 노드로 옮기면 이전 노드는 자동으로 안전하게 삭제됨
+            
+            // 동작 원리:
+            // 1. head->next의 소유권을 일시적으로 뺏어와서 head에 넣음
+            // 2. 이 과정에서 원래 head가 소유하던 노드는 소유주가 없어지므로 삭제됨
+            // 3. 루프를 돌기 때문에 스택을 깊게 쌓지 않고 하나씩 순차적으로 처리함
+    }
+
 private:
     // Node* head = nullptr;
     std::unique_ptr<Node> head = nullptr;
@@ -26,7 +40,7 @@ public:
     void pop_back();
     void insert_after(Node* pre, int x);
     void remove_after(Node* pre);
-    Node* find(int x);
+    Node* find(int x) const;
 };
 
 void List::push_front(int x)
@@ -134,9 +148,19 @@ void List::remove_after(Node* pre)
     --size;
 }
 
-Node* List::find(int x)
+List::Node* List::find(int x) const
 {
+    Node* temp = head.get();
 
+    while (temp != nullptr)
+    {
+        if(temp->data == x)
+            return temp;
+
+        temp = temp->next.get();
+    }
+
+    return nullptr;
 }
 
 int main()
