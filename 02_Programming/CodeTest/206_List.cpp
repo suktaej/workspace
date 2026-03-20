@@ -41,6 +41,8 @@ public:
     void insert_after(Node* pre, int x);
     void remove_after(Node* pre);
     Node* find(int x) const;
+    void print_reverse(Node* n);
+    void reverse();
 };
 
 void List::push_front(int x)
@@ -161,6 +163,34 @@ List::Node* List::find(int x) const
     }
 
     return nullptr;
+}
+
+void List::print_reverse(Node *n)
+{
+    if(!n)
+        return;
+    print_reverse(n->next.get());
+    std::cout<<n->data<<' ';
+}
+
+void List::reverse()
+{
+    if(!head || !head->next)
+        return;
+
+    std::unique_ptr<Node> prev = nullptr;
+    std::unique_ptr<Node> curr = std::move(head);
+    tail = curr.get();
+
+    while(curr)
+    {
+        std::unique_ptr<Node> nextNode = std::move(curr->next);
+        curr->next = std::move(prev);
+        prev = std::move(curr);
+        curr = std::move(nextNode);
+    }
+
+    head = std::move(prev);
 }
 
 int main()
