@@ -41,17 +41,22 @@ void insertionSort()
     for (int i = 1; i < n; ++i)
     {
         int key = arr[i];
-        int j;
-        for (j = i - 1; j >= 0 ; --j)
+        int j = i-1;
+
+        while (j >= 0)
         {
             if(arr[j] < key)
                 break;
 
             arr[j+1] = arr[j];
+            --j;
         }
+
         arr[j+1] = key;
     }
 }
+
+
 
 int main()
 {
