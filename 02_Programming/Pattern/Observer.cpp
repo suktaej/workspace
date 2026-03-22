@@ -21,10 +21,16 @@ public:
     virtual void onNotify(const Entity& entity, Event evet) = 0;
 };
 
-class Achievements : public Observer
-{
+class Achivements : public Observer {
 public:
-    virtual void onNotify(const Entity& entity, Event evet) = 0;
+    virtual void onNotify(const Entity& entity, Event event) 
+    {
+        switch (event) { }
+    }
+
+private:
+    void unlock(Achivements achievement) { }
+    bool heroIsOnBridge;
 };
 
 class Subject 
