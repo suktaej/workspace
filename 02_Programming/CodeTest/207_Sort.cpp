@@ -377,8 +377,44 @@ void lomutoQuickSort(int low, int high)
     }
 }
 
+void heapify(int arrSize, int rootIdx)
+{
+    int largeIdx = rootIdx;
+    int left = 2 * rootIdx + 1;
+    int right = 2 * rootIdx + 2;
+
+    if(left < arrSize && arr[largeIdx] < arr[left])
+        largeIdx = left;
+
+    if(right < arrSize && arr[largeIdx] < arr[right])
+        largeIdx = right;
+
+    if(largeIdx!=rootIdx)
+    {
+        std::swap(arr[largeIdx],arr[rootIdx]);
+        heapify(arrSize,largeIdx);
+    }
+}
+
+void heapSort()
+{
+    int size = sizeof(arr)/sizeof(int);
+    int bnd = size / 2 - 1;
+
+    for (int i = bnd; i >= 0; --i)
+        heapify(size, i);
+
+    for (int i = size - 1; i > 0; --i)
+    {
+        std::swap(arr[0],arr[i]);
+        heapify(i,0);
+    }
+}
+
 int main()
 {
+    int inArr[n] = {10, 7, 42, 9, 20, 8, 34, 6, 5};
+
     for (int i = 0; i < n; ++i)
         std::cout << arr[i] << ' ';
 
@@ -389,6 +425,7 @@ int main()
     // mergeSort(0,sizeof(arr)/sizeof(arr[0]));
     // lomutoQuickSort(0,sizeof(arr)/sizeof(int)-1);
     // hoareQuickSort(0,sizeof(arr)/sizeof(int)-1);
+    heapSort();
 
     std::cout << std::endl;
 
