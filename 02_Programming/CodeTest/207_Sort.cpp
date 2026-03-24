@@ -45,6 +45,45 @@ public:
     }
 
 public:
+
+    void insertionSort()
+    {
+        if(head== nullptr || head->getNext() == nullptr)
+            return;
+
+        Node* sortedHead = nullptr;
+        Node* cur = head;
+
+        while(cur!=nullptr)
+        {
+            Node* next = cur->getNext();
+
+            if (sortedHead == nullptr ||
+                sortedHead->getValue() >= cur->getValue())
+                sortedHead = cur;
+            else
+            {
+                Node* temp = sortedHead;
+                while (temp->getNext() != nullptr &&
+                       temp->getNext()->getValue() < cur->getValue())
+                       temp = temp->getNext();
+
+                cur->setNext(temp->getNext());
+                temp->setNext(cur);
+            }
+
+            cur = next;
+        }
+
+        head = sortedHead;
+        Node* lastNode = head;
+        while (nullptr != lastNode &&
+               nullptr != lastNode->getNext())
+               lastNode = lastNode->getNext();
+
+        tail = lastNode;
+    }
+
     void push_back(int i)
     {
         Node *newNode = new Node(i, nullptr);
@@ -329,7 +368,11 @@ int main()
     // insertionSort();
     // selectionSort();
     // bubbleSort();
-    mergeSort(0,sizeof(arr)/sizeof(arr[0]));
+    // mergeSort(0,sizeof(arr)/sizeof(arr[0]));
+
+    int arrSize = 5;
+    int *dArr = (int*)malloc(sizeof(int)*arrSize);
+
     std::cout << std::endl;
 
     for (int i = 0; i < n; ++i)
