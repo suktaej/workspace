@@ -411,6 +411,33 @@ void heapSort()
     }
 }
 
+void countingSort()
+{
+    int size = sizeof(arr)/sizeof(int);
+    int minVal = *std::min_element(std::begin(arr),std::end(arr));
+    int maxVal = *std::max_element(std::begin(arr),std::end(arr));
+    int range = maxVal - minVal + 1;
+
+    std::vector<int> cnt(range, 0);
+    std::vector<int> output(size, 0);
+
+    for(int n : arr)
+        ++cnt[n - minVal];
+
+    for (int i = 1; i < range; ++i)
+        cnt[i] += cnt[i-1];
+
+    for (int i = size - 1; i >= 0; --i)
+    {
+        int pos = arr[i] - minVal;
+        output[cnt[pos]-1] = arr[i];
+        --cnt[pos];
+    }
+
+    memcpy(arr,output.data(),output.size()*sizeof(int));
+    // std::copy(output.begin(), output.end(), arr);
+}
+
 int main()
 {
     int inArr[n] = {10, 7, 42, 9, 20, 8, 34, 6, 5};
@@ -425,7 +452,8 @@ int main()
     // mergeSort(0,sizeof(arr)/sizeof(arr[0]));
     // lomutoQuickSort(0,sizeof(arr)/sizeof(int)-1);
     // hoareQuickSort(0,sizeof(arr)/sizeof(int)-1);
-    heapSort();
+    // heapSort();
+    countingSort();
 
     std::cout << std::endl;
 
