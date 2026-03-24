@@ -149,7 +149,14 @@ int main()
     stage.add(chump, 0);
 
     harry->slap();
-    stage.update();
+    std::cout << "--- Frame 1 ---" << std::endl;
+    stage.update(); 
+    std::cout << "--- Frame 2 ---" << std::endl;
+    stage.update(); 
+    std::cout << "--- Frame 3 ---" << std::endl;
+    stage.update(); 
+    std::cout << "--- Frame 4 ---" << std::endl;
+    stage.update(); 
 
     return 0;
 }
