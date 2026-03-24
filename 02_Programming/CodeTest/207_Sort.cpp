@@ -228,7 +228,7 @@ public:
 };
 
 constexpr int n = 9;
-int arr[n] = {1, 7, 42, 9, 20, 8, 3, 6, 5};
+int arr[n] = {10, 7, 42, 9, 20, 8, 34, 6, 5};
 
 void selectionSort()
 {
@@ -271,82 +271,36 @@ void bubbleSort()
                 std::swap(arr[j + 1], arr[j]);
 }
 
-/*
 void merge(int left, int mid, int right)
 {
-    int rangeMid = mid + 1;
-    int lSize = rangeMid - left;
-    int rSize = right - mid;
+    int leftSize = mid - left;
+    int rightSize = right - mid;
 
-    std::vector<int> lVec(lSize), rVec(rSize);
+    std::vector<int> leftVector(leftSize);
+    for (int i = 0; i < leftSize; ++i)
+        leftVector[i] = arr[i + left];
 
-    for (int i = 0; i < lSize; ++i)
-        lVec[i] = arr[left + i];
+    std::vector<int> rightVector(rightSize);
+    for (int i = 0; i < rightSize; ++i)
+        rightVector[i] = arr[i + mid];
 
-    for (int i = 0; i < rSize; ++i)
-        rVec[i] = arr[rangeMid + i];
-
-    int rVecIdx = 0;
-    int lVecIdx = 0;
+    int leftIndex = 0;
+    int rightIndex = 0;
     int idx = left;
 
-    while(lVecIdx < lSize && rVecIdx < rSize)
+    while (leftIndex < leftSize && rightIndex < rightSize)
     {
-        if(lVec[lVecIdx] <= rVec[rVecIdx])
-            arr[idx++] = lVec[lVecIdx++];
+        if (leftVector[leftIndex] <= rightVector[rightIndex])
+            arr[idx++] = leftVector[leftIndex++];
         else
-            arr[idx++] = rVec[rVecIdx++];
+            arr[idx++] = rightVector[rightIndex++];
     }
 
-    while(lVecIdx < lSize)
-        arr[idx++] = lVec[lVecIdx++];
+    while (leftIndex < leftSize)
+        arr[idx++] = leftVector[leftIndex++];
 
-    while(rVecIdx < rSize)
-        arr[idx++] = rVec[rVecIdx++];
-}
-
-void mergeSort(int left, int right)
-{
-    if(left < right)
-    {
-        int mid = left + (right - left) / 2;
-        mergeSort(left, mid);
-        mergeSort(mid + 1, right);
-        merge(left, mid, right);
-    }
-}
-*/
-
-void merge(int left, int mid, int right)
-{
-    int lSize = mid - left;
-    int rSize = right - mid;
-
-    std::vector<int> lVec(lSize), rVec(rSize);
-
-    for (int i = 0; i < lSize; ++i)
-        lVec[i] = arr[left + i];
-
-    for (int i = 0; i < rSize; ++i)
-        rVec[i] = arr[mid + i];
-
-    int rVecIdx = 0;
-    int lVecIdx = 0;
-    int idx = left;
-
-    while(lVecIdx < lSize && rVecIdx < rSize)
-    {
-        if(lVec[lVecIdx] <= rVec[rVecIdx])
-            arr[idx++] = lVec[lVecIdx++];
-        else
-            arr[idx++] = rVec[rVecIdx++];
-    }
-
-    while(lVecIdx < lSize)
-        arr[idx++] = lVec[lVecIdx++];
-
-    while(rVecIdx < rSize)
-        arr[idx++] = rVec[rVecIdx++]; 
+    while (rightIndex < rightSize)
+        arr[idx++] = rightVector[rightIndex++];
 }
 
 void mergeSort(int left, int right)
@@ -355,8 +309,71 @@ void mergeSort(int left, int right)
     {
         int mid = left + (right - left) / 2;
         mergeSort(left, mid);
-        mergeSort(mid, right);
-        merge(left, mid, right);
+        mergeSort(mid,right);
+        merge(left,mid,right);
+    }
+}
+
+int hoare(int low, int high)
+{
+    int pivot = arr[low];
+    int li = low - 1;
+    int hi = high + 1;
+
+    while(true)
+    {
+        do ++li;
+        while (arr[li] < pivot);
+
+        do --hi;
+        while(arr[hi] > pivot);
+    
+        if(li >= hi)
+            return hi;
+
+        std::swap(arr[li], arr[hi]);
+    }
+}
+
+int lomuto(int low, int high)
+{
+    int mid = low + (high - low) / 2;
+    std::swap(arr[mid], arr[high]);
+    
+    int pivot = arr[high];
+    int idx = low;
+
+    for (int i = low; i < high; ++i)
+    {
+        if(arr[i] < pivot)
+        {
+            std::swap(arr[i],arr[idx]);
+            ++idx;
+        }
+    }
+
+    std::swap(arr[idx],arr[high]);
+
+    return idx;
+}
+
+void hoareQuickSort(int low, int high)
+{
+    if (low < high)
+    {
+        int pivot = lomuto(low, high);
+        hoareQuickSort(low, pivot);
+        hoareQuickSort(pivot+1, high);
+    }
+}
+
+void lomutoQuickSort(int low, int high)
+{
+    if (low < high)
+    {
+        int pivot = lomuto(low, high);
+        lomutoQuickSort(low, pivot -1);
+        lomutoQuickSort(pivot+1, high);
     }
 }
 
@@ -365,13 +382,13 @@ int main()
     for (int i = 0; i < n; ++i)
         std::cout << arr[i] << ' ';
 
+    int arrSize = sizeof(arr)/sizeof(int);
     // insertionSort();
     // selectionSort();
     // bubbleSort();
     // mergeSort(0,sizeof(arr)/sizeof(arr[0]));
-
-    int arrSize = 5;
-    int *dArr = (int*)malloc(sizeof(int)*arrSize);
+    // lomutoQuickSort(0,sizeof(arr)/sizeof(int)-1);
+    // hoareQuickSort(0,sizeof(arr)/sizeof(int)-1);
 
     std::cout << std::endl;
 
