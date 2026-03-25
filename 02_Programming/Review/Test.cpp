@@ -1,413 +1,236 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
+
+constexpr int n = 9;
+int gArr[n] = {10, 7, 42, 9, 20, 8, 34, 6, 5};
+
+void selectionSort(int* arr, int size)
+{
+    for(int i=0;i<size;++i)
+    {
+        int tmp = i;
+        for(int j=i+1;j<size;++j)
+        {
+            if(arr[tmp] > arr[j])
+                tmp = j;
+        }
+        std::swap(arr[tmp],arr[i]);
+    }
+}
+
+void insertionSort(int* arr, int size)
+{
+    for(int i = 1;i<size;++i)
+    {
+        int key = arr[i];
+        int j = i-1;
+        
+        while (j >= 0)
+        {
+            if (arr[j] < key)
+                break;
+
+            arr[j+1] = arr[j];
+            --j;
+        }
+        arr[j+1] = key;
+    }
+}
+
+void bubbleSort(int* arr, int size)
+{
+    for (int i = 0; i < size - 1; ++i)
+        for (int j = 0; j < size - 1 - i; ++j)
+            if (arr[j] > arr[j + 1])
+                std::swap(arr[j], arr[j + 1]);
+}
+
+void merge(int left, int mid, int right)
+{
+    int ls = mid - left;
+    int rs = right - mid;
+
+    std::vector<int> lv(ls);
+    std::vector<int> rv(rs);
+
+    for (int i = 0; i < ls; ++i)
+        lv[i] = gArr[i + left];
+
+    for (int i = 0; i < rs; ++i)
+        rv[i] = gArr[i + mid];
+
+    int li = 0;
+    int ri = 0;
+    int idx = left;
+
+    while (li < ls && ri < rs)
+    {
+        if (lv[li] <= rv[ri])
+            gArr[idx++] = lv[li++];
+        else
+            gArr[idx++] = rv[ri++];
+    }
+
+    while (li < ls)
+        gArr[idx++] = lv[li++];
+
+    while (ri < rs)
+        gArr[idx++] = rv[ri++];
+}
+
+void mergeSort(int left, int right)
+{
+    if (right - left > 1)
+    {
+        int mid = left + (right - left) / 2;
+        mergeSort(left, mid);
+        mergeSort(mid, right);
+        merge(left, mid, right);
+    }
+}
+
+int hoare(int low, int high)
+{
+    int pivot = gArr[low];
+    int li = low - 1;
+    int hi = high + 1;
+
+    while(true)
+    {
+        do ++li; while (gArr[li] < pivot);
+        do --hi; while (gArr[hi] > pivot);
+
+        if(li >= hi)
+            return hi;
+
+        std::swap(gArr[li], gArr[hi]);
+    }
+}
+
+int lomuto(int low, int high)
+{
+    int mid = low + (high - low) / 2;
+    std::swap(gArr[mid],gArr[high]);
+
+    int pivot = gArr[high];
+    int idx = low;
+
+    for (int i = low; i < high; ++i)
+        if(gArr[i] < pivot)
+        {
+            std::swap(gArr[i],gArr[idx]);
+            ++idx;
+        }
+
+    std::swap(gArr[idx],gArr[high]);
+
+    return idx;
+}
+
+void hoareQuickSort(int low, int high)
+{
+    if( low < high)
+    {
+        int pivot = hoare(low, high);
+        hoareQuickSort(low, pivot);
+        hoareQuickSort(pivot+1,high);
+    }
+}
+
+void lomutoQuickSort(int low, int high)
+{
+    if(low < high)
+    {
+        int pivot = lomuto(low, high);
+        lomutoQuickSort(low, pivot-1);
+        lomutoQuickSort(pivot+1, high);
+    }
+}
+
+
+void heapify(int arrSize, int rootIdx)
+{
+    int large = rootIdx;
+    int left = 2 * rootIdx + 1;
+    int right = 2 * rootIdx + 2;
+
+    if(left < arrSize && gArr[left] > gArr[large])
+        large = left;
+    
+    if(right < arrSize && gArr[right] > gArr[large])
+        large = right;
+
+    if(large!=rootIdx)
+    {
+        std::swap(gArr[large],gArr[rootIdx]);
+        heapify(arrSize,large);
+    }
+}
+
+void heapSort(int size)
+{
+    int bnd = size / 2 - 1;
+    for (int i = bnd; i >= 0; --i)
+        heapify(size, i);
+
+    for (int i = size - 1; i > 0; --i)
+    {
+        std::swap(gArr[i],gArr[0]);
+        heapify(i,0);
+    }
+}
 
 /*
-int n, m;
-std::vector<std::vector<int>> graph;
-std::vector<bool> visited;
-
-struct disjointSet
+void countingSort()
 {
-    std::vector<int> parents;
-    std::vector<int> rank;
-    int numSet;
+    int size = sizeof(arr)/sizeof(int);
+    int minVal = *std::min_element(std::begin(arr),std::end(arr));
+    int maxVal = *std::max_element(std::begin(arr),std::end(arr));
+    int range = maxVal - minVal + 1;
 
-    disjointSet(int n)
-    : parents(n+1), rank(n+1), numSet(n)
+    std::vector<int> cnt(range, 0);
+    std::vector<int> output(size, 0);
+
+    for(int n : arr)
+        ++cnt[n - minVal];
+
+    for (int i = 1; i < range; ++i)
+        cnt[i] += cnt[i-1];
+
+    for (int i = size - 1; i >= 0; --i)
     {
-        for(int i=0;i<=n;++i)
-            parents[i]= i;
+        int pos = arr[i] - minVal;
+        output[cnt[pos]-1] = arr[i];
+        --cnt[pos];
     }
 
-    int find(int i)
-    {
-        if(parents[i]==i)
-            return i;
-
-        return parents[i] = find(parents[i]);
-    }
-
-    bool unite(int i,int j)
-    {
-        int rooti = find(i);
-        int rootj = find(j);
-
-        if(rooti==rootj)
-            return false;
-
-        if(rank[rooti] < rank[rootj])
-            std::swap(rooti, rootj);
-
-        parents[rootj] = rooti;
-
-        if(rank[rooti]==rank[rootj])
-            ++rank[rooti];
-        
-        --numSet;
-        return true;
-    }
-
-    int Components()
-    {
-        // int cnt = 0;
-
-        // for(int i=1;i<=n;++i)
-        //     if(parents[i]==i)
-        //         ++cnt;
-
-        // return cnt;
-        return numSet;
-    }
-};
-
-void bfs(int src)
-{
-    std::queue<int> q;
-
-    q.push(src);
-    visited[src] = true;
-
-    while(!q.empty())
-    {
-        int cur = q.front();
-        q.pop();
-
-        for(const int& node : graph[cur])
-        {
-            if(visited[node])
-            {
-                continue;
-            }
-
-            q.push(node);
-            visited[node] = true;
-        }
-    }
+    memcpy(arr,output.data(),output.size()*sizeof(int));
+    // std::copy(output.begin(), output.end(), arr);
 }
-
-void dfs(int node)
-{
-    visited[node] = true;
-    
-    for(const int& next : graph[node])
-        if(!visited[next])
-            dfs(next);
-}
-
-void ds()
-{
-    struct disjointSet s(n);
-
-    for(int i=1;i<=n;++i)
-        for(const auto& j : graph[i])
-            s.unite(i,j);
-
-    std::cout<<s.Components();
-}
-
+*/
 int main()
 {
-    std::cin>>n>>m;
-    graph.resize(n+1);
-    visited.resize(n+1,false);
+    int iArr[n];
+    memcpy(iArr,gArr,sizeof(gArr));
 
-    for(int i=0;i<m;++i)
-    {
-        int u, v;
-        std::cin>>u>>v;
-        graph[u].push_back(v);
-        graph[v].push_back(u);
-    }
+    for (int i = 0; i < n; ++i)
+        std::cout << gArr[i] << ' ';
 
-    ds();
+    int size = sizeof(iArr)/sizeof(int);
+    // selectionSort(iArr,size);
+    // insertionSort(iArr,size);
+    // bubbleSort(iArr,size);
+    // mergeSort(0,size);
+    // lomutoQuickSort(0, size - 1);
+    // hoareQuickSort(0, size - 1);
+    heapSort(size);
+    // countingSort();
 
-    // int cnt = 0;
+    std::cout << std::endl;
 
-    // for(int i=1;i<=n;++i)
-    // {
-    //     if (!visited[i])
-    //     {
-    //         ++cnt;
-    //         // bfs(i);
-    //         // dfs(i);
-    //     }
-    // }
-
-    // std::cout<<cnt;
+    for (int i = 0; i < n; ++i)
+        std::cout << gArr[i] << ' ';
 
     return 0;
 }
-
-
-// int main()
-// {
-//     int n;
-//     int blocks[] = {1,2,2};
-//     std::cin>>n;
-
-//     std::vector<int> dp(n+1,0);
-//     dp[0]=1;
-    
-//     for(int i =1;i<=n;++i)
-//         for(const int& block : blocks)
-//             if(i-block >= 0)
-//                 dp[i] += dp[i-block];
-    
-//     std::cout << dp[n];
-    
-//     return 0;
-// }
-
-int main()
-{
-    int x = ((0xEF >> 1) << 2) & 0xF;
-    // 11101111
-    // 01110111
-    // 11011100
-    // 00001111
-    // 00001100
-    std::cout<<x;
-    return 0;
-}
-
-//bigclass는 멤버변수가 많은 클래스
-//잠재적으로 문제가 될 수 있는 부분 2가지를 구하라
-class BigClass
-{
-    char* m_longstr;
-
-    void doSomething(BigClass a)
-    {
-        for(int i=0;i<strlen(a.m_longstr);++i)
-        {
-            doSomething(a.m_long)
-        }
-    }
-}
-
-// doSomething을 통해 m_longstr이 전달되면, BigClass는 m_longstr
-
-// void func(char*& str)
-// {
-//     str = "changed";
-// }
-
-// int main()
-// {
-//     char* temp = "string";
-//     func(temp);
-//     std::cout<<temp;
-//     return 0;
-// }
-
-// char* func(int num)
-// {
-//     char str[128];
-//     sprintf_s(str, sizeof(str), "number : %d", num);
-//     return str;
-// }
-
-// bool Store(unsigned int money, unsigned int count, unsigned int price)
-// {
-//     return money >= price*count;
-// }
-
-// target 변수의 n번째 bit를 flag에 따라 on/off시킬 수 있도록 함수를 완성해라
-void func(int& target, int n ,bool flag)
-{
-    if(flag)
-        target |= (1 << n);
-    else
-        target &= ~(1 << n);
-
-    target ^= (1 << n);
-}
-
-// pow함수를 bit연산자를 이용해서 구현
-int pow(int base, int exp)
-{
-    int res = 1;
-    while(exp)
-    {
-        if(exp & 1)
-            res *= base;
-        base*= base;
-
-        exp >>= 1;
-    }
-
-    return res;
-}
-
-// 13, 27 뒤바뀐 비트 개수
-// 1110 
-// 0001 1011
-int diff()
-{
-    int a = 13;
-    int b = 27;
-    int c = a ^ b;
-    int cnt = 0;
-
-    while(c)
-    {
-        c &= (c - 1);
-        ++cnt;
-    }
-
-    std::cout<<cnt;
-}
-
-
-// apple, alepp처럼 문자 배열이 다르지만 
-// 길이와 문자구성이 같은 단어를 판별하는 함수 생성
-
-bool diff(const std::string& a,const std::string& b)
-{
-    if (a.length() != b.length())
-        return false;
-    
-    int alp[26] = {0,};
-
-    for(const char& c : a)
-        ++alp[c-'a'];
-
-    for(const char& c : b)
-        if (--alp[c - 'a'] < 0)
-            return false;
-
-    return true;
-}
-
-bool diff(std::string a,std::string b)
-{
-    std::sort(a.begin(),a.end());
-    std::sort(b.begin(),b.end());
-
-    std::cout<<a<<' '<<b<<'\n';
-
-    if (a == b)
-        return true;
-
-    return false;
-}
-
-void func()
-{
-    int a= 10, b= 100, c =20;
-    int r1 = a * b / c;
-    int r2 = a / c * b;
-    std::cout<<r1<<' '<<r2;
-}
-
-// N크기인 정방형 배열이 0과 1로 이루어져 있을 때 (x,y)좌표로부터 연속된 0을 1로 바꾸는 함수를 생성하라
-
-using namespace std;
-#include <map>
-class A
-{
-private:
-    int num;
-
-public:
-    A() {};
-    ~A() {};
-};
-
-class B
-{
-private:
-    int num;
-
-public:
-    B() {};
-    ~B() {};
-};
-
-int main()
-{
-    A a;
-    B b;
-    map<A, B> m;
-    m.insert(map<A, B>::value_type(a, b));
-    
-    return 0;
-}
-int Num[] = {1,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2,1};
-
-void rtnNum(int* arr, int startidx, int endidx, int targetnum)
-{
-
-}
-
-void func()
-{
-    int num[] = {1,2,3,4,5,6};
-    int MAXNUM = sizeof(num)/sizeof(int);
-
-    for (int i = 0; i < MAXNUM - 1; ++i)
-    {
-        for (int j = 0; j < MAXNUM - 1; ++j)
-        {
-            if(num[j] > num[j+1])
-            {
-                int temp = num[j+1];
-                num[j+1] = num[j];
-                num[j] = temp;
-            }
-        }
-    }
-
-    for(int i=0;i<MAXNUM-1;++i)
-        std::cout<<num[i]<<std::endl;
-}
-int main()
-{
-    func();
-    return 0;
-}
-
-class A
-{
-private:
-    int* a;
-
-public:
-    A()
-    {
-        a = new int(0);
-    }
-    ~A()
-    {
-        delete a;
-    }
-};
-
-class B : public A
-{
-private:
-    int *b;
-
-public:
-    B()
-    {
-        b = new int(0);
-    }
-    ~B()
-    {
-        delete b;
-    }
-};
-
-int main()
-{
-    A* a = new B;
-    B* b = new B;
-
-    delete a;
-    delete b;
-
-    return 0;
-}
-=====*/ 

@@ -227,8 +227,8 @@ public:
     }
 };
 
-constexpr int n = 9;
-int arr[n] = {10, 7, 42, 9, 20, 8, 34, 6, 5};
+constexpr int n = 11;
+int arr[n] = {10, 7, 48, 9, 20, 8, 0, 56, 34, 6, 5};
 
 void selectionSort()
 {
@@ -411,7 +411,7 @@ void heapSort()
     }
 }
 
-void countingSort()
+void minCountingSort()
 {
     int size = sizeof(arr)/sizeof(int);
     int minVal = *std::min_element(std::begin(arr),std::end(arr));
@@ -438,6 +438,26 @@ void countingSort()
     // std::copy(output.begin(), output.end(), arr);
 }
 
+void countingSort()
+{
+    int size = sizeof(arr)/sizeof(int);
+    int max = *std::max_element(std::begin(arr),std::end(arr));
+
+    std::vector<int> counter(max + 1, 0);
+    std::vector<int> output(size, 0);
+
+    for (int i = 0; i < size; ++i)
+        ++counter[arr[i]];
+
+    for (int i = 1; i <= max; ++i)
+        counter[i] += counter[i-1];
+
+    for (int i = size - 1; i >= 0; --i)
+        output[--counter[arr[i]]] = arr[i];
+
+    std::copy(output.begin(),output.end(),arr);
+}
+
 int main()
 {
     int inArr[n] = {10, 7, 42, 9, 20, 8, 34, 6, 5};
@@ -454,6 +474,7 @@ int main()
     // hoareQuickSort(0,sizeof(arr)/sizeof(int)-1);
     // heapSort();
     countingSort();
+    // cntSort();
 
     std::cout << std::endl;
 
