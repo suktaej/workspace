@@ -459,17 +459,28 @@ void countingSort()
     std::copy(output.begin(),output.end(),arr);
 }
 
-void RadixSort()
+void radixSort()
 {
     int maxVal = *std::max_element(std::begin(arr),std::end(arr));
     int radix = 10;
     
-
     for(int exp = 1; maxVal / exp > 0 ; exp *= 10)
     {
         std::vector<std::queue<int>> bucket(radix);
         for(const int& it : arr)
         {
+            int digit = (it/exp) % 10;
+            bucket[digit].push(it);
+        }
+
+        int idx = 0;
+        for(int i=0;i<radix;++i)
+        {
+            while(!bucket[i].empty())
+            {
+                arr[idx++] = bucket[i].front();
+                bucket[i].pop();
+            }
         }
     }
 }
@@ -489,7 +500,8 @@ int main()
     // lomutoQuickSort(0,sizeof(arr)/sizeof(int)-1);
     // hoareQuickSort(0,sizeof(arr)/sizeof(int)-1);
     // heapSort();
-    countingSort();
+    // countingSort();
+    radixSort();
 
     std::cout << std::endl;
 

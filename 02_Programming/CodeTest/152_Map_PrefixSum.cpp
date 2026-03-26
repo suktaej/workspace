@@ -23,14 +23,8 @@ int main()
         int x1,y1,x2,y2;
         std::cin>>x1>>y1>>x2>>y2;
         
-        long long res = sum[x2][y2];
-        if(x1 > 1)
-            res -= sum[x1-1][y2];
-        if(y1 > 1)
-            res -= sum[x2][y1-1];
-        if (x1 > 1 && y1 > 1)
-            res += sum[x1-1][y1-1];
-
+        long long res = sum[x2][y2] - sum[x1-1][y2] -sum[x2][y1-1] + sum[x1-1][y1-1];
+        
         std::cout<<res<<'\n';
     }
 
