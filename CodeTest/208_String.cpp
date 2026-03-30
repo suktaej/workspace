@@ -116,6 +116,61 @@ void reverseWords(char* str)
     }
 }
 
+void intToStr(const int& inp, char* str)
+{
+    int idx = 0;
+
+    if (inp == 0)
+    {
+        str[idx++] = '0';
+        str[idx] = '\0';
+        return;
+    }
+    
+    long n = inp;
+    bool isNegative = false;
+
+    if(n < 0)
+    {
+        isNegative = true;
+        n *= -1;
+    }
+
+    while (n > 0)
+    {
+        str[idx++] = '0' + (n % 10);
+        n /= 10;
+    }
+
+    if(isNegative)
+        str[idx++] = '-';
+
+    for (int i = 0; i < idx / 2; ++i)
+    {
+        char temp = str[i];
+        str[i] = str[idx - 1 - i];
+        str[idx-1-i] = temp;
+    }
+
+    str[idx] = '\0';
+}
+
+void deleteDupChar(const char* str)
+{
+    int idx = 0;
+    char buffer[128];
+
+    for(int i=0;str[i]!='\0';++i)
+    {
+        if(str[i] != str[i+1])
+            buffer[idx++] = str[i];
+    }
+
+    buffer[idx] = '\0';
+
+    std::cout<<buffer;
+}
+
 int main()
 {
     char* str = "hello";
@@ -128,6 +183,15 @@ int main()
     char oup[100];
 
     reverse(oup,size,inp);
-    std::cout<<oup;
+    // std::cout<<oup;
+
+    int intInp = -1919;
+    char charOutp[128] = {};
+    intToStr(intInp,charOutp);
+
+    std::cout<<charOutp;
+
+    char* delchar = "aaabbbcccdc";
+    deleteDupChar(delchar);
     return 0;
 }

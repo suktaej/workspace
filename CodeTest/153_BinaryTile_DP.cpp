@@ -1,12 +1,24 @@
 #include <iostream>
 #include <vector>
+    
+int n;
+
+void withoutArray()
+{
+    int a = 1;
+	int b = 2;
+	for (int i = 3; i <= n; i++) {
+		int tmp = a;
+		a = b;
+		b = (tmp + b) % 15746;
+	}
+    printf("%d", b);
+}
 
 int main()
 {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
-
-    int n;
     std::cin>>n;
 
     if (n == 1)
