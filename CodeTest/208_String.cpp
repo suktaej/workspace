@@ -171,27 +171,54 @@ void deleteDupChar(const char* str)
     std::cout<<buffer;
 }
 
+void deleteDupStr(char* src, const char* str) 
+{
+    if (!src || !str) 
+        return;
+
+    int srcLen = strlen(src);
+    int strLen = strlen(str);
+    if (strLen == 0) 
+        return;
+
+    int widx = 0;
+    int ridx = 0;
+
+    while (src[ridx] != '\0')
+    {
+        if(strncmp(&src[ridx],str,strLen) == 0)
+            ridx += strLen;
+        else
+            src[widx++] = src[ridx++];
+    }
+
+    src[widx] = '\0';
+}
 int main()
 {
-    char* str = "hello";
-    char res[100];
+    // char* str = "hello";
+    // char res[100];
     // myStrcpy(str,res);
     // std::cout<<res;
 
-    char* inp = "hello world this is test ground";
-    int size = strlen(inp);
-    char oup[100];
+    // char* inp = "hello world this is test ground";
+    // int size = strlen(inp);
+    // char oup[100];
 
-    reverse(oup,size,inp);
-    // std::cout<<oup;
+    // reverse(oup,size,inp);
+    // // std::cout<<oup;
 
-    int intInp = -1919;
-    char charOutp[128] = {};
-    intToStr(intInp,charOutp);
+    // int intInp = -1919;
+    // char charOutp[128] = {};
+    // intToStr(intInp,charOutp);
+    // std::cout<<charOutp;
 
-    std::cout<<charOutp;
+    // char* delchar = "aaabbbcccdc";
+    // deleteDupChar(delchar);
 
-    char* delchar = "aaabbbcccdc";
-    deleteDupChar(delchar);
+    // char inpstr[] = "abcabcaadf";
+    // char* delstr = "abc";
+    // deleteDupStr(inpstr,delstr);
+    // std::cout<<inpstr;
     return 0;
 }
