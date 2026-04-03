@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
+#include <algorithm>
 
 int myStrlen(char* str)
 {
@@ -194,6 +196,115 @@ void deleteDupStr(char* src, const char* str)
 
     src[widx] = '\0';
 }
+
+void deleteDupStr_default(char* src, const char* str) 
+{
+    if (!src || !str) 
+        return;
+
+    int srcLen = strlen(src);
+    int strLen = strlen(str);
+    if (strLen == 0) 
+        return;
+
+    std::string source(src);
+    std::string toDelete(str);
+
+    size_t pos = 0;
+
+    while ((pos = source.find(toDelete, pos)) != std::string::npos) 
+        source.erase(pos, strLen);
+
+    strcpy(src, source.c_str());
+}
+
+void duplicateElementDelete(std::vector<int>& arr)
+{
+    // std::sort(arr.begin(), arr.end());
+    // auto last = std::unique(arr.begin(), arr.end());
+    // arr.erase(last, arr.end());
+    // std::erase_if(arr, [](int a, int b){ return a == b; });
+}
+
+void deleteSomeElement(std::vector<int>& arr, int target)
+{
+    auto it = std::find(arr.begin(), arr.end(), target);
+    if (it != arr.end())
+        arr.erase(it);
+}
+
+bool anagram(const std::string& str, const std::string& target)
+{
+    int cnt[26] = {0,};
+    for(const char& c : str)
+        ++cnt[c-'a'];
+
+    for(const char& c : target)
+    {
+        if (--cnt[c - 'a'] < 0)
+            return false;
+    }
+
+    return true;
+}
+
+bool anagramCpp( std::string str,  std::string target)
+{
+    std::sort(str.begin(),str.end());
+    std::sort(target.begin(),target.end());
+    
+    // return strcmp(str.c_str(),target.c_str()) ? false : true;
+    if(str == target)
+        return true;
+}
+
+void stringCopy(const std::string& src, char* target)
+{
+    // strcpy(target,src.c_str());
+    int size = src.length();
+    for(int i=0;i<size;++i)
+        target[i] = src[i];
+    
+    target[size+1] = '\0';
+}
+
+bool stringCompare(const std::string& str, const std::string& comp)
+{
+    int strSize = str.length();
+    int compSize = comp.length();
+
+    if(strSize != compSize)
+        return false;
+
+    for(int i=0;i<strSize;++i)
+        if(str[i]!=comp[i])
+            return false;
+
+    return true;
+}
+
+bool PalindromeChar(const std::string& str)
+{
+    int size = str.length();
+    for (int i = 0; i < size / 2; ++i)
+        if (str[i] != str[size - 1 - i])
+            return false;
+
+    return true;
+}
+
+char* findStr(const char* src, int srcSize, const char* target, int targetSize)
+{
+    if (src == nullptr || target == nullptr || targetSize > srcSize) 
+        return nullptr;
+
+    for (int i = 0; i <= srcSize - targetSize; ++i)
+        if(src[i] == target[0] && strncmp(&src[i],target,targetSize) == 0)
+                return const_cast<char*>(&src[i]);
+
+    return nullptr;
+}
+
 int main()
 {
     // char* str = "hello";
@@ -220,5 +331,10 @@ int main()
     // char* delstr = "abc";
     // deleteDupStr(inpstr,delstr);
     // std::cout<<inpstr;
+
+    std::string str = "hello";
+    char temp[64];
+    stringCopy(str,temp);
+    std::cout<<temp;
     return 0;
 }
