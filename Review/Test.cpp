@@ -209,6 +209,38 @@ void countingSort()
     // std::copy(output.begin(), output.end(), arr);
 }
 */
+
+bool twoPointDistinRange(int x1, int y1, int x2, int y2)
+{
+    int rx = x1 - x2;
+    int ry = y1 - y2;
+    int distSq = (rx * rx) + (ry * ry);
+    int range = 5;
+
+    bool res = distSq <= range * range;
+
+    return res;
+}
+
+float func(float3 data)
+{
+    return data.r * 0.1234 + data.g * 0.5678 + data.b * 0.9012;
+}
+
+float test(float3* arr, float w , float h)
+{
+    uint idx =0;
+
+    for(uint i=0;i<h;++i)
+        for(uint j=0;j<w;++j)
+        {
+            idx = i*w + j;
+            arr[idx] = A(Arr[idx]);
+        }
+
+    return arr[특정인덱스] / (w*h);
+}
+
 int main()
 {
     int iArr[n];
