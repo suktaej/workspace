@@ -222,23 +222,34 @@ bool twoPointDistinRange(int x1, int y1, int x2, int y2)
     return res;
 }
 
-float func(float3 data)
+// float func(float3 data)
+// {
+//     return data.r * 0.1234 + data.g * 0.5678 + data.b * 0.9012;
+// }
+
+// float test(float3* arr, float w , float h)
+// {
+//     uint idx =0;
+
+//     for(uint i=0;i<h;++i)
+//         for(uint j=0;j<w;++j)
+//         {
+//             idx = i*w + j;
+//             arr[idx] = A(Arr[idx]);
+//         }
+
+//     return arr[특정인덱스] / (w*h);
+// }
+
+int gcd(int a, int b)
 {
-    return data.r * 0.1234 + data.g * 0.5678 + data.b * 0.9012;
+    return b ? gcd(b,a%b) : a;
 }
 
-float test(float3* arr, float w , float h)
+int lcm(int a, int b)
 {
-    uint idx =0;
-
-    for(uint i=0;i<h;++i)
-        for(uint j=0;j<w;++j)
-        {
-            idx = i*w + j;
-            arr[idx] = A(Arr[idx]);
-        }
-
-    return arr[특정인덱스] / (w*h);
+    int deno = gcd(a,b);
+    return a * b / deno;
 }
 
 int main()

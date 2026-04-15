@@ -196,13 +196,42 @@ int memberCount(int time, const std::vector<int>& enter, const std::vector<int>&
     return exist[time];
 }
 
+// 턴에 비례해 갈 수 있는 거리가 증가
+// n번만 이동 가능
+// k번째 자리는 밟을수 없음
+int maxStep(int n,int k)
+{
+    int total = n*(n+1)/2;
+
+    // 총 합이 진행 중 k를 밟는지 확인
+    int sum = 0;
+    bool hitK = false;
+    for(int i=1;i<=n;++i)
+    {
+        sum+=i;
+        if(sum == k)
+        {
+            hitK = true;
+            break;
+        }
+    }
+
+    // 밟았다면 1만 밟지 않고 진행
+    if(hitK)
+        return total -1;
+    else
+        return total;
+
+}
+
 int main()
 {
     // std::cout<<reverse(12034506);
-    std::cout<<gcd(5,10)<<' '<<gcd(32,6);
-    std::cout<<'\n';
-    std::cout<<lcm(5,10)<<' '<<lcm(32,6);
-    std::cout<<'\n';
-    std::cout<<nlm(3,10);
+    // std::cout<<gcd(5,10)<<' '<<gcd(32,6);
+    // std::cout<<'\n';
+    // std::cout<<lcm(5,10)<<' '<<lcm(32,6);
+    // std::cout<<'\n';
+    // std::cout<<nlm(3,10);
+    std::cout<<maxStep(3,3);
     return 0;
 }
