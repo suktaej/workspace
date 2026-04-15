@@ -6,12 +6,11 @@
 int n;
 std::vector<std::vector<int>> grid;
 std::vector<std::vector<bool>> visited;
+int dx[] = {1, -1, 0, 0};
+int dy[] = {0, 0, 1, -1};
 
 void bfs(int y, int x, int height)
 {
-    int dx[] = {1,-1,0,0};
-    int dy[] = {0,0,1,-1};
-
     std::queue<std::pair<int,int>> q;
     q.push({y,x});
     visited[y][x] = true;
@@ -38,6 +37,21 @@ void bfs(int y, int x, int height)
             q.push({ny,nx});
             visited[ny][nx] = true;
         }
+    }
+}
+
+void dfs(int y, int x, int h) 
+{
+    visited[y][x] = true;
+
+    for (int i = 0; i < 4; ++i) 
+    {
+        int ny = y + dy[i];
+        int nx = x + dx[i];
+
+        if (ny >= 0 && ny < n && nx >= 0 && nx < n)
+            if (!visited[ny][nx] && grid[ny][nx] > h)
+                dfs(ny, nx, h);
     }
 }
 
