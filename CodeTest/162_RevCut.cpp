@@ -124,6 +124,7 @@ void opt()
     
     cin >> p >> n >> s;
 
+    // 파싱
     string temp = "";
     for (int i = 0; i < s.length(); i++) 
     {
@@ -142,7 +143,7 @@ void opt()
     bool isReversed = false;
     bool isError = false;
 
-    // 2. 명령어 실행
+    // 명령어 실행
     for (char cmd : p) 
     {
         if (cmd == 'R') 
@@ -163,7 +164,7 @@ void opt()
         }
     }
 
-    // 3. 결과 출력
+    // 결과 출력
     if (isError) 
         cout << "error\n";
     else 
