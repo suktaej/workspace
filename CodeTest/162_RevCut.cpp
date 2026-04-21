@@ -1,10 +1,11 @@
 #include <iostream>
 #include <vector>
+#include <deque>
 #include <string>
 #include <algorithm>
 #include <sstream>
+#include <cctype>
 
-int testCase = 0;
 
 void parsing(std::vector<int>& vec)
 {
@@ -112,10 +113,90 @@ void solve()
     std::cout<<']'<<'\n';
 }
 
+using namespace std;
+
+void opt()
+{
+    string p;
+    int n;
+    string s;
+    deque<int> dq;
+    
+    cin >> p >> n >> s;
+
+    string temp = "";
+    for (int i = 0; i < s.length(); i++) 
+    {
+        if (isdigit(s[i])) 
+            temp += s[i];
+        else 
+        {
+            if (!temp.empty()) 
+            {
+                dq.push_back(stoi(temp));
+                temp = "";
+            }
+        }
+    }
+
+    bool isReversed = false;
+    bool isError = false;
+
+    // 2. 명령어 실행
+    for (char cmd : p) 
+    {
+        if (cmd == 'R') 
+            isReversed = !isReversed;
+        else 
+        { 
+            if (dq.empty()) 
+            {
+                isError = true;
+                break;
+            }
+
+            if (isReversed) 
+                dq.pop_back();
+            else 
+                dq.pop_front();
+            
+        }
+    }
+
+    // 3. 결과 출력
+    if (isError) 
+        cout << "error\n";
+    else 
+    {
+        cout << "[";
+        if (isReversed) 
+        {
+            while (!dq.empty()) 
+            {
+                cout << dq.back();
+                dq.pop_back();
+                if (!dq.empty()) cout << ",";
+            }
+        } 
+        else 
+        {
+            while (!dq.empty()) 
+            {
+                cout << dq.front();
+                dq.pop_front();
+                if (!dq.empty()) cout << ",";
+            }
+        }
+        cout << "]\n";
+    }
+}
+
 int main()
 {
+    int testCase = 0;
     std::cin>>testCase;
-    for(int i=0;i<testCase;++i)
+
+    while(testCase--)
         solve();
 
     return 0;
