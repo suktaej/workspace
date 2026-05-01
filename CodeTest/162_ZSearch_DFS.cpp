@@ -3,10 +3,9 @@
 #include <cmath>
 
 int n, r, c;
+
 int cnt = 0;
 std::vector<std::vector<int>> grid;
-
-int ans = 0;
 
 void dfs(int exp, int row, int col)
 {
@@ -32,11 +31,13 @@ void dfs(int exp, int row, int col)
     dfs(newExp, row+nextSize, col+nextSize);
 }
 
+int ans = 0;
+
 void solve(int size, int x, int y)
 {
-    if (y == r && x == c)
+    if (y == r && x == c) 
     {
-        std::cout<< ans;
+        std::cout << ans;
         return;
     }
 
@@ -51,6 +52,7 @@ void solve(int size, int x, int y)
     else
         ans += size * size;
 }
+
 int main()
 {
     std::cin>>n>>r>>c;
